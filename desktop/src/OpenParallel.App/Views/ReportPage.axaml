@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="OpenParallel.App.Views.ReportPage">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Classes="page">
+      <TextBlock Classes="title" Text="Report a problem" Margin="0,4,0,4" />
+      <TextBlock Classes="secondary" TextWrapping="Wrap" MaxWidth="680" HorizontalAlignment="Left"
+                 Text="Something didn’t work, an app mixed its accounts, or you have an idea. The report opens in your own mail app, and nothing is sent until you send it there." />
+
+      <TextBlock Classes="section" Text="What happened?" />
+      <StackPanel x:Name="Kinds" Spacing="2">
+        <RadioButton GroupName="kind" Tag="Bug" Content="Something doesn’t work" IsChecked="True" />
+        <RadioButton GroupName="kind" Tag="Separate" Content="An app doesn’t keep its data separate" />
+        <RadioButton GroupName="kind" Tag="Idea" Content="An idea or an app to support" />
+        <RadioButton GroupName="kind" Tag="Other" Content="Something else" />
+      </StackPanel>
+
+      <TextBlock Classes="section" Text="App involved" />
+      <ui:FASettingsExpander x:Name="AppCard" Header="App">
+        <ui:FASettingsExpander.Footer>
+          <TextBox x:Name="AppBox" Width="260" PlaceholderText="For example Discord" AutomationProperties.Name="App" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="VersionCard" Header="Its version" Description="In the app’s About window.">
+        <ui:FASettingsExpander.Footer>
+          <TextBox x:Name="VersionBox" Width="260" AutomationProperties.Name="App version" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="What happened, and what you expected instead" />
+      <TextBox x:Name="DetailsBox" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="110"
+               AutomationProperties.Name="What happened, and what you expected instead"
+               PlaceholderText="I opened Discord Parall and it showed my main account instead of the second one." />
+      <TextBlock x:Name="DetailsError" IsVisible="False" Margin="2,6,0,0" Text="Say what happened, in a sentence or two." />
+
+      <TextBlock Classes="section" Text="How to see it again (optional)" />
+      <TextBox x:Name="StepsBox" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80" AutomationProperties.Name="How to see it again" />
+
+      <TextBlock Classes="section" Text="System" />
+      <ui:FASettingsExpander x:Name="SystemCard" Header="Include the system and version lines">
+        <ui:FASettingsExpander.Footer>
+          <ToggleSwitch x:Name="IncludeToggle" IsChecked="True" AutomationProperties.Name="Include the system and version lines" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Your report" />
+      <Border Classes="card">
+        <SelectableTextBlock x:Name="PreviewText" TextWrapping="Wrap" FontSize="12.5" />
+      </Border>
+
+      <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
+        <Button x:Name="EmailButton" Classes="accent" Content="Send by email" />
+        <Button x:Name="IssueButton" Content="Open a GitHub issue" IsVisible="False" />
+        <Button x:Name="CopyButton" Content="Copy report" />
+      </StackPanel>
+      <TextBlock x:Name="Note" Classes="caption" TextWrapping="Wrap" Margin="2,10,0,0" MaxWidth="680" HorizontalAlignment="Left" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

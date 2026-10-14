@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>opctl</AssemblyName>
+    <RootNamespace>OpenParallel.Cli</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenParallel.Core\OpenParallel.Core.csproj" />
+  </ItemGroup>
+</Project>

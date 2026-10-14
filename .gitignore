@@ -1,0 +1,43 @@
+.build/
+.build-x86_64/
+.swiftpm/
+DerivedData/
+dist/
+.DS_Store
+
+# Private, never published: session transcripts, digests, and archived
+# experiments (the archive includes extracted proprietary Claude app code).
+research/
+archive/
+
+# Vercel project links carry account identifiers.
+.vercel/
+
+# Optional private extensions: compiled locally when present, never published.
+Sources/OpenParallel/Private/
+Tests/OpenParallelTests/Private/
+scripts/private/
+private/
+
+# Windows version build output
+desktop/**/bin/
+desktop/**/obj/
+desktop/artifacts/
+__pycache__/
+
+# Cloudflare tooling state
+.wrangler/
+web/downloads/
+
+# Local tooling
+.claude/
+node_modules/
+desktop/TestResults/
+
+# Website: build output and old drafts (the drafts describe a private-build feature)
+web/dist/
+web/index.html
+web/deploy/
+
+# Marketing video workspace (voice takes and renders from third-party services)
+video/

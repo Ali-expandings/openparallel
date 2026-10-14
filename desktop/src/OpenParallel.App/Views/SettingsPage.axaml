@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="OpenParallel.App.Views.SettingsPage">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Classes="page">
+      <TextBlock Classes="title" Text="Settings" Margin="0,4,0,4" />
+
+      <TextBlock Classes="section" Text="Appearance" />
+      <ui:FASettingsExpander x:Name="ThemeCard" Header="Theme" Description="Light or dark, or follow Windows.">
+        <ui:FASettingsExpander.Footer>
+          <ComboBox x:Name="ThemeBox" MinWidth="200" AutomationProperties.Name="Theme">
+            <ComboBoxItem Content="Use system setting" Tag="System" />
+            <ComboBoxItem Content="Light" Tag="Light" />
+            <ComboBoxItem Content="Dark" Tag="Dark" />
+          </ComboBox>
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="New instances" />
+      <ui:FASettingsExpander x:Name="OpenCard" Header="Open new instances after creating them">
+        <ui:FASettingsExpander.Footer>
+          <ToggleSwitch x:Name="OpenToggle" AutomationProperties.Name="Open new instances after creating them" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="DesktopCard" Header="Also add a desktop shortcut"
+                             Description="New instances always get a Start menu shortcut, in the OpenParallel folder.">
+        <ui:FASettingsExpander.Footer>
+          <ToggleSwitch x:Name="DesktopToggle" AutomationProperties.Name="Also add a desktop shortcut" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Notification area" />
+      <ui:FASettingsExpander x:Name="TrayCard" Header="Keep OpenParallel in the notification area"
+                             Description="Closing the window leaves OpenParallel&#8217;s icon next to the clock, with your instances in its menu.">
+        <ui:FASettingsExpander.Footer>
+          <ToggleSwitch x:Name="TrayToggle" AutomationProperties.Name="Keep OpenParallel in the notification area" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Locations" />
+      <ui:FASettingsExpander x:Name="ShortcutsCard" Header="Start menu shortcuts">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="ShortcutsButton" Content="Open folder" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="DataCard" Header="Instance data">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="DataButton" Content="Open folder" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="LogsCard" Header="Logs">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="LogsButton" Content="Open folder" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Help" />
+      <ui:FASettingsExpander x:Name="ReportCard" Header="Report a problem" Description="Something didn’t work, or an app mixed its accounts? The report opens in your own mail app.">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="ReportButton" Content="Report…" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="KeysCard" Header="Keyboard shortcuts" Description="Everything in OpenParallel works from the keyboard." />
+
+      <TextBlock Classes="section" Text="About" />
+      <ui:FASettingsExpander x:Name="AboutCard" Header="OpenParallel"
+                             Description="Run a second copy of an app with its own login and data. The original app is never changed.">
+        <ui:FASettingsExpander.Footer>
+          <TextBlock x:Name="VersionText" Classes="secondary" VerticalAlignment="Center" />
+        </ui:FASettingsExpander.Footer>
+        <ui:FASettingsExpanderItem Content="Privacy"
+                                   Description="OpenParallel sends nothing anywhere and never changes the apps you copy. It runs only while its window or its notification-area icon is open." />
+      </ui:FASettingsExpander>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

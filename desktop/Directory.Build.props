@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Version>1.0.0</Version>
+    <Company>OpenParallel</Company>
+    <Product>OpenParallel</Product>
+    <Copyright>MIT License</Copyright>
+    <!-- No telemetry or crash reporting is ever compiled in. -->
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+</Project>

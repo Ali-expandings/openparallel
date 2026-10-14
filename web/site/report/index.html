@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report a problem with OpenParallel</title>
+<meta name="description" content="Tell the OpenParallel team what went wrong, or which app should work. The report opens in your own mail app; nothing is sent until you send it.">
+<meta name="theme-color" content="#f2b544" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2b2c33" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/openparallel-64.png">
+<link rel="stylesheet" href="/site.css">
+<script src="/site.js" defer></script>
+<script src="/report.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12h16M12 4v16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 8.6A5 5 0 0 0 9 15m6.5-.5A5 5 0 0 0 12 7M5.3 5.4A9 9 0 0 0 6 18.4M18.4 18A9 9 0 0 0 12 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8M7.1 6.3a7.5 7.5 0 1 0 9.8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4.5h4V7m-7.5 0 1 12.5h9L17.5 7M10.5 11v5m3-5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.5 7-5 5 5 5m7-10 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-min" viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1"/></symbol>
+  <symbol id="i-max" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1"/></symbol>
+  <symbol id="i-x" viewBox="0 0 10 10"><path d="m1.5 1.5 7 7m0-7-7 7" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="page-head">
+  <header class="menubar">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/assets/openparallel-64.png" alt="" width="26" height="26">OpenParallel</a>
+      <nav id="site-nav" aria-label="Site">
+        <a href="/#how">How it works</a>
+        <a href="/apps/">Apps</a>
+        <a href="/#download">Download</a>
+        <a href="/report/" aria-current="page">Report a problem</a>
+      </nav>
+      <div class="menubar-end">
+        <a class="btn btn-quiet btn-small github" data-repo-link hidden><svg aria-hidden="true"><use href="#i-code"/></svg>Source</a>
+        <a class="btn btn-primary btn-small" href="/#download">Download</a>
+        <button class="btn btn-quiet btn-small menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><svg aria-hidden="true"><use href="#i-menu"/></svg><span class="visually-hidden">Menu</span></button>
+      </div>
+    </div>
+  </header>
+  <div class="wrap title">
+    <h1>Report a problem</h1>
+    <p>Something didn’t work, an app mixed its accounts, or you have an idea. Fill in what you can; the report opens in your own mail app, and nothing is sent until you send it there.</p>
+  </div>
+</div>
+
+<main id="main" class="page">
+  <div class="wrap report">
+    <form class="form" data-report novalidate>
+      <fieldset class="field">
+        <legend>What happened?</legend>
+        <div class="choices">
+          <label class="choice"><input type="radio" name="kind" value="bug" checked><span>Something doesn’t work<small>An error, a copy that won’t open, a button that does nothing.</small></span></label>
+          <label class="choice"><input type="radio" name="kind" value="separate"><span>An app doesn’t keep its data separate<small>Both copies show the same account, or one signs the other out.</small></span></label>
+          <label class="choice"><input type="radio" name="kind" value="idea"><span>An idea or an app to support<small>Something OpenParallel should do, or an app it should know.</small></span></label>
+          <label class="choice"><input type="radio" name="kind" value="other"><span>Something else</span></label>
+        </div>
+      </fieldset>
+
+      <div class="two">
+        <div class="field"><label for="app">App involved</label><input class="input" id="app" name="app" placeholder="For example Discord" autocomplete="off"></div>
+        <div class="field"><label for="appVersion">Its version</label><input class="input" id="appVersion" name="appVersion" placeholder="In the app’s About window" autocomplete="off"></div>
+      </div>
+
+      <div class="field">
+        <label for="what">What happened, and what you expected instead</label>
+        <textarea class="textarea" id="what" name="what" required aria-describedby="what-error" placeholder="I opened Discord Parall and it showed my main account instead of the second one."></textarea>
+        <p class="error-text" id="what-error" hidden>Say what happened, in a sentence or two.</p>
+      </div>
+
+      <div class="field">
+        <label for="steps">How to see it again <span class="hint">(optional)</span></label>
+        <textarea class="textarea" id="steps" name="steps" placeholder="1. Create a copy of Discord&#10;2. Open it&#10;3. …"></textarea>
+      </div>
+
+      <div class="two">
+        <div class="field"><label for="system">Your system</label><input class="input" id="system" name="system" autocomplete="off"></div>
+        <div class="field"><label for="opVersion">OpenParallel version</label><input class="input" id="opVersion" name="opVersion" autocomplete="off"></div>
+      </div>
+
+      <label class="check"><input type="checkbox" name="includeSystem" checked> Include the system and version lines in the report</label>
+    </form>
+
+    <aside class="preview" aria-labelledby="preview-title">
+      <div class="sheet">
+        <div class="titlebar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="title" id="preview-title">Your report</span><span style="width:47px"></span></div>
+        <pre data-preview aria-live="polite"></pre>
+        <div class="send">
+          <a class="btn btn-primary" data-send-email>Send by email</a>
+          <a class="btn btn-plain" data-send-github hidden target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-code"/></svg>Open a GitHub issue</a>
+          <button class="btn btn-plain" type="button" data-copy>Copy report</button>
+          <p data-send-note>Your mail app opens with this report filled in. Nothing is sent until you press Send there.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="colophon">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/openparallel-64.png" alt="" width="26" height="26">OpenParallel</a>
+    <span>Free software under the MIT license.</span>
+    <nav aria-label="Footer">
+      <a href="/apps/">Apps</a>
+      <a href="/report/">Report a problem</a>
+      <a href="/privacy/">Privacy</a>
+      <a data-repo-link hidden>Source code</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

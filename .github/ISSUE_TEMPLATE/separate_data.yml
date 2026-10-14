@@ -1,0 +1,39 @@
+name: An app doesn't keep its data separate
+description: Both copies show the same account, or one signs the other out.
+labels: ["compatibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These reports are how statuses change on the [apps list](https://openparallel.pages.dev/apps/). The exact app version matters most.
+  - type: input
+    id: app
+    attributes:
+      label: App and exact version
+      placeholder: Telegram Desktop 6.1.3
+    validations:
+      required: true
+  - type: dropdown
+    id: system
+    attributes:
+      label: System
+      options: [macOS, Windows, Linux]
+    validations:
+      required: true
+  - type: input
+    id: installed
+    attributes:
+      label: Where the app came from
+      placeholder: Developer's website, Mac App Store, Microsoft Store, Flatpak, Snap…
+  - type: textarea
+    id: what
+    attributes:
+      label: What you saw
+      placeholder: The copy opened signed in to my main account. Signing out in one signed out both.
+    validations:
+      required: true
+  - type: input
+    id: openparallel
+    attributes:
+      label: OpenParallel version
+      placeholder: "1.0.0"

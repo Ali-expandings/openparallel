@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="OpenParallel.App.Views.InstancePage">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Classes="page">
+      <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,4,0,18">
+        <ContentControl x:Name="IconHost" Width="52" Height="52" VerticalAlignment="Center" />
+        <StackPanel Grid.Column="1" Margin="16,0" VerticalAlignment="Center" Spacing="2">
+          <TextBlock x:Name="NameText" Classes="title" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" />
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Ellipse x:Name="RunningDot" Width="8" Height="8" VerticalAlignment="Center" />
+            <TextBlock x:Name="StateText" Classes="secondary" />
+          </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <Button x:Name="QuitButton" Content="Quit" MinWidth="88" ToolTip.Tip="Quit (Ctrl+Shift+Q)" />
+          <Button x:Name="OpenButton" Classes="accent" Content="Open" MinWidth="104" ToolTip.Tip="Open (Ctrl+O)" />
+        </StackPanel>
+      </Grid>
+
+      <ui:FAInfoBar x:Name="SourceBar" IsOpen="False" IsClosable="False" Severity="Warning" Margin="0,0,0,6" />
+      <ui:FAInfoBar x:Name="ShortcutBar" IsOpen="False" IsClosable="False" Severity="Warning" Margin="0,0,0,6" />
+
+      <TextBlock Classes="section" Text="Status" />
+      <ui:FASettingsExpander x:Name="CompatibilityCard" Header="Compatibility" />
+      <ui:FASettingsExpander x:Name="OwnDataCard" Header="Own login and data" />
+
+      <TextBlock Classes="section" Text="Data" />
+      <ui:FASettingsExpander x:Name="FolderCard" Header="Data folder">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="FolderButton" Content="Open folder" ToolTip.Tip="Open folder (Ctrl+E)" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="SizeCard" Header="Size on disk">
+        <ui:FASettingsExpander.Footer>
+          <TextBlock x:Name="SizeText" Classes="secondary" Text="Measuring…" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Source" />
+      <ui:FASettingsExpander x:Name="SourceCard">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="SourceButton" Content="Open location" ToolTip.Tip="Show it in File Explorer" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Shortcuts" />
+      <ui:FASettingsExpander x:Name="ShortcutCard" Header="Start menu">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="ShortcutButton" Content="Open location" ToolTip.Tip="Show it in File Explorer" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="DesktopCard" Header="Desktop" IsVisible="False">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="DesktopButton" Content="Open location" ToolTip.Tip="Show it in File Explorer" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="LaunchCard" Header="How it starts"
+                             Description="The program, arguments and settings its shortcut uses.">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="CopyButton" Content="Copy command" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="CreatedCard" Header="Created">
+        <ui:FASettingsExpander.Footer>
+          <TextBlock x:Name="CreatedText" Classes="secondary" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Help" />
+      <ui:FASettingsExpander x:Name="ReportCard" Header="Report a problem with this instance"
+                             Description="Opens a report with this app, its version and status filled in.">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="ReportButton" Content="Report…" ToolTip.Tip="Report a problem (F1)" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+
+      <TextBlock Classes="section" Text="Remove" />
+      <ui:FASettingsExpander x:Name="RemoveCard" Header="Move to Recycle Bin">
+        <ui:FASettingsExpander.Footer>
+          <Button x:Name="RemoveButton" Content="Move to Recycle Bin…" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

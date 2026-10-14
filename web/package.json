@@ -1,0 +1,10 @@
+{
+  "name": "openparallel-website",
+  "private": true,
+  "description": "The OpenParallel website. No dependencies; this file keeps wrangler's working files inside web/.",
+  "scripts": {
+    "build": "./build.sh",
+    "deploy": "./deploy.sh",
+    "deploy:preview": "./deploy.sh preview"
+  }
+}

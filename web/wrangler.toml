@@ -1,0 +1,5 @@
+# Cloudflare Pages project for the website (deploy with ./deploy.sh). Classic Pages, not
+# Workers: it gives the plain openparallel.pages.dev address.
+name = "openparallel"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-10-01"

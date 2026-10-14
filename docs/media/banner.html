@@ -1,0 +1,68 @@
+<!doctype html>
+<!-- Source of banner.png and social-preview.png (rendered with headless Chrome, see docs/media/README.md). -->
+<html lang="en"><head><meta charset="utf-8"><title>OpenParallel banner</title>
+<style>
+@font-face { font-family: "Bricolage"; font-weight: 700; src: url("../../web/site/fonts/BricolageGrotesque-Bold.ttf"); }
+:root {
+  --wall: oklch(0.8 0.15 72); --wall-mark: oklch(0.99 0.01 85 / 0.55); --wall-ink: oklch(0.21 0.03 55);
+  --win-bg: oklch(0.995 0.002 270); --win-bar: oklch(0.955 0.004 270); --win-side: oklch(0.973 0.004 270);
+  --win-line: oklch(0.86 0.006 270); --win-ink: oklch(0.25 0.012 270); --win-ink-2: oklch(0.5 0.012 270); --win-chip: oklch(0.93 0.01 270);
+  --dock: oklch(0.97 0.01 80 / 0.55); --tile-2: oklch(0.52 0.15 275); --tile-1: oklch(0.6 0.13 45); --tile-3: oklch(0.6 0.12 235); --tile-4: oklch(0.52 0.13 250); --tile-5: oklch(0.52 0.15 300); --tile-6: oklch(0.55 0.02 270); --tile-7: oklch(0.58 0.12 160);
+  --close: oklch(0.7 0.18 25); --min: oklch(0.82 0.15 85); --max: oklch(0.74 0.17 145);
+  --shadow-win: 0 34px 70px -26px oklch(0.25 0.07 55 / 0.55), 0 4px 10px oklch(0.25 0.05 55 / 0.18);
+  --ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+}
+* { margin: 0; box-sizing: border-box; }
+body { width: 1280px; height: 640px; overflow: hidden; background: var(--wall); position: relative; font-family: var(--ui); }
+.mark { position: absolute; border-radius: 40px; background: var(--wall-mark); }
+.copy { position: absolute; left: 76px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; gap: 18px; color: var(--wall-ink); }
+.brand { display: flex; align-items: center; gap: 22px; }
+.brand img { width: 112px; height: 112px; }
+.brand h1 { font: 700 78px/1 "Bricolage"; letter-spacing: -0.04em; }
+.tag { font: 700 44px/1.05 "Bricolage"; letter-spacing: -0.03em; margin-top: 12px; }
+.sub { font-size: 23px; font-weight: 600; opacity: 0.8; }
+.win { position: absolute; background: var(--win-bg); border-radius: 18px; box-shadow: var(--shadow-win); overflow: hidden; }
+.bar { height: 38px; background: var(--win-bar); border-bottom: 1.5px solid var(--win-line); display: flex; align-items: center; padding: 0 14px; gap: 7px; font-size: 15px; font-weight: 600; color: var(--win-ink-2); }
+.bar i { width: 12px; height: 12px; border-radius: 6px; background: var(--close); display: inline-block; }
+.bar i:nth-child(2) { background: var(--min); } .bar i:nth-child(3) { background: var(--max); }
+.bar .t { flex: 1; text-align: center; margin-right: 50px; }
+.bar .who { font-size: 13px; background: var(--win-chip); color: var(--win-ink); padding: 3px 10px; border-radius: 99px; }
+.side { position: absolute; left: 0; top: 38px; bottom: 0; width: 31%; background: var(--win-side); border-right: 1.5px solid var(--win-line); padding: 14px 12px; font-size: 15px; font-weight: 700; color: var(--win-ink); }
+.side div { font-weight: 400; color: var(--win-ink-2); font-size: 14px; padding: 4px 7px; border-radius: 7px; margin-top: 4px; }
+.side div.on { background: var(--win-chip); color: var(--win-ink); }
+.main { position: absolute; left: 31%; right: 0; top: 38px; padding: 16px; display: grid; gap: 14px; }
+.msg { display: flex; gap: 10px; font-size: 14.5px; line-height: 1.3; color: var(--win-ink); }
+.msg b { display: block; } .msg span { color: var(--win-ink-2); }
+.av { width: 30px; height: 30px; border-radius: 15px; color: white; display: grid; place-items: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.label { position: absolute; font: 700 30px/1 "Bricolage"; padding: 5px 16px 9px; border-radius: 13px; transform: rotate(-4deg); box-shadow: 0 14px 30px -14px oklch(0.15 0.03 55 / 0.6); }
+.dock { position: absolute; left: 780px; top: 548px; display: flex; gap: 11px; padding: 11px; border-radius: 24px; background: var(--dock); border: 1.5px solid oklch(1 0 0 / 0.4); box-shadow: 0 18px 40px -18px oklch(0.25 0.06 55 / 0.5); }
+.tile { width: 58px; height: 58px; border-radius: 14px; color: white; display: grid; place-items: center; font: 700 28px "Bricolage"; box-shadow: inset 0 -3px 0 oklch(0.1 0.01 270 / 0.12), 0 3px 8px oklch(0.2 0.03 55 / 0.25); }
+.tip { position: absolute; left: 934px; top: 504px; padding: 5px 12px; border-radius: 9px; background: oklch(0.25 0.01 270 / 0.88); color: white; font-size: 15px; font-weight: 600; }
+</style></head>
+<body>
+  <div class="mark" style="width:420px;height:420px;right:-150px;top:-190px"></div>
+  <div class="mark" style="width:300px;height:300px;left:-150px;bottom:-170px;opacity:.7"></div>
+  <div class="copy">
+    <div class="brand"><img src="../../web/site/assets/openparallel-256.png" alt=""><h1>OpenParallel</h1></div>
+    <div class="tag">Two of the same app.<br>Each with its own login.</div>
+    <div class="sub">Free and open source · macOS · Windows · Linux</div>
+  </div>
+  <div class="win" style="left:690px;top:70px;width:470px;height:250px">
+    <div class="bar"><i></i><i></i><i></i><span class="t">Discord</span><span class="who">june</span></div>
+    <div class="side">Fernhill Studio<div class="on"># general</div><div># orders</div></div>
+    <div class="main"><div class="msg"><span class="av" style="background:var(--tile-1)">J</span><div><b>june</b><span>Kiln is loaded for Thursday.</span></div></div><div class="msg"><span class="av" style="background:var(--tile-3)">R</span><div><b>rafael</b><span>New mugs are up.</span></div></div></div>
+  </div>
+  <div class="win" style="left:760px;top:262px;width:470px;height:250px">
+    <div class="bar"><i></i><i></i><i></i><span class="t">Discord Parall</span><span class="who">maya</span></div>
+    <div class="side">Kiln Ceramics<div class="on"># design</div><div># shipping</div></div>
+    <div class="main"><div class="msg"><span class="av" style="background:var(--tile-5)">M</span><div><b>maya</b><span>Homepage comps are in.</span></div></div><div class="msg"><span class="av" style="background:var(--tile-7)">L</span><div><b>lena</b><span>Shipping labels printed.</span></div></div></div>
+  </div>
+  <div class="label" style="left:664px;top:46px;background:var(--wall-ink);color:white">MAIN</div>
+  <div class="label" style="left:736px;top:238px;background:white;color:var(--wall-ink)">ALT</div>
+  <div class="tip">Discord Parall</div>
+  <div class="dock">
+    <div class="tile" style="background:var(--tile-6)">F</div><div class="tile" style="background:var(--tile-3)">T</div>
+    <div class="tile" style="background:var(--tile-2)">D</div><div class="tile" style="background:var(--tile-2);outline:3px solid white;outline-offset:2px">D</div>
+    <div class="tile" style="background:var(--tile-4)">V</div>
+  </div>
+</body></html>

@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      macos:
+        description: Also run the macOS app tests (Swift)
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  engine:
+    name: Windows and Linux engine (.NET)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Test
+        working-directory: desktop
+        run: dotnet test --project tests/OpenParallel.Core.Tests
+
+  website:
+    name: Website builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: bash web/build.sh && test -f web/dist/index.html && test -f web/dist/project.json
+
+  macos:
+    # macOS runners cost 10× the minutes of Linux ones on private repositories, so this runs on
+    # demand for now. Move it to every push once the repository is public (free minutes).
+    name: macOS app (Swift)
+    if: github.event_name == 'workflow_dispatch' && inputs.macos
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test
+        run: swift test

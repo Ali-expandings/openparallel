@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenParallel: two of the same app, each with its own login</title>
+<meta name="description" content="OpenParallel makes a second copy of an app you already have, with its own icon and its own data, so another account stays signed in beside the first. Free and open source for macOS, Windows and Linux.">
+<meta name="theme-color" content="#f2b544" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2b2c33" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/openparallel-64.png">
+<link rel="stylesheet" href="/site.css">
+<script src="/site.js" defer></script>
+<script src="/desk.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12h16M12 4v16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 8.6A5 5 0 0 0 9 15m6.5-.5A5 5 0 0 0 12 7M5.3 5.4A9 9 0 0 0 6 18.4M18.4 18A9 9 0 0 0 12 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8M7.1 6.3a7.5 7.5 0 1 0 9.8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4.5h4V7m-7.5 0 1 12.5h9L17.5 7M10.5 11v5m3-5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.5 7-5 5 5 5m7-10 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-min" viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1"/></symbol>
+  <symbol id="i-max" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1"/></symbol>
+  <symbol id="i-x" viewBox="0 0 10 10"><path d="m1.5 1.5 7 7m0-7-7 7" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="wall">
+  <header class="menubar">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/assets/openparallel-64.png" alt="" width="26" height="26">OpenParallel</a>
+      <nav id="site-nav" aria-label="Site">
+        <a href="#how">How it works</a>
+        <a href="/apps/">Apps</a>
+        <a href="#download">Download</a>
+        <a href="/report/">Report a problem</a>
+      </nav>
+      <div class="menubar-end">
+        <a class="btn btn-quiet btn-small github" data-repo-link hidden><svg aria-hidden="true"><use href="#i-code"/></svg>Source</a>
+        <a class="btn btn-primary btn-small" href="#download">Download</a>
+        <button class="btn btn-quiet btn-small menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><svg aria-hidden="true"><use href="#i-menu"/></svg><span class="visually-hidden">Menu</span></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <h1 id="hero-title"><span>Two of the same app.</span> <span>Each with its own login.</span></h1>
+    <div class="hero-copy">
+      <p class="lede">OpenParallel makes a second copy of an app you already have, with its own icon and its own data, so another account stays signed in beside the first. The app itself is never changed.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#download" data-download-auto><svg aria-hidden="true"><use href="#i-down"/></svg><span data-download-label>Download</span></a>
+        <a class="btn btn-quiet" href="#download" data-other-systems>Windows and Linux</a>
+      </div>
+      <p class="hero-meta">Free and open source under the MIT license.</p>
+    </div>
+
+    <figure class="desk" data-os="mac" data-app="discord" data-front="copy">
+      <div class="desk-bar">
+        <div class="seg" role="radiogroup" aria-label="Show an app" data-app-picker>
+          <button type="button" role="radio" aria-checked="false" data-app="claude">Claude</button>
+          <button type="button" role="radio" aria-checked="true" data-app="discord">Discord</button>
+          <button type="button" role="radio" aria-checked="false" data-app="telegram">Telegram</button>
+          <button type="button" role="radio" aria-checked="false" data-app="vscode">VS Code</button>
+          <button type="button" role="radio" aria-checked="false" data-app="obsidian">Obsidian</button>
+        </div>
+        <div class="seg" role="radiogroup" aria-label="Show a system" data-os-picker>
+          <button type="button" role="radio" aria-checked="true" data-os="mac">macOS</button>
+          <button type="button" role="radio" aria-checked="false" data-os="windows">Windows</button>
+          <button type="button" role="radio" aria-checked="false" data-os="linux">Linux</button>
+        </div>
+      </div>
+      <div class="desk-stage" data-stage>
+        <noscript><p>Two windows of the same app, each signed in to a different account, with both icons side by side in the Dock.</p></noscript>
+      </div>
+      <figcaption>Illustration. Click the copy in the <span data-dock-word>Dock</span> to open it again. The apps shown come from the tested list; their makers aren’t involved with OpenParallel.</figcaption>
+    </figure>
+  </section>
+</div>
+
+<main id="main">
+  <section class="section" id="how" aria-labelledby="how-title">
+    <div class="wrap split">
+      <div>
+        <h2 id="how-title">Three steps, in an app that looks like the rest of your computer.</h2>
+        <p class="intro">No settings files and no command line. OpenParallel lists the apps you have and says plainly what a copy of each one gets before you make it.</p>
+        <ol class="steps" data-steps>
+          <li class="on" data-step="1" tabindex="0">
+            <div><h3>Pick the app</h3><p>Your apps, grouped by what a copy gets: its own login and data, a second window with the same data, or nothing because the app allows only one copy.</p></div>
+          </li>
+          <li data-step="2" tabindex="0">
+            <div><h3>Name the copy</h3><p>It’s called “Discord Parall” unless you rename it. Separate login and data is on wherever the app allows it.</p></div>
+          </li>
+          <li data-step="3" tabindex="0">
+            <div><h3>Open it like any app</h3><p>It waits in the <span data-menu-word>Dock and Launchpad</span> under its own name. Sign in to the other account once and it stays there.</p></div>
+          </li>
+        </ol>
+      </div>
+      <div class="sheet" data-sheet data-step="1" role="img" aria-label="The New instance window: choosing Discord from the list of apps, naming the copy, and the result: Discord and Discord Parall side by side.">
+        <div class="titlebar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="title">New Instance</span><span style="width:47px"></span></div>
+        <div class="sheet-body">
+          <div class="sheet-pick">
+            <div class="sheet-search"><svg aria-hidden="true"><use href="#i-search"/></svg>Search apps</div>
+            <p class="sheet-group">Separate login and data</p>
+            <div class="sheet-row"><span class="face" style="--face:var(--tile-1)">C</span><span>Claude</span><small>Tested</small></div>
+            <div class="sheet-row on"><span class="face" style="--face:var(--tile-2)">D</span><span>Discord</span><small>Tested</small></div>
+            <div class="sheet-row"><span class="face" style="--face:var(--tile-3)">T</span><span>Telegram</span><small>Tested</small></div>
+            <div class="sheet-row"><span class="face" style="--face:var(--tile-4)">V</span><span>Visual Studio Code</span><small>Tested</small></div>
+            <p class="sheet-group">Opens again, shares data</p>
+            <div class="sheet-row"><span class="face" style="--face:var(--tile-5)">N</span><span>Notes</span><small>Shares data</small></div>
+          </div>
+          <div class="sheet-form">
+            <div class="sheet-field"><label>Name</label><output>Discord Parall</output></div>
+            <div class="sheet-field"><label>Separate login and data</label><span class="sheet-toggle" aria-hidden="true"></span></div>
+            <div class="sheet-field"><label>Open after creating</label><span class="sheet-toggle" aria-hidden="true"></span></div>
+            <div class="sheet-actions"><span>Back</span><span class="go">Create</span></div>
+          </div>
+          <div class="sheet-done">
+            <div class="pair">
+              <div><span class="face" style="--face:var(--tile-2)">D</span>Discord</div>
+              <div><span class="face" style="--face:var(--tile-2)">D</span>Discord Parall</div>
+            </div>
+            <p>Two apps in the Dock. Two accounts, signed in.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="apart" aria-labelledby="apart-title">
+    <div class="wrap">
+      <h2 id="apart-title">Same app. Everything that makes it yours, kept apart.</h2>
+      <p class="intro">A copy runs the very app you installed, so it updates when the app does. What it gets is its own place for the things that make an account yours.</p>
+      <div class="ledger">
+        <div>
+          <h3>Separate in every copy</h3>
+          <ul>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Sign-ins and the accounts behind them</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Cookies, history and site data</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Settings, extensions, themes and caches</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Its own name and icon in the <span data-menu-word-short>Dock</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Shared with the original</h3>
+          <ul>
+            <li><svg aria-hidden="true"><use href="#i-share"/></svg>The program itself: installed once, updated once</li>
+            <li><svg aria-hidden="true"><use href="#i-share"/></svg>Your documents and folders, as with any app</li>
+          </ul>
+        </div>
+      </div>
+      <div class="recipes">
+        <div><b>Chrome, Edge, Brave and other Chromium browsers</b><span>Their own profile folder.</span></div>
+        <div><b>Slack, Discord, Obsidian, Claude and other Electron apps</b><span>Their own user data folder.</span></div>
+        <div><b>VS Code, Cursor and VSCodium</b><span>Their own settings and their own extensions.</span></div>
+        <div><b>Firefox, LibreWolf and Zen</b><span>Their own profile, kept from the original’s.</span></div>
+        <div><b>Telegram Desktop</b><span>Its own working folder, signed in on its own.</span></div>
+        <div><b>Any website</b><span>Its own window with its own cookies, separate from your browser.</span></div>
+        <div><b>JetBrains IDEs, and other apps on Linux</b><span>Their own settings and caches. Marked Experimental until tested.</span></div>
+        <div><b>Zoom, Steam and others that allow one copy</b><span>Not supported. Where a website version exists, OpenParallel offers that instead.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="apps" aria-labelledby="apps-title">
+    <div class="wrap">
+      <h2 id="apps-title">Check your app before you download.</h2>
+      <p class="intro">Every app has a status that says exactly what was shown. Tested means this exact version ran as two copies with separate data. Nothing is rounded up.</p>
+      <div class="listview" data-register data-limit="10">
+        <div class="listview-tools">
+          <label class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="visually-hidden">Search apps</span><input type="search" placeholder="Search 199 apps" data-search autocomplete="off"></label>
+        </div>
+        <table>
+          <thead><tr><th scope="col">App</th><th scope="col">Status</th><th scope="col">Note</th></tr></thead>
+          <tbody data-rows><tr><td colspan="3" class="empty">Loading the list…</td></tr></tbody>
+        </table>
+        <div class="listview-foot"><span data-summary>On macOS.</span><a href="/apps/">See every app and what each status means</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="private" aria-labelledby="private-title">
+    <div class="wrap">
+      <h2 id="private-title">Private, because there’s nothing to send.</h2>
+      <div class="promises">
+        <div><svg aria-hidden="true"><use href="#i-signal"/></svg><div><b>It doesn’t use the network</b><p>No account, no analytics, no update checks. Your apps talk to their own services as usual.</p></div></div>
+        <div><svg aria-hidden="true"><use href="#i-power"/></svg><div><b>Nothing runs in the background</b><p>A copy is an ordinary shortcut and a data folder. OpenParallel runs only while you have it open.</p></div></div>
+        <div><svg aria-hidden="true"><use href="#i-lock"/></svg><div><b>The original app is never touched</b><p>Its files and its own data stay exactly as they were. Copies live in a folder of their own.</p></div></div>
+        <div><svg aria-hidden="true"><use href="#i-trash"/></svg><div><b>Removing is reversible</b><p>Moving a copy to the <span data-trash-word>Trash</span> takes its shortcut and data with it, and you can put them back.</p></div></div>
+        <div><svg aria-hidden="true"><use href="#i-code"/></svg><div><b>Open source</b><p>MIT license. <span data-repo-sentence>The code goes public with the first release.</span></p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="download" aria-labelledby="download-title">
+    <div class="wrap">
+      <h2 id="download-title">Download OpenParallel.</h2>
+      <p class="intro">Free, with no installer to click through and no account to make.</p>
+      <div class="downloads" data-downloads>
+        <div class="dl" data-system="mac">
+          <div><h3>macOS</h3><span class="os-mark" data-requires></span></div>
+          <p>Open the zip and drag OpenParallel to Applications. <code data-file></code></p>
+          <a class="btn btn-primary" data-get><svg aria-hidden="true"><use href="#i-down"/></svg>Download</a>
+        </div>
+        <div class="dl" data-system="windows">
+          <div><h3>Windows</h3><span class="os-mark" data-requires></span></div>
+          <p>Unzip it anywhere you like to keep it and run <code>OpenParallel.exe</code>. <code data-file></code></p>
+          <a class="btn btn-primary" data-get><svg aria-hidden="true"><use href="#i-down"/></svg>Download</a>
+        </div>
+        <div class="dl" data-system="linux-x64">
+          <div><h3>Linux</h3><span class="os-mark" data-requires></span></div>
+          <p>Unpack it and run <code>install.sh</code>, no sudo needed. <code data-file></code></p>
+          <a class="btn btn-primary" data-get><svg aria-hidden="true"><use href="#i-down"/></svg>Download</a>
+        </div>
+        <div class="dl" data-system="linux-arm64">
+          <div><h3>Linux on ARM</h3><span class="os-mark" data-requires></span></div>
+          <p>The same, for 64-bit ARM computers. <code data-file></code></p>
+          <a class="btn btn-primary" data-get><svg aria-hidden="true"><use href="#i-down"/></svg>Download</a>
+        </div>
+      </div>
+      <p class="release-note" data-release-note hidden>The first public release isn’t out yet. These buttons will download from GitHub the moment it is.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="colophon">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/openparallel-64.png" alt="" width="26" height="26">OpenParallel</a>
+    <span>Free software under the MIT license.</span>
+    <nav aria-label="Footer">
+      <a href="/apps/">Apps</a>
+      <a href="/report/">Report a problem</a>
+      <a href="/privacy/">Privacy</a>
+      <a data-repo-link hidden>Source code</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

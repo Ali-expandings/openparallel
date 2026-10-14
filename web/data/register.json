@@ -1,0 +1,1406 @@
+{
+  "rows": [
+    {
+      "app": "Anki",
+      "tier": "tested",
+      "family": "Isolated home",
+      "note": "Ran twice with separate processes and separate profiles. Version 26.8. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Antigravity",
+      "tier": "tested",
+      "family": "Antigravity",
+      "note": "Ran twice with separate processes and separate profiles. Version 2.2.1. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Antigravity IDE",
+      "tier": "tested",
+      "family": "Antigravity",
+      "note": "Ran twice with separate processes and separate profiles. Version 2.1.1, 2.5.5. Recorded 2026-08-18.",
+      "versions": 2
+    },
+    {
+      "app": "Audacity",
+      "tier": "tested",
+      "family": "Isolated home",
+      "note": "Ran twice with separate processes and separate profiles. Version 3.7.8.0. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Brave Browser",
+      "tier": "tested",
+      "family": "Chromium",
+      "note": "Ran twice with separate processes and separate profiles. Version 151.1.93.129, 151.1.93.136. Recorded 2026-08-19.",
+      "versions": 2
+    },
+    {
+      "app": "Claude",
+      "tier": "tested",
+      "family": "Claude",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.24012.9, 1.32352.1, 1.32885.1. Recorded 2026-08-19.",
+      "versions": 3
+    },
+    {
+      "app": "Codex",
+      "tier": "tested",
+      "family": "Codex",
+      "note": "Ran twice with separate processes and separate profiles. Version 26.721.81911, 26.803.61601. Recorded 2026-08-18.",
+      "versions": 2
+    },
+    {
+      "app": "Cursor",
+      "tier": "tested",
+      "family": "VS Code",
+      "note": "Ran twice with separate processes and separate profiles. Version 3.10.11. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "DBeaver Community",
+      "tier": "tested",
+      "family": "Eclipse",
+      "note": "Ran twice with separate processes and separate profiles. Version 26.1.3. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Discord",
+      "tier": "tested",
+      "family": "Discord",
+      "note": "Ran twice with separate processes and separate profiles. Version 0.0.402, 0.0.407. Recorded 2026-08-18.",
+      "versions": 2
+    },
+    {
+      "app": "Firefox",
+      "tier": "tested",
+      "family": "Firefox",
+      "note": "Ran twice with separate processes and separate profiles. Version 153.0.1, 153.0.4. Recorded 2026-08-18.",
+      "versions": 2
+    },
+    {
+      "app": "Gemini",
+      "tier": "tested",
+      "family": "Isolated home",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.84.4.574. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Ghostty",
+      "tier": "tested",
+      "family": "Isolated home",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.3.1. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "iTerm2",
+      "tier": "tested",
+      "family": "Isolated home",
+      "note": "Ran twice with separate processes and separate profiles. Version 3.6.11, 3.6.10. Recorded 2026-08-19.",
+      "versions": 2
+    },
+    {
+      "app": "Obsidian",
+      "tier": "tested",
+      "family": "Electron",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.12.7. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "OpenCode",
+      "tier": "tested",
+      "family": "ToDesktop",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.17.16. Recorded 2026-08-18.",
+      "versions": 1
+    },
+    {
+      "app": "Openscreen",
+      "tier": "tested",
+      "family": "Electron",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.4.0. Recorded 2026-08-18.",
+      "versions": 1
+    },
+    {
+      "app": "Screen Studio",
+      "tier": "tested",
+      "family": "Electron",
+      "note": "Ran twice with separate processes and separate profiles. Version 3.6.0-4214. Recorded 2026-08-18.",
+      "versions": 1
+    },
+    {
+      "app": "Signal",
+      "tier": "tested",
+      "family": "ToDesktop",
+      "note": "Ran twice with separate processes and separate profiles. Version 8.21.0. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Spotify",
+      "tier": "tested",
+      "family": "Spotify",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.2.94.583, 1.2.96.518. Recorded 2026-08-18.",
+      "versions": 2
+    },
+    {
+      "app": "Sublime Text",
+      "tier": "tested",
+      "family": "Isolated home",
+      "note": "Ran twice with separate processes and separate profiles. Version Build 4200. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Telegram Desktop",
+      "tier": "tested",
+      "family": "Telegram",
+      "note": "Ran twice with separate processes and separate profiles. Version 7.0.7. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Tor Browser",
+      "tier": "tested",
+      "family": "Firefox",
+      "note": "Ran twice with separate processes and separate profiles. Version 15.0.6. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Visual Studio Code",
+      "tier": "tested",
+      "family": "VS Code",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.127.0. Recorded 2026-08-02.",
+      "versions": 1
+    },
+    {
+      "app": "Vivaldi",
+      "tier": "tested",
+      "family": "Chromium",
+      "note": "Ran twice with separate processes and separate profiles. Version 8.1.4087.64. Recorded 2026-08-19.",
+      "versions": 1
+    },
+    {
+      "app": "WhatsApp",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "One bundle identifier and App Group set: a second process opens the same account. Use a website instance of web.whatsapp.com.",
+      "versions": 0
+    },
+    {
+      "app": "Zen",
+      "tier": "tested",
+      "family": "Firefox",
+      "note": "Ran twice with separate processes and separate profiles. Version 1.21.10b, 1.21.14b. Recorded 2026-08-18.",
+      "versions": 2
+    },
+    {
+      "app": "Google Chrome",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Chromium",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Microsoft Edge",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Opera",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Opera GX",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Arc",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Dia",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Perplexity Comet",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "OpenAI Atlas",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Yandex Browser",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Sidekick",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Wavebox",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Naver Whale",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Thorium",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Ungoogled Chromium",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "SigmaOS",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Shift",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Station",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Min",
+      "tier": "detected",
+      "family": "Chromium",
+      "note": "The Chromium recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Floorp",
+      "tier": "detected",
+      "family": "Firefox",
+      "note": "The Firefox recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Waterfox",
+      "tier": "detected",
+      "family": "Firefox",
+      "note": "The Firefox recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Mullvad Browser",
+      "tier": "detected",
+      "family": "Firefox",
+      "note": "The Firefox recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Firefox Developer Edition",
+      "tier": "detected",
+      "family": "Firefox",
+      "note": "The Firefox recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Firefox ESR",
+      "tier": "detected",
+      "family": "Firefox",
+      "note": "The Firefox recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Pale Moon",
+      "tier": "detected",
+      "family": "Firefox",
+      "note": "The Firefox recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Windsurf",
+      "tier": "detected",
+      "family": "VS Code",
+      "note": "The VS Code recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "VSCodium",
+      "tier": "detected",
+      "family": "VS Code",
+      "note": "The VS Code recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Trae",
+      "tier": "detected",
+      "family": "VS Code",
+      "note": "The VS Code recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Positron",
+      "tier": "detected",
+      "family": "VS Code",
+      "note": "The VS Code recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Kiro",
+      "tier": "detected",
+      "family": "VS Code",
+      "note": "The VS Code recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Void",
+      "tier": "detected",
+      "family": "VS Code",
+      "note": "The VS Code recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Theia IDE",
+      "tier": "detected",
+      "family": "VS Code",
+      "note": "The VS Code recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Slack",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Notion",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Linear",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Postman",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Insomnia",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Bitwarden",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Mattermost",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Element",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Beeper Desktop",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Todoist",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Asana",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "ClickUp",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Figma",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Loom",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Fluent Reader",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "UpNote",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Logseq",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Joplin",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Standard Notes",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Anytype",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Zulip",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Rocket.Chat",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Ferdium",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Franz",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Wire",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Threema",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Microsoft To Do",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Skype",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Twist",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Chatwoot",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Hoppscotch",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Bruno",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Rambox",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Trello",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Basecamp",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Toggl Track",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Clockify",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Miro",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Whimsical",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Craft",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Reflect",
+      "tier": "detected",
+      "family": "Electron",
+      "note": "The Electron recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Superhuman",
+      "tier": "detected",
+      "family": "ToDesktop",
+      "note": "The ToDesktop recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Height",
+      "tier": "detected",
+      "family": "ToDesktop",
+      "note": "The ToDesktop recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Cron",
+      "tier": "detected",
+      "family": "ToDesktop",
+      "note": "The ToDesktop recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Warp",
+      "tier": "detected",
+      "family": "ToDesktop",
+      "note": "The ToDesktop recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Raycast",
+      "tier": "detected",
+      "family": "ToDesktop",
+      "note": "The ToDesktop recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "IntelliJ IDEA",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "PyCharm",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "WebStorm",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "GoLand",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "CLion",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "RubyMine",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "DataGrip",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "PhpStorm",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Rider",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Android Studio",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "AppCode",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "DataSpell",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Aqua",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "RustRover",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Fleet",
+      "tier": "detected",
+      "family": "JetBrains",
+      "note": "The JetBrains recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Eclipse IDE",
+      "tier": "detected",
+      "family": "Eclipse",
+      "note": "The Eclipse recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Spring Tool Suite",
+      "tier": "detected",
+      "family": "Eclipse",
+      "note": "The Eclipse recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "MyEclipse",
+      "tier": "detected",
+      "family": "Eclipse",
+      "note": "The Eclipse recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Talend Studio",
+      "tier": "detected",
+      "family": "Eclipse",
+      "note": "The Eclipse recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Alacritty",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Kitty",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "WezTerm",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Emacs",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Blender",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "FreeCAD",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "KiCad",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Arduino IDE",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "OBS Studio",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Inkscape",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "GIMP",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Krita",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Darktable",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "RawTherapee",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "MuseScore",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Ardour",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "LMMS",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Godot",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Tiled",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "OpenSCAD",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "QGIS",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Meld",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Zotero",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Calibre",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "HandBrake",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Kdenlive",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Shotcut",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Neovide",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Hyper",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Tabby",
+      "tier": "detected",
+      "family": "Isolated home",
+      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "versions": 0
+    },
+    {
+      "app": "Zed",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "Inspected on this Mac at 1.15.0: no isolation recipe applies yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Sketch",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Pixelmator Pro",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Scrivener",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Affinity Photo",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Affinity Designer",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Docker Desktop",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Tailscale",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Zoom",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Microsoft Teams",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Microsoft Outlook",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Spark Desktop",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Viber",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "WeChat",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Plex",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Evernote",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Dropbox",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Things 3",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "OmniFocus",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Bear",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Fantastical",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "1Password",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Proton Mail",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Signal Desktop (App Store build)",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Parallels Desktop",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "VMware Fusion",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Steam",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Adobe Photoshop",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Adobe Lightroom",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "DaVinci Resolve",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
+      "versions": 0
+    },
+    {
+      "app": "Telegram Lite",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "App Store build rejected a second instance in a real test.",
+      "versions": 0
+    },
+    {
+      "app": "Safari",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Terminal",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Keynote",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Numbers",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Pages",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Xcode",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Mail",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Messages",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Notes",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Photos",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Calendar",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Reminders",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "App Store",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "Apple system app, system-managed container.",
+      "versions": 0
+    },
+    {
+      "app": "Any iOS or iPadOS app",
+      "tier": "limited",
+      "family": "Blocked",
+      "note": "macOS runs these in a single system container.",
+      "versions": 0
+    }
+  ],
+  "counts": {
+    "tested": 27,
+    "detected": 127,
+    "wishlist": 30,
+    "limited": 15
+  },
+  "total": 199,
+  "testedVersions": 37,
+  "testedApps": 27
+}

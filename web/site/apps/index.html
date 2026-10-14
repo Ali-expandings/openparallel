@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apps that work with OpenParallel</title>
+<meta name="description" content="Every app OpenParallel knows, with an honest status: Tested, Supported, Wanted or Not supported.">
+<meta name="theme-color" content="#f2b544" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2b2c33" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/openparallel-64.png">
+<link rel="stylesheet" href="/site.css">
+<script src="/site.js" defer></script>
+<script src="/apps.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12h16M12 4v16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-signal" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 8.6A5 5 0 0 0 9 15m6.5-.5A5 5 0 0 0 12 7M5.3 5.4A9 9 0 0 0 6 18.4M18.4 18A9 9 0 0 0 12 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v8M7.1 6.3a7.5 7.5 0 1 0 9.8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4.5h4V7m-7.5 0 1 12.5h9L17.5 7M10.5 11v5m3-5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.5 7-5 5 5 5m7-10 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-min" viewBox="0 0 10 10"><path d="M1 5h8" stroke="currentColor" stroke-width="1"/></symbol>
+  <symbol id="i-max" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1"/></symbol>
+  <symbol id="i-x" viewBox="0 0 10 10"><path d="m1.5 1.5 7 7m0-7-7 7" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="page-head">
+  <header class="menubar">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/assets/openparallel-64.png" alt="" width="26" height="26">OpenParallel</a>
+      <nav id="site-nav" aria-label="Site">
+        <a href="/#how">How it works</a>
+        <a href="/apps/" aria-current="page">Apps</a>
+        <a href="/#download">Download</a>
+        <a href="/report/">Report a problem</a>
+      </nav>
+      <div class="menubar-end">
+        <a class="btn btn-quiet btn-small github" data-repo-link hidden><svg aria-hidden="true"><use href="#i-code"/></svg>Source</a>
+        <a class="btn btn-primary btn-small" href="/#download">Download</a>
+        <button class="btn btn-quiet btn-small menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><svg aria-hidden="true"><use href="#i-menu"/></svg><span class="visually-hidden">Menu</span></button>
+      </div>
+    </div>
+  </header>
+  <div class="wrap title">
+    <h1>Which apps can have a second copy?</h1>
+    <p>Every app OpenParallel knows, with what has actually been shown for each one. Search for yours; if it isn’t here, report it and it can be tested.</p>
+  </div>
+</div>
+
+<main id="main" class="page">
+  <div class="wrap">
+    <div class="legend">
+      <div><span class="status status-tested">Tested</span><p>This exact version ran as two copies with separate processes and separate data on a test Mac. Versions are listed.</p></div>
+      <div><span class="status status-supported">Supported</span><p>A recipe exists for this kind of app, so a copy should get its own data. This app hasn’t been tested yet.</p></div>
+      <div><span class="status status-wanted">Wanted</span><p>People asked for it. No recipe yet; a test report moves it up.</p></div>
+      <div><span class="status status-no">Not supported</span><p>The system or the app itself allows only one copy, so OpenParallel won’t pretend.</p></div>
+    </div>
+
+    <div class="listview" data-register-full>
+      <div class="listview-tools">
+        <label class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="visually-hidden">Search apps</span><input type="search" placeholder="Search apps" data-search autocomplete="off"></label>
+        <div class="seg seg-ground" role="radiogroup" aria-label="Status" data-filter>
+          <button type="button" role="radio" aria-checked="true" data-tier="all">All</button>
+          <button type="button" role="radio" aria-checked="false" data-tier="tested">Tested</button>
+          <button type="button" role="radio" aria-checked="false" data-tier="detected">Supported</button>
+          <button type="button" role="radio" aria-checked="false" data-tier="wishlist">Wanted</button>
+          <button type="button" role="radio" aria-checked="false" data-tier="limited">Not supported</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th scope="col">App</th><th scope="col">Status</th><th scope="col">Note</th></tr></thead>
+        <tbody data-rows><tr><td colspan="3" class="empty">Loading the list…</td></tr></tbody>
+      </table>
+      <div class="listview-foot"><span data-summary></span><a href="/report/?kind=separate">Report an app</a></div>
+    </div>
+
+    <div class="prose">
+      <h2>Windows and Linux</h2>
+      <p>The same recipes run there: Chromium browsers and Electron apps get their own profile folder, VS Code its own settings and extensions, Firefox its own profile, Telegram its own working folder. Real-app testing on Windows and Linux is under way, so those apps count as Supported until a test says more.</p>
+      <h2>Something listed wrongly?</h2>
+      <p>If an app here behaves differently on your computer, <a href="/report/?kind=separate">send a report</a> with the app’s version. Reports are how statuses change.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="colophon">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/openparallel-64.png" alt="" width="26" height="26">OpenParallel</a>
+    <span>Free software under the MIT license.</span>
+    <nav aria-label="Footer">
+      <a href="/apps/">Apps</a>
+      <a href="/report/">Report a problem</a>
+      <a href="/privacy/">Privacy</a>
+      <a data-repo-link hidden>Source code</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

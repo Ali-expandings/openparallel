@@ -1,0 +1,27 @@
+name: An idea, or an app to support
+description: Something OpenParallel should do, or an app it should know.
+labels: ["idea"]
+body:
+  - type: input
+    id: app
+    attributes:
+      label: App (if this is about an app)
+      placeholder: Slack, from slack.com
+  - type: dropdown
+    id: system
+    attributes:
+      label: System
+      multiple: true
+      options: [macOS, Windows, Linux]
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea, or why you need a second copy of this app
+    validations:
+      required: true
+  - type: checkboxes
+    id: test
+    attributes:
+      label: Testing
+      options:
+        - label: I can test a build with this app on my machine and report back.

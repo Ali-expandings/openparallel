@@ -1,0 +1,41 @@
+name: Something doesn't work
+description: An error, a copy that won't open, a button that does nothing.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **Report a problem** in the app (Help menu on macOS, F1 on Windows and Linux) fills most of this in for you; you can paste its text in the last box instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected instead
+      placeholder: I created a copy of Discord and it opened the original account.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to see it again
+      placeholder: |
+        1. Create a copy of …
+        2. Open it
+        3. …
+  - type: input
+    id: app
+    attributes:
+      label: App involved and its version
+      placeholder: Discord 0.0.407 (in the app's About window)
+  - type: input
+    id: system
+    attributes:
+      label: OpenParallel version and your system
+      placeholder: OpenParallel 1.0.0, macOS 15.6 (Apple silicon)
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Report text (optional)
+      description: The text from Report a problem → Copy report, if you used it.
+      render: text

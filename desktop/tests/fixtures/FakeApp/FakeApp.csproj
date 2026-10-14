@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>FakeApp</AssemblyName>
+    <RootNamespace>FakeApp</RootNamespace>
+    <ApplicationIcon>fake.ico</ApplicationIcon>
+    <Company>Fixture Labs</Company>
+    <Product>Stand-in app</Product>
+  </PropertyGroup>
+</Project>

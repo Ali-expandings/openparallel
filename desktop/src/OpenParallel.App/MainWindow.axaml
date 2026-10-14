@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        x:Class="OpenParallel.App.MainWindow"
+        Title="OpenParallel"
+        Icon="/Assets/OpenParallel.ico"
+        Width="1080" Height="720" MinWidth="780" MinHeight="500"
+        WindowStartupLocation="CenterScreen">
+  <ui:FANavigationView x:Name="Nav"
+                       PaneDisplayMode="Left"
+                       IsSettingsVisible="True"
+                       IsBackButtonVisible="False"
+                       IsPaneToggleButtonVisible="False"
+                       OpenPaneLength="296">
+    <ui:FANavigationView.AutoCompleteBox>
+      <AutoCompleteBox x:Name="Search" PlaceholderText="Search instances  (Ctrl+F)" FilterMode="None"
+                       AutomationProperties.Name="Search instances" />
+    </ui:FANavigationView.AutoCompleteBox>
+    <ui:FANavigationView.FooterMenuItems>
+      <ui:FANavigationViewItem x:Name="ReportItem" Content="Report a problem" Tag="report" ToolTip.Tip="Report a problem (F1)" />
+    </ui:FANavigationView.FooterMenuItems>
+    <ui:FANavigationView.PaneCustomContent>
+      <Button x:Name="NewButton" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+              Margin="8,4,8,8" Padding="12,7" ToolTip.Tip="New instance (Ctrl+N)"
+              AutomationProperties.Name="New instance">
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <ui:FASymbolIcon Symbol="Add" FontSize="16" />
+          <TextBlock Text="New instance" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
+    </ui:FANavigationView.PaneCustomContent>
+    <Grid RowDefinitions="Auto,*">
+      <ui:FAInfoBar x:Name="Banner" Grid.Row="0" IsOpen="False" IsClosable="True" Margin="36,16,36,0" />
+      <ContentControl x:Name="PageHost" Grid.Row="1" />
+    </Grid>
+  </ui:FANavigationView>
+</Window>

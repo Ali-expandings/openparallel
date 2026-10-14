@@ -1,0 +1,150 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="OpenParallel.App.Views.NewInstancePage"
+             DragDrop.AllowDrop="True">
+  <Grid RowDefinitions="Auto,*,Auto,Auto" Margin="36,20,36,20" MaxWidth="1000">
+    <StackPanel Spacing="8">
+      <TextBlock Classes="title" Text="New instance" />
+      <TabStrip x:Name="KindTabs" Margin="-12,0,0,0">
+        <TabStripItem Content="App" ToolTip.Tip="An installed app (Ctrl+1)" />
+        <TabStripItem Content="Website" ToolTip.Tip="A website in its own window (Ctrl+2)" />
+      </TabStrip>
+    </StackPanel>
+
+    <!-- Step 1: choose an app -->
+    <Grid x:Name="PickerPanel" Grid.Row="1" RowDefinitions="Auto,*" Margin="0,12,0,0">
+      <TextBox x:Name="AppSearch" PlaceholderText="Search apps" AutomationProperties.Name="Search apps"
+               ToolTip.Tip="Type to search, Up and Down to choose, Enter to continue" />
+      <ListBox x:Name="AppList" Grid.Row="1" Margin="0,8,0,0" Background="Transparent"
+               AutomationProperties.Name="Installed apps" />
+      <StackPanel x:Name="LoadingPanel" Grid.Row="1" Spacing="12"
+                  HorizontalAlignment="Center" VerticalAlignment="Center">
+        <ui:FAProgressRing IsIndeterminate="True" Width="32" Height="32" />
+        <TextBlock Classes="secondary" Text="Looking for apps…" />
+      </StackPanel>
+      <TextBlock x:Name="NoAppsText" Grid.Row="1" IsVisible="False" Classes="secondary" TextWrapping="Wrap"
+                 HorizontalAlignment="Center" VerticalAlignment="Center" />
+    </Grid>
+
+    <!-- Step 2: what the app instance gets -->
+    <ScrollViewer x:Name="AppForm" Grid.Row="1" IsVisible="False" Margin="0,12,0,0"
+                  HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="4">
+        <Border Classes="card">
+          <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+            <ContentControl x:Name="AppIconHost" Width="40" Height="40" VerticalAlignment="Center" />
+            <StackPanel Grid.Column="1" Margin="14,0" VerticalAlignment="Center" Spacing="2">
+              <TextBlock x:Name="AppNameText" FontSize="18" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+              <TextBlock x:Name="AppVersionText" Classes="secondary" TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <ui:FASymbolIcon x:Name="StatusIcon" FontSize="16" />
+              <TextBlock x:Name="StatusTitle" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBlock x:Name="StatusDetail" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                       Margin="14,10,0,0" TextWrapping="Wrap" Classes="secondary" />
+          </Grid>
+        </Border>
+        <ui:FAInfoBar x:Name="UnsupportedBar" IsOpen="False" IsClosable="False" Severity="Error" Margin="0,6,0,0" />
+
+        <StackPanel x:Name="AppOptions" Spacing="4">
+          <TextBlock Classes="section" Text="Instance" />
+          <ui:FASettingsExpander x:Name="AppNameCard" Header="Name">
+            <ui:FASettingsExpander.Footer>
+              <TextBox x:Name="AppNameBox" Width="260" AutomationProperties.Name="Instance name" />
+            </ui:FASettingsExpander.Footer>
+          </ui:FASettingsExpander>
+          <TextBlock x:Name="AppNameHint" Classes="caption" IsVisible="False" Margin="56,2,0,6" TextWrapping="Wrap" />
+          <ui:FASettingsExpander x:Name="SeparateCard" Header="Separate login and data">
+            <ui:FASettingsExpander.Footer>
+              <ToggleSwitch x:Name="SeparateToggle" AutomationProperties.Name="Separate login and data" />
+            </ui:FASettingsExpander.Footer>
+          </ui:FASettingsExpander>
+          <ui:FASettingsExpander x:Name="AppOpenCard" Header="Open after creating">
+            <ui:FASettingsExpander.Footer>
+              <ToggleSwitch x:Name="AppOpenToggle" AutomationProperties.Name="Open after creating" />
+            </ui:FASettingsExpander.Footer>
+          </ui:FASettingsExpander>
+          <ui:FASettingsExpander x:Name="AppDesktopCard" Header="Also add a desktop shortcut"
+                                 Description="A Start menu shortcut is always made, in the OpenParallel folder.">
+            <ui:FASettingsExpander.Footer>
+              <ToggleSwitch x:Name="AppDesktopToggle" AutomationProperties.Name="Also add a desktop shortcut" />
+            </ui:FASettingsExpander.Footer>
+          </ui:FASettingsExpander>
+          <ui:FASettingsExpander x:Name="AdvancedExpander" Header="Advanced launch options"
+                                 Description="Extra arguments and environment variables for this instance only.">
+            <ui:FASettingsExpanderItem x:Name="ArgsItem" Content="Launch arguments">
+              <ui:FASettingsExpanderItem.Footer>
+                <TextBox x:Name="ArgsBox" Width="240" PlaceholderText="--start-maximized" AutomationProperties.Name="Launch arguments" />
+              </ui:FASettingsExpanderItem.Footer>
+            </ui:FASettingsExpanderItem>
+            <ui:FASettingsExpanderItem Content="Environment variables"
+                                       Description="For this instance only, e.g. LANG = ar_EG.UTF-8">
+              <ui:FASettingsExpanderItem.Footer>
+                <Button x:Name="AddEnvButton" Content="Add variable" />
+              </ui:FASettingsExpanderItem.Footer>
+            </ui:FASettingsExpanderItem>
+            <ui:FASettingsExpanderItem x:Name="EnvItem" IsVisible="False">
+              <StackPanel x:Name="EnvRows" Spacing="6" />
+            </ui:FASettingsExpanderItem>
+          </ui:FASettingsExpander>
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Website -->
+    <ScrollViewer x:Name="WebForm" Grid.Row="1" IsVisible="False" Margin="0,12,0,0"
+                  HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="4">
+        <ui:FAInfoBar x:Name="NoBrowserBar" IsOpen="False" IsClosable="False" Severity="Warning"
+                      Title="No Chromium browser was found."
+                      Message="Install Microsoft Edge, Google Chrome or Brave to make website instances." />
+        <ui:FASettingsExpander x:Name="AddressCard" Header="Address">
+          <ui:FASettingsExpander.Footer>
+            <TextBox x:Name="AddressBox" Width="320" PlaceholderText="https://web.whatsapp.com"
+                     AutomationProperties.Name="Address" />
+          </ui:FASettingsExpander.Footer>
+        </ui:FASettingsExpander>
+        <ui:FASettingsExpander x:Name="WebNameCard" Header="Name">
+          <ui:FASettingsExpander.Footer>
+            <TextBox x:Name="WebNameBox" Width="260" AutomationProperties.Name="Instance name" />
+          </ui:FASettingsExpander.Footer>
+        </ui:FASettingsExpander>
+        <TextBlock x:Name="WebNameHint" Classes="caption" IsVisible="False" Margin="56,2,0,6" TextWrapping="Wrap" />
+        <ui:FASettingsExpander x:Name="BrowserCard" Header="Browser"
+                               Description="The website opens in an app window of this browser, with a profile of its own.">
+          <ui:FASettingsExpander.Footer>
+            <ComboBox x:Name="BrowserBox" MinWidth="220" AutomationProperties.Name="Browser" />
+          </ui:FASettingsExpander.Footer>
+        </ui:FASettingsExpander>
+        <ui:FASettingsExpander x:Name="WebOpenCard" Header="Open after creating">
+          <ui:FASettingsExpander.Footer>
+            <ToggleSwitch x:Name="WebOpenToggle" AutomationProperties.Name="Open after creating" />
+          </ui:FASettingsExpander.Footer>
+        </ui:FASettingsExpander>
+        <ui:FASettingsExpander x:Name="WebDesktopCard" Header="Also add a desktop shortcut"
+                               Description="A Start menu shortcut is always made, in the OpenParallel folder.">
+          <ui:FASettingsExpander.Footer>
+            <ToggleSwitch x:Name="WebDesktopToggle" AutomationProperties.Name="Also add a desktop shortcut" />
+          </ui:FASettingsExpander.Footer>
+        </ui:FASettingsExpander>
+        <TextBlock x:Name="WebDetail" Classes="caption" TextWrapping="Wrap" Margin="2,8,0,0" />
+        <TextBlock Classes="section" Text="Common" />
+        <WrapPanel x:Name="Presets" />
+      </StackPanel>
+    </ScrollViewer>
+
+    <ui:FAInfoBar x:Name="ErrorBar" Grid.Row="2" IsOpen="False" IsClosable="True" Severity="Error" Margin="0,12,0,0" />
+
+    <Grid Grid.Row="3" ColumnDefinitions="Auto,*,Auto" Margin="0,14,0,0">
+      <Button x:Name="BrowseButton" Content="Browse…" ToolTip.Tip="Choose a program anywhere on this PC (Ctrl+O)" />
+      <TextBlock x:Name="FooterHint" Grid.Column="1" Classes="caption" VerticalAlignment="Center" Margin="12,0"
+                 TextTrimming="CharacterEllipsis" Text="You can also drop a program or its shortcut here." />
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+        <Button x:Name="SecondaryButton" Content="Cancel" MinWidth="96" />
+        <Button x:Name="PrimaryButton" Classes="accent" Content="Continue" MinWidth="120" />
+      </StackPanel>
+    </Grid>
+  </Grid>
+</UserControl>

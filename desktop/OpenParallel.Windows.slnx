@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OpenParallel.App/OpenParallel.App.csproj" />
+    <Project Path="src/OpenParallel.Cli/OpenParallel.Cli.csproj" />
+    <Project Path="src/OpenParallel.Core/OpenParallel.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpenParallel.Core.Tests/OpenParallel.Core.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/fixtures/">
+    <Project Path="tests/fixtures/FakeApp/FakeApp.csproj" />
+  </Folder>
+</Solution>
