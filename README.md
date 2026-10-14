@@ -54,6 +54,23 @@ OpenParallel gives you **a second copy of the app**, called `Discord Parall` unl
 - **Reversible.** Removing a copy moves its shortcut and data to the Trash or Recycle Bin, so a mistake can be undone.
 - **Native on every system.** SwiftUI on macOS; Avalonia with Fluent design on Windows and Linux, so it looks like the rest of the computer.
 
+## The app
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/media/macos-app-dark.png">
+    <img src="docs/media/macos-app-light.png" width="820" alt="The OpenParallel macOS window: a sidebar listing copies grouped by app (Claude Parall, Visual Studio Code Parall, Discord Parall, Firefox Parall, Obsidian Parall, and the website copy WhatsApp Web Parall), and the Discord Parall page with an Open button, its compatibility status (Supported: this exact version has not been tested yet) and its own data.">
+  </picture>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/media/macos-new-instance-dark.png">
+    <img src="docs/media/macos-new-instance-light.png" width="430" alt="The New Instance sheet for Claude: the installed version, its status, the name Claude Parall, and switches for separate login and data and for opening it after creating.">
+  </picture>
+  <br><sub>The macOS app built from this repository, showing a sample library. Versions that haven't been tested yet say so.</sub>
+</p>
+
 ## Download
 
 | System | Status | Get it | Requires |

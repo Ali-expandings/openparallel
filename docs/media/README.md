@@ -9,4 +9,9 @@
   converted with ffmpeg (12 fps, 96-colour palette). It's an illustration; the people and
   workspaces in it are made up, and it says so in the frame.
 
+- `macos-app-{light,dark}.png` and `macos-new-instance-{light,dark}.png`: real screenshots of the
+  macOS app built from this repository (debug build, sample library in a temporary folder, saved
+  by the app from its own windows). The main window is cropped above the data-folder row, which
+  showed the temporary path.
+
 App icons in the illustrations are letter tiles, never the apps' own logos.
