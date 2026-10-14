@@ -10,8 +10,8 @@
 <p align="center">
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-f2b544?style=flat-square"></a>
   <img alt="macOS 14 and later" src="https://img.shields.io/badge/macOS-14%2B-111?style=flat-square&logo=apple">
-  <img alt="Windows 10 and 11, beta" src="https://img.shields.io/badge/Windows-10%20%7C%2011%20·%20beta-0a5bc4?style=flat-square">
-  <img alt="Linux, beta" src="https://img.shields.io/badge/Linux-x64%20%7C%20arm64%20·%20beta-333?style=flat-square&logo=linux&logoColor=white">
+  <img alt="Windows 10 and 11, beta" src="https://img.shields.io/badge/Windows-10%20%7C%2011%20%C2%B7%20beta-0a5bc4?style=flat-square">
+  <img alt="Linux, beta" src="https://img.shields.io/badge/Linux-x64%20%7C%20arm64%20%C2%B7%20beta-333?style=flat-square&logo=linux&logoColor=white">
   <a href="https://github.com/Ali-expandings/openparallel/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Ali-expandings/openparallel/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="No telemetry" src="https://img.shields.io/badge/telemetry-none-2f8f5b?style=flat-square">
   <a href="https://openparallel.pages.dev"><img alt="Website" src="https://img.shields.io/badge/website-openparallel.pages.dev-f2b544?style=flat-square"></a>
@@ -87,11 +87,10 @@ A copy is two small things: **a launcher** and **a data folder**. The launcher s
 
 ```mermaid
 flowchart LR
-    S["Discord Parall<br/>(Dock · Start menu · app launcher)"] --> L["Launcher<br/>a tiny shortcut, no app code inside"]
-    L -->|"--user-data-dir=…/Instances/discord-parall"| A["Discord<br/>the app you installed, unchanged"]
-    A --> D[("discord-parall<br/>its own sign-ins, cookies,<br/>settings and caches")]
-    O["Discord<br/>(the original)"] --> A
-    A -.-> P[("Discord's own data<br/>untouched")]
+    C["Discord Parall<br/>the copy's shortcut"] -->|"--user-data-dir=…/discord-parall"| A["Discord<br/>installed once, never modified"]
+    O["Discord<br/>the original shortcut"] --> A
+    A -->|"when opened as the copy"| D[("The copy's data<br/>its own sign-ins, cookies,<br/>settings and caches")]
+    A -->|"when opened as itself"| P[("Discord's own data<br/>untouched")]
 ```
 
 | Separate in every copy | Shared with the original |
