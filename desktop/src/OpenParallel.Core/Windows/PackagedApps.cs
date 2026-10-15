@@ -100,6 +100,70 @@ public static class PackagedApps
     /// <summary>A Start menu entry of an installed Store package.</summary>
     public sealed record ListedApp(string Name, string Exe, string Family, string AppId, Version Version);
 
+    private const string PackagesKey = @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages";
+
+    /// <summary>This user's installed packages (full name, folder), from where Windows keeps
+    /// them in the registry. Windows' own packages are skipped.</summary>
+    [SupportedOSPlatform("windows")]
+    public static IEnumerable<(string FullName, string Root)> InstalledPackages()
+    {
+        var found = new List<(string, string)>();
+        try
+        {
+            using var packages = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(PackagesKey);
+            if (packages is null) return found;
+            foreach (var fullName in packages.GetSubKeyNames())
+            {
+                if (IsWindowsOwn(fullName.Split('_')[0])) continue;
+                using var key = packages.OpenSubKey(fullName);
+                if (key?.GetValue("PackageRootFolder") is string root && Directory.Exists(root)) found.Add((fullName, root));
+            }
+        }
+        catch (Exception error) when (error is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+        {
+        }
+        return found;
+    }
+
+    /// <summary>The Store apps this user has, newest version of each (an app being updated can
+    /// be installed twice for a while).</summary>
+    [SupportedOSPlatform("windows")]
+    public static IReadOnlyList<ListedApp> InstalledApps()
+    {
+        var apps = new List<ListedApp>();
+        foreach (var (_, root) in InstalledPackages())
+        {
+            try
+            {
+                var manifest = Path.Combine(root, "AppxManifest.xml");
+                if (File.Exists(manifest)) apps.AddRange(ListedApps(root, File.ReadAllText(manifest)));
+            }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException)
+            {
+                // A package being installed or removed; it shows up on the next look.
+            }
+        }
+        return apps.GroupBy(a => (a.Family, a.AppId)).Select(g => g.MaxBy(a => a.Version)!).ToList();
+    }
+
+    /// <summary>Where a copy's Store app is now, or null when it is no longer installed. Its
+    /// folder changes with every update, so a copy can't rely on the path it recorded.</summary>
+    [SupportedOSPlatform("windows")]
+    public static string? CurrentExe(string launchTarget)
+    {
+        var aumid = launchTarget.StartsWith(ActivationPrefix, StringComparison.OrdinalIgnoreCase) ? launchTarget[ActivationPrefix.Length..] : launchTarget;
+        return Find(InstalledApps(), aumid)?.Exe;
+    }
+
+    /// <summary>The listed app with this AppUserModelId (<c>Family!AppId</c>).</summary>
+    public static ListedApp? Find(IEnumerable<ListedApp> apps, string appUserModelId)
+    {
+        var bang = appUserModelId.IndexOf('!');
+        if (bang <= 0) return null;
+        var (family, id) = (appUserModelId[..bang], appUserModelId[(bang + 1)..]);
+        return apps.FirstOrDefault(a => a.Family.Equals(family, StringComparison.OrdinalIgnoreCase) && a.AppId.Equals(id, StringComparison.OrdinalIgnoreCase));
+    }
+
     /// <summary>Windows' own packages (Notepad, Terminal, the Store, WSL, frameworks): not apps to copy.</summary>
     public static bool IsWindowsOwn(string packageName) =>
         packageName.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase)

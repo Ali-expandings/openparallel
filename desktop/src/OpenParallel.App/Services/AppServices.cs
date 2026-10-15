@@ -159,6 +159,9 @@ public sealed record StatusText(string Title, FASymbol Symbol, string Detail)
             return new("Shares data", FASymbol.Copy, $"This instance opens {manifest.SourceName} again with the same login and data as the original.");
         if (Enum.TryParse<AppFamily>(manifest.Family, out var family) && family == AppFamily.JetBrains)
             return new("Experimental", FASymbol.Important, "Its settings, plugins and caches live in this instance's own folders. Test it before relying on it.");
+        if (manifest.LaunchMode == "packaged")
+            return new("Experimental", FASymbol.Important,
+                "A Microsoft Store app built on Electron. It starts through Windows with a data folder of its own. New on Windows: test before relying on it.");
         return new("Supported", FASymbol.Checkmark,
             "OpenParallel knows how to give this kind of app its own data folder. This exact version has not been tested yet.");
     }

@@ -333,11 +333,20 @@ auto-update; Linux build (possible later with the same Avalonia code).
 - After the fix the list shows Antigravity and Cursor as Supported, Claude and ChatGPT as
   Experimental (Store apps built on Electron). The Antigravity copy opened on its own first-run
   screen with its own data folder while the original ran.
-- Not finished: the VM paused when its disk (external drive "THE BOSS") filled up (391 MB free),
-  in the middle of the Cursor copy. Still to check there: Cursor, Claude and ChatGPT copies
-  starting with their own data, side by side with the originals.
-- Closing the window keeps OpenParallel in the notification area (setting "Keep in notification
-  area"). A second start then did not bring the window back, but that process's files had just
-  been replaced by a rebuild; ending it and starting the new build worked. Recheck "close, then
-  start again" on a clean run.
-
+- The VM paused once when its drive (external "THE BOSS") filled up; Ali freed space and the
+  test went on from a fresh restart.
+- Results (all on real Windows 11 ARM):
+  | App | Copy beside the original | Notes |
+  |---|---|---|
+  | Firefox 142 | yes, own profile | Quit and reopen work |
+  | Antigravity 2.23.1 | yes, own first-run screen | |
+  | Cursor 3.24.18 | yes, both at their login screens | copy's log: "updates are disabled by user preference"; no Inno "Setup is running" dialog. First start of a copy showed a blank window for minutes (Cursor's first-run setup on emulated x64); Quit and Open fixed it |
+  | Claude 2.42304 (Store) | yes, two "Get started" windows | data in the copy's own folder (23 MB) |
+  | ChatGPT 155 / Codex (Store) | yes, two processes, the copy with `--user-data-dir=…\chatgpt-parall\electron` | |
+- Fixed after this run: a Store copy's page said "Claude is no longer at this location" (it checked
+  the `shell:AppsFolder\…` launch target as a file) and its status said Supported instead of
+  Experimental (the saved record had no case for Store copies). Now it looks the app up by its id
+  (`PackagedApps.CurrentExe`, the folder changes with every update) and says "no longer
+  installed" only when the package is gone. Tests 71/71, Wine 39/39.
+- Closing the window keeps OpenParallel in the notification area; starting it again brings the
+  window back (checked on a clean run).

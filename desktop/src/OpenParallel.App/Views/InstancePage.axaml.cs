@@ -74,15 +74,23 @@ public partial class InstancePage : UserControl
         {
             SourceCard.Header = m.SourceName;
             SourceCard.IconSource = AppIcons.IconSource(m);
-            var location = File.Exists(m.SourcePath) ? m.SourcePath : m.LaunchTarget;
+            // A Store app starts by its id, not a file; its folder changes with every update.
+            var packaged = m.LaunchMode == "packaged" && OperatingSystem.IsWindows();
+            var current = packaged ? OpenParallel.Core.Windows.PackagedApps.CurrentExe(m.LaunchTarget) : null;
+            var installed = packaged ? current is not null : File.Exists(m.LaunchTarget);
+            var location = current ?? (File.Exists(m.SourcePath) ? m.SourcePath : m.LaunchTarget);
             SourceCard.Description = (m.SourceVersionAtCreation.Length > 0 ? $"Version {m.SourceVersionAtCreation} when this instance was made\n" : "")
                                      + Explorer.Friendly(location);
             SourceButton.Click += (_, _) => Explorer.Show(location);
-            if (!File.Exists(m.LaunchTarget))
+            if (!installed)
             {
                 SourceButton.IsEnabled = false;
-                ShowSourceBar($"{m.SourceName} is no longer at this location.",
-                    "If it was moved or reinstalled somewhere else, create a new instance of it. This instance’s data folder is kept.");
+                if (packaged)
+                    ShowSourceBar($"{m.SourceName} is no longer installed.",
+                        $"Install {m.SourceName} from the Microsoft Store again and this instance opens as before. Its data folder is kept.");
+                else
+                    ShowSourceBar($"{m.SourceName} is no longer at this location.",
+                        "If it was moved or reinstalled somewhere else, create a new instance of it. This instance’s data folder is kept.");
             }
         }
 

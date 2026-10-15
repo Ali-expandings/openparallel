@@ -259,6 +259,18 @@ public class StoreListingTests
     }
 
     [Fact]
+    public void ACopyFindsItsAppByIdAfterAnUpdateMovesIt()
+    {
+        var updated = PackagedApps.ListedApps(Root.Replace("2.42304.0.0", "2.50000.0.0"), Claude.Replace("2.42304.0.0", "2.50000.0.0"));
+        var app = PackagedApps.Find(updated, "Claude_pzs8sxrjxfjjc!Claude");
+        Assert.NotNull(app);
+        Assert.Contains("2.50000.0.0", app!.Exe);
+        Assert.Null(PackagedApps.Find(updated, "Claude_pzs8sxrjxfjjc!SshProxy"));
+        Assert.Null(PackagedApps.Find(updated, "OpenAI.ChatGPT_2p2nqsd0c76g0!App"));
+        Assert.Null(PackagedApps.Find(updated, "no-bang"));
+    }
+
+    [Fact]
     public void AResourceNameFallsBackToThePackageName()
     {
         var unnamed = Claude.Replace("<uap:VisualElements DisplayName=\"Claude\" Square44x44Logo", "<uap:VisualElements DisplayName=\"ms-resource:AppName\" Square44x44Logo")

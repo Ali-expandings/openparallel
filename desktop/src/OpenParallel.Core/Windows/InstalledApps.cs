@@ -49,7 +49,8 @@ public static class InstalledApps
             found[exe] = new InstalledApp(name, exe);
         }
 
-        foreach (var app in StoreApps())
+        // Store apps have neither a shortcut file nor an Uninstall entry.
+        foreach (var app in PackagedApps.InstalledApps())
         {
             if (IsNoisePath(app.Exe) || found.ContainsKey(app.Exe)) continue;
             found[app.Exe] = new InstalledApp(app.Name, app.Exe);
@@ -75,41 +76,6 @@ public static class InstalledApps
             }
         }
         return target;
-    }
-
-    private const string PackagesKey = @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages";
-
-    /// <summary>Microsoft Store apps have neither a shortcut file nor an Uninstall entry. Windows
-    /// keeps this user's packages, with their folders, under <see cref="PackagesKey"/>; an
-    /// updated app can be listed twice for a while, so only its newest version is kept.</summary>
-    private static List<PackagedApps.ListedApp> StoreApps()
-    {
-        var apps = new List<PackagedApps.ListedApp>();
-        try
-        {
-            using var packages = Registry.CurrentUser.OpenSubKey(PackagesKey);
-            if (packages is null) return apps;
-            foreach (var fullName in packages.GetSubKeyNames())
-            {
-                if (PackagedApps.IsWindowsOwn(fullName.Split('_')[0])) continue;
-                using var key = packages.OpenSubKey(fullName);
-                if (key?.GetValue("PackageRootFolder") is not string root) continue;
-                try
-                {
-                    var manifest = Path.Combine(root, "AppxManifest.xml");
-                    if (File.Exists(manifest)) apps.AddRange(PackagedApps.ListedApps(root, File.ReadAllText(manifest)));
-                }
-                catch (Exception error) when (error is IOException or UnauthorizedAccessException)
-                {
-                    // A package being installed or removed; it shows up on the next look.
-                }
-            }
-        }
-        catch (Exception error) when (error is System.Security.SecurityException or UnauthorizedAccessException or IOException)
-        {
-            return apps;
-        }
-        return apps.GroupBy(a => (a.Family, a.AppId)).Select(g => g.MaxBy(a => a.Version)!).ToList();
     }
 
     private static IEnumerable<(string Name, string Exe)> UninstallEntries()
