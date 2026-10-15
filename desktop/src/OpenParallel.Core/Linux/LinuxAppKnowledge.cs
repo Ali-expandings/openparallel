@@ -108,11 +108,13 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
         var single = names.FirstOrDefault(SingleInstance.ContainsKey);
         AppFamily family;
         if (single is not null) family = AppFamily.Unsupported;
-        else if (Named(ChromiumNames) || Named(ChromiumIds) || Has("chrome_crashpad_handler") && Has("chrome_100_percent.pak") && !Has("resources/app.asar")) family = AppFamily.Chromium;
+        else if (Named(ChromiumNames) || Named(ChromiumIds)) family = AppFamily.Chromium;
         else if (Named(VSCodeNames) || Has("resources/app/product.json")) family = AppFamily.VSCode;
         else if (Named(FirefoxNames) || Has("application.ini", "omni.ja")) family = AppFamily.Firefox;
         else if (Named(TelegramNames)) family = AppFamily.Telegram;
         else if (Named(ElectronNames) || Has("resources/app.asar") || Has("resources/app/package.json")) family = AppFamily.Electron;
+        // Last: Electron apps ship Chromium's files too (VS Code was taken for a browser).
+        else if (Has("chrome_crashpad_handler") && Has("chrome_100_percent.pak")) family = AppFamily.Chromium;
         else if (names.Any(n => JetBrainsScripts.Any(s => n == s + ".sh")) || Has("idea.properties")) family = AppFamily.JetBrains;
         else family = AppFamily.Generic;
 

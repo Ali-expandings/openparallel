@@ -213,4 +213,11 @@ desktop entry and icon) and `uninstall.sh`. AppImage later (needs `appimagetool`
   profile was under ~/.local/share. Website profiles now go inside the browser snap's folder
   too, and the `web` folder is made up front (all systems). The test now opens a real website
   instance when a real Chromium is present: **48/48**. Wine 39/39.
+- VS Code 1.142 (Microsoft's ARM64 tarball in `~/op-apps`, its `chrome-sandbox` set to root
+  4755 as the .deb does; without that Ubuntu 24.04 aborts VS Code itself): it was detected as a
+  **Chromium browser** (its folder has Chromium's crash handler and .pak files, and that test ran
+  before the VS Code one), so a copy would share the original's extensions and keep its
+  updater. The file-based Chromium test now runs after the VS Code and Electron markers. Real VS
+  Code copy: own profile, own extensions folder, updater off. The test covers one real app per
+  family (Chromium, Firefox, VS Code) and a real website instance: **53/53**.
 

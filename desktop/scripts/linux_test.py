@@ -270,14 +270,17 @@ def real_browsers():
     """Chromium, Chrome or Firefox from the distribution, a Snap or a Flatpak, if present."""
     _, r = opctl("apps")
     apps = json.loads(r.stdout) if r.stdout.strip().startswith("[") else []
-    picks = [a for a in apps if a["family"] in ("Chromium", "Firefox") and not os.path.basename(a["exePath"]).startswith("op-fixture")]
+    picks = [a for a in apps if a["family"] in ("Chromium", "Firefox", "VSCode") and not os.path.basename(a["exePath"]).startswith("op-fixture")
+             and FIXTURES not in a["exePath"]]
+    # One of each family at most.
+    picks = [a for i, a in enumerate(picks) if a["family"] not in [b["family"] for b in picks[:i]]]
     if not picks:
         print("SKIP no real Chromium or Firefox on this machine", flush=True)
         return
     if not os.environ.get("DISPLAY") and not os.environ.get("WAYLAND_DISPLAY"):
         print("SKIP real browsers need a desktop session (DISPLAY)", flush=True)
         return
-    for app in picks[:2]:
+    for app in picks:
         m, _ = opctl("create", "--app", app["exePath"], "--name", app["name"] + " Test")
         opctl("launch", m["instanceSlug"])
         running = wait_for(lambda: (opctl("running")[0] or {}).get(m["instanceSlug"]), 40)
@@ -285,9 +288,15 @@ def real_browsers():
         # The app must really use its folder: a Snap Firefox once ran but showed "profile missing".
         args = m["launchArguments"]
         profile = (args[args.index("-profile") + 1] if "-profile" in args
+                   else args[args.index("--user-data-dir") + 1] if "--user-data-dir" in args
                    else next((a.split("=", 1)[1] for a in args if a.startswith("--user-data-dir=")), None))
         filled = profile and wait_for(lambda: os.path.isdir(profile) and len(os.listdir(profile)) > 3, 40)
         check(f"real {app['name']}: it writes its own profile ({profile})", filled, os.listdir(profile) if profile and os.path.isdir(profile) else "missing")
+        if app["family"] == "VSCode":
+            settings = os.path.join(profile, "User", "settings.json")
+            text = open(settings).read() if os.path.exists(settings) else ""
+            check(f"real {app['name']}: its own updater is off", '"update.mode": "none"' in text, text[:200])
+            check(f"real {app['name']}: its own extensions folder", "--extensions-dir" in m["launchArguments"], m["launchArguments"])
         opctl("quit", m["instanceSlug"])
         gone = wait_for(lambda: not (opctl("running")[0] or {}).get(m["instanceSlug"]), 30)
         check(f"real {app['name']}: Quit closes it", gone)

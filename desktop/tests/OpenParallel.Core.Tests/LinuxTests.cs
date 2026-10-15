@@ -118,6 +118,17 @@ public class LinuxInspectorTests : IDisposable
     }
 
     [Fact]
+    public void ElectronAppsAreNotTakenForBrowsers()
+    {
+        // VS Code 1.142 for Linux ARM: Chromium's files beside resources/app/product.json (2026-10-16).
+        string[] chromiumFiles = ["chrome_crashpad_handler", "chrome_100_percent.pak"];
+        var vscode = apps.Inspect(Entry("Visual Studio Code", Program("op-apps/VSCode-linux-arm64/code", [.. chromiumFiles, "resources/app/product.json"]) + " %F"));
+        Assert.Equal(AppFamily.VSCode, vscode.Family);
+        Assert.Equal(AppFamily.Electron, apps.Inspect(Entry("Chat", Program("opt/chat/chat", [.. chromiumFiles, "resources/app.asar"]))).Family);
+        Assert.Equal(AppFamily.Chromium, apps.Inspect(Entry("Some Browser", Program("opt/browser/browser", chromiumFiles))).Family);
+    }
+
+    [Fact]
     public void AnyOtherAppGetsItsOwnXdgFolders()
     {
         var tool = apps.Inspect(Entry("Tool", "env GDK_BACKEND=x11 " + Program("bin/tool")));
