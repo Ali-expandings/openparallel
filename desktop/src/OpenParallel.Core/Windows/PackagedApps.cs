@@ -95,6 +95,60 @@ public static class PackagedApps
         return new Package(root, family, name, id, display, logo);
     }
 
+    // MARK: Listing
+
+    /// <summary>A Start menu entry of an installed Store package.</summary>
+    public sealed record ListedApp(string Name, string Exe, string Family, string AppId, Version Version);
+
+    /// <summary>Windows' own packages (Notepad, Terminal, the Store, WSL, frameworks): not apps to copy.</summary>
+    public static bool IsWindowsOwn(string packageName) =>
+        packageName.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase)
+        || packageName.StartsWith("Windows.", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>The desktop apps a package shows in the Start menu. Helpers hidden from it
+    /// (Claude's SSH tools), UWP apps (no exe of their own to start), frameworks, resource
+    /// packages and Windows' own packages are left out.</summary>
+    public static IReadOnlyList<ListedApp> ListedApps(string root, string xml)
+    {
+        XDocument document;
+        try
+        {
+            document = XDocument.Parse(xml);
+        }
+        catch (XmlException)
+        {
+            return [];
+        }
+        var all = document.Descendants().ToList();
+        var identity = all.FirstOrDefault(e => e.Name.LocalName == "Identity");
+        var name = identity?.Attribute("Name")?.Value;
+        var folder = root.TrimEnd('\\', '/');
+        var family = FamilyName(folder[(folder.LastIndexOfAny(['\\', '/']) + 1)..]);
+        if (string.IsNullOrWhiteSpace(name) || family is null || IsWindowsOwn(name)) return [];
+
+        string? Property(string element) =>
+            all.FirstOrDefault(e => e.Name.LocalName == element && e.Parent?.Name.LocalName == "Properties")?.Value.Trim();
+        if (Property("Framework") == "true" || Property("ResourcePackage") == "true") return [];
+        var version = Version.TryParse(identity!.Attribute("Version")?.Value, out var parsed) ? parsed : new Version(0, 0);
+
+        var listed = new List<ListedApp>();
+        foreach (var application in all.Where(e => e.Name.LocalName == "Application"))
+        {
+            var exe = application.Attribute("Executable")?.Value;
+            var id = application.Attribute("Id")?.Value;
+            if (exe is null || id is null || !exe.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) continue;
+            var fullTrust = application.Attribute("EntryPoint")?.Value == "Windows.FullTrustApplication"
+                || application.Attributes().Any(a => a.Name.LocalName == "RuntimeBehavior" && a.Value is "packagedClassicApp" or "win32App");
+            if (!fullTrust) continue;
+            var visual = application.Elements().FirstOrDefault(e => e.Name.LocalName == "VisualElements");
+            if (string.Equals(visual?.Attribute("AppListEntry")?.Value, "none", StringComparison.OrdinalIgnoreCase)) continue;
+            var display = new[] { visual?.Attribute("DisplayName")?.Value, Property("DisplayName"), name }
+                .First(n => !string.IsNullOrWhiteSpace(n) && !n.StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase))!;
+            listed.Add(new ListedApp(display, Path.Combine(root, exe.Replace('\\', Path.DirectorySeparatorChar)), family, id, version));
+        }
+        return listed;
+    }
+
     // MARK: Icon
 
     /// <summary>Writes the app's largest list logo as an .ico for the copy's shortcut. The

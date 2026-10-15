@@ -187,3 +187,82 @@ public class UpdaterTests
         Assert.Equal("none", System.Text.Json.JsonDocument.Parse(File.ReadAllText(Settings(root))).RootElement.GetProperty("update.mode").GetString());
     }
 }
+
+/// <summary>Entries found in the Windows VM test (2026-10-15) that are not apps to copy.</summary>
+public class AppListNoiseTests
+{
+    private const string Windows = @"C:\Windows";
+
+    [Theory]
+    [InlineData(@"C:\Program Files\Mozilla Firefox\private_browsing.exe")]
+    [InlineData(@"C:\ProgramData\Package Cache\{6c1e1f5a-0000-4e2b-9d6a-1b2c3d4e5f60}\dotnet-sdk-6.0.428-win-arm64.exe")]
+    [InlineData(@"C:\Windows\System32\notepad.exe")]
+    [InlineData(@"C:\Users\ali\AppData\Local\Programs\cursor\unins000.exe")]
+    public void HelpersAndInstallerCachesAreSkipped(string exe) =>
+        Assert.True(AppListNoise.IsNoisePath(exe, Windows));
+
+    [Theory]
+    [InlineData(@"C:\Program Files\Mozilla Firefox\firefox.exe")]
+    [InlineData(@"C:\Users\ali\AppData\Local\Programs\cursor\Cursor.exe")]
+    public void RealAppsStay(string exe) =>
+        Assert.False(AppListNoise.IsNoisePath(exe, Windows));
+}
+
+/// <summary>Store apps reach the app list through their manifests (they have no shortcut file).</summary>
+public class StoreListingTests
+{
+    private const string Root = @"C:\Program Files\WindowsApps\Claude_2.42304.0.0_arm64__pzs8sxrjxfjjc";
+
+    /// <summary>Shaped like Claude 2.42304's real manifest: the app and two hidden helpers.</summary>
+    private const string Claude = """
+        <?xml version="1.0" encoding="utf-8"?>
+        <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+                 xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
+          <Identity Name="Claude" Publisher="CN=Anthropic" Version="2.42304.0.0" ProcessorArchitecture="arm64" />
+          <Properties><DisplayName>Claude</DisplayName></Properties>
+          <Applications>
+            <Application Id="Claude" Executable="app\Claude.exe" EntryPoint="Windows.FullTrustApplication">
+              <uap:VisualElements DisplayName="Claude" Square44x44Logo="Assets\Square44x44Logo.png" Description="Claude" BackgroundColor="transparent" />
+            </Application>
+            <Application Id="SshAskpass" Executable="app\resources\claude-ssh-askpass.exe" EntryPoint="Windows.FullTrustApplication">
+              <uap:VisualElements DisplayName="Claude" AppListEntry="none" Square44x44Logo="Assets\Square44x44Logo.png" Description="helper" BackgroundColor="transparent" />
+            </Application>
+            <Application Id="SshProxy" Executable="app\resources\claude-ssh-proxy.exe" EntryPoint="Windows.FullTrustApplication">
+              <uap:VisualElements DisplayName="Claude" AppListEntry="none" Square44x44Logo="Assets\Square44x44Logo.png" Description="helper" BackgroundColor="transparent" />
+            </Application>
+          </Applications>
+        </Package>
+        """;
+
+    [Fact]
+    public void OnlyTheAppItselfIsListed()
+    {
+        var app = Assert.Single(PackagedApps.ListedApps(Root, Claude));
+        Assert.Equal("Claude", app.Name);
+        Assert.Equal("Claude_pzs8sxrjxfjjc", app.Family);
+        Assert.EndsWith("Claude.exe", app.Exe);
+        Assert.Equal(new Version(2, 42304, 0, 0), app.Version);
+    }
+
+    [Fact]
+    public void UwpAppsFrameworksAndWindowsOwnPackagesAreLeftOut()
+    {
+        var uwp = Claude.Replace("Executable=\"app\\Claude.exe\" EntryPoint=\"Windows.FullTrustApplication\"", "Executable=\"App.exe\" EntryPoint=\"App.App\"");
+        Assert.Empty(PackagedApps.ListedApps(Root, uwp));
+
+        var framework = Claude.Replace("<DisplayName>Claude</DisplayName>", "<DisplayName>Claude</DisplayName><Framework>true</Framework>");
+        Assert.Empty(PackagedApps.ListedApps(Root, framework));
+
+        var notepad = Claude.Replace("Name=\"Claude\"", "Name=\"Microsoft.WindowsNotepad\"");
+        Assert.Empty(PackagedApps.ListedApps(@"C:\Program Files\WindowsApps\Microsoft.WindowsNotepad_11.2607.14.0_arm64__8wekyb3d8bbwe", notepad));
+        Assert.Empty(PackagedApps.ListedApps(Root, "not xml"));
+    }
+
+    [Fact]
+    public void AResourceNameFallsBackToThePackageName()
+    {
+        var unnamed = Claude.Replace("<uap:VisualElements DisplayName=\"Claude\" Square44x44Logo", "<uap:VisualElements DisplayName=\"ms-resource:AppName\" Square44x44Logo")
+            .Replace("<DisplayName>Claude</DisplayName>", "<DisplayName>ms-resource:Title</DisplayName>");
+        Assert.Equal("Claude", Assert.Single(PackagedApps.ListedApps(Root, unnamed)).Name);
+    }
+}

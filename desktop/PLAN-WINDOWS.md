@@ -106,7 +106,13 @@ starts the app with the right environment and exits.
 
 Start Menu shortcuts (all users and current user) resolved to their targets, plus the Uninstall
 registry keys (`DisplayIcon`, `InstallLocation`) and App Paths. Duplicates are merged; uninstallers,
-helpers and OpenParallel's own shortcuts are skipped. Packaged apps are listed separately.
+helpers (Firefox's `private_browsing.exe`), installer caches (`\Package Cache\`) and OpenParallel's
+own shortcuts are skipped. Microsoft Store apps have neither a shortcut file nor an Uninstall entry:
+they come from this user's package list (`HKCU\Software\Classes\Local Settings\Software\Microsoft\
+Windows\CurrentVersion\AppModel\Repository\Packages\<full name>`, value `PackageRootFolder`) and
+each package's `AppxManifest.xml`. Only desktop (full-trust) apps shown in the Start menu are
+listed; Windows' own packages (`Microsoft*`, `Windows.*`), frameworks, resource packages and
+helpers with `AppListEntry="none"` are skipped, and the newest version wins.
 
 ## 4. Interface (Windows 11 Fluent, mapped from the Mac design you liked)
 
@@ -309,3 +315,29 @@ auto-update; Linux build (possible later with the same Avalonia code).
   time OpenParallel opens them; an update mode the person set is kept. Updates come from the
   original, which updates the shared program for both. Tests 61/61, Wine 39/39; build sha256
   12a07100…48d5dd at the same link.
+
+### 2026-10-15: real Windows 11 (ARM) in Parallels
+
+- Ali's VM "Windows 11 mie" (Windows 11 on ARM, the x64 build runs under emulation), driven by
+  keyboard through `prlctl send-key-event` and read through screenshots.
+- Firefox: copy created, opened on a fresh profile, shown as Running, quit to Not running; the
+  original Firefox ran beside it on its own profile; the Start menu has "Firefox Parall".
+- Installed for the test (official ARM64 installers, Ali's OK): Cursor 3.24.18 (user setup),
+  Antigravity 2.23.1, Claude 2.42304 (MSIX; needs admin for its Cowork service, Ali approved it),
+  ChatGPT 155.0.8059 from the Store (the Codex app now ships inside it; Ali approved its admin
+  prompt).
+- Found and fixed: Store apps never reached the New instance list (no shortcut file, no Uninstall
+  entry), so Claude and ChatGPT were missing; now listed from the package registry (3.6). Firefox
+  Private Browsing was offered as an app of its own, and the .NET SDK's installer showed up; both
+  filtered. Tests 70/70.
+- After the fix the list shows Antigravity and Cursor as Supported, Claude and ChatGPT as
+  Experimental (Store apps built on Electron). The Antigravity copy opened on its own first-run
+  screen with its own data folder while the original ran.
+- Not finished: the VM paused when its disk (external drive "THE BOSS") filled up (391 MB free),
+  in the middle of the Cursor copy. Still to check there: Cursor, Claude and ChatGPT copies
+  starting with their own data, side by side with the originals.
+- Closing the window keeps OpenParallel in the notification area (setting "Keep in notification
+  area"). A second start then did not bring the window back, but that process's files had just
+  been replaced by a rebuild; ending it and starting the new build worked. Recheck "close, then
+  start again" on a clean run.
+

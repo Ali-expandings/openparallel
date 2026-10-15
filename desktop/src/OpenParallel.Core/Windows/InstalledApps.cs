@@ -6,8 +6,9 @@ namespace OpenParallel.Core.Windows;
 [SupportedOSPlatform("windows")]
 public static class InstalledApps
 {
-    /// <summary>Start menu shortcuts (all users and this user) resolved to their exe, plus the
-    /// Uninstall registry. Skips uninstallers, Windows' own tools and OpenParallel's shortcuts.</summary>
+    /// <summary>Start menu shortcuts (all users and this user) resolved to their exe, the
+    /// Uninstall registry and Microsoft Store apps. Skips uninstallers, Windows' own tools and
+    /// OpenParallel's shortcuts.</summary>
     public static IReadOnlyList<InstalledApp> Find(IPlatform platform)
     {
         var found = new Dictionary<string, InstalledApp>(StringComparer.OrdinalIgnoreCase);
@@ -48,6 +49,12 @@ public static class InstalledApps
             found[exe] = new InstalledApp(name, exe);
         }
 
+        foreach (var app in StoreApps())
+        {
+            if (IsNoisePath(app.Exe) || found.ContainsKey(app.Exe)) continue;
+            found[app.Exe] = new InstalledApp(app.Name, app.Exe);
+        }
+
         return found.Values.OrderBy(a => a.Name, StringComparer.CurrentCultureIgnoreCase).ToList();
     }
 
@@ -68,6 +75,41 @@ public static class InstalledApps
             }
         }
         return target;
+    }
+
+    private const string PackagesKey = @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages";
+
+    /// <summary>Microsoft Store apps have neither a shortcut file nor an Uninstall entry. Windows
+    /// keeps this user's packages, with their folders, under <see cref="PackagesKey"/>; an
+    /// updated app can be listed twice for a while, so only its newest version is kept.</summary>
+    private static List<PackagedApps.ListedApp> StoreApps()
+    {
+        var apps = new List<PackagedApps.ListedApp>();
+        try
+        {
+            using var packages = Registry.CurrentUser.OpenSubKey(PackagesKey);
+            if (packages is null) return apps;
+            foreach (var fullName in packages.GetSubKeyNames())
+            {
+                if (PackagedApps.IsWindowsOwn(fullName.Split('_')[0])) continue;
+                using var key = packages.OpenSubKey(fullName);
+                if (key?.GetValue("PackageRootFolder") is not string root) continue;
+                try
+                {
+                    var manifest = Path.Combine(root, "AppxManifest.xml");
+                    if (File.Exists(manifest)) apps.AddRange(PackagedApps.ListedApps(root, File.ReadAllText(manifest)));
+                }
+                catch (Exception error) when (error is IOException or UnauthorizedAccessException)
+                {
+                    // A package being installed or removed; it shows up on the next look.
+                }
+            }
+        }
+        catch (Exception error) when (error is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+        {
+            return apps;
+        }
+        return apps.GroupBy(a => (a.Family, a.AppId)).Select(g => g.MaxBy(a => a.Version)!).ToList();
     }
 
     private static IEnumerable<(string Name, string Exe)> UninstallEntries()
@@ -112,14 +154,26 @@ public static class InstalledApps
         || name.Contains("help", StringComparison.OrdinalIgnoreCase)
         || name.Contains("website", StringComparison.OrdinalIgnoreCase);
 
-    private static bool IsNoisePath(string exe)
+    private static bool IsNoisePath(string exe) =>
+        AppListNoise.IsNoisePath(exe, Environment.GetFolderPath(Environment.SpecialFolder.Windows));
+}
+
+/// <summary>Entries the app list skips. Kept apart from <see cref="InstalledApps"/> so tests run on any system.</summary>
+internal static class AppListNoise
+{
+    /// <summary>Helpers that only start another app (Firefox's private window launcher) and
+    /// OpenParallel itself.</summary>
+    private static readonly string[] Files = ["OpenParallel.exe", "opctl.exe", "private_browsing.exe"];
+
+    /// <summary>Windows' own tools, uninstallers, those helpers, and installer caches (the .NET SDK's
+    /// uninstall entry points at its setup exe under Package Cache).</summary>
+    public static bool IsNoisePath(string exe, string windowsFolder)
     {
-        var windows = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-        var file = Path.GetFileName(exe);
-        return exe.StartsWith(windows, StringComparison.OrdinalIgnoreCase)
+        var file = exe[(exe.LastIndexOfAny(['\\', '/']) + 1)..];
+        return (windowsFolder.Length > 0 && exe.StartsWith(windowsFolder, StringComparison.OrdinalIgnoreCase))
             || file.StartsWith("unins", StringComparison.OrdinalIgnoreCase)
-            || file.Equals("OpenParallel.exe", StringComparison.OrdinalIgnoreCase)
-            || file.Equals("opctl.exe", StringComparison.OrdinalIgnoreCase);
+            || Files.Contains(file, StringComparer.OrdinalIgnoreCase)
+            || exe.Contains(@"\Package Cache\", StringComparison.OrdinalIgnoreCase);
     }
 }
 
