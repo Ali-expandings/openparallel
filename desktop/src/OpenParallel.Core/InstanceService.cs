@@ -15,9 +15,18 @@ public sealed class InstanceService(IPlatform platform)
     };
 
     /// <summary>Tested exact versions on Windows: (exe name, version) → status. Grows only from
-    /// recorded two-copy tests.</summary>
+    /// recorded two-copy tests (REAL_APP_TEST_MATRIX.md): the copy and the original running at once
+    /// as separate processes, the copy on its own data folder.</summary>
     public static IReadOnlyDictionary<(string, string), CompatibilityStatus> Ledger { get; } =
-        new Dictionary<(string, string), CompatibilityStatus>();
+        new Dictionary<(string, string), CompatibilityStatus>
+        {
+            // 2026-10-15/16, Windows 11 on ARM (Parallels), the x64 build under emulation.
+            [("firefox.exe", "142.0")] = CompatibilityStatus.Tested,
+            [("cursor.exe", "3.24.18")] = CompatibilityStatus.Tested,
+            [("antigravity.exe", "2.23.1.0")] = CompatibilityStatus.Tested,
+            [("claude.exe", "2.42304.0")] = CompatibilityStatus.Tested,
+            [("chatgpt.exe", "155.0.8059.40")] = CompatibilityStatus.Tested,
+        };
 
     /// <summary>An icon OpenParallel saved for the instance (Store apps), used by its shortcuts.</summary>
     public const string IconFileName = "icon.ico";

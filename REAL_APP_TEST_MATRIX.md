@@ -56,6 +56,38 @@ This is a **process-and-profile approval**, not an account-level authentication 
 | Zen | `app.zen-browser.zen` | 1.21.10b | Firefox `-profile -no-remote` | 2 | 2026-08-02 |
 | Zen | `app.zen-browser.zen` | 1.21.14b | Firefox `-profile -no-remote` | 2 | 2026-08-18 |
 
+## Windows: first real-machine tests
+
+Windows 11 on ARM in Parallels Desktop, running the x64 build under Windows' emulation,
+2026-10-15/16. Each row: the copy made from OpenParallel's New instance list and the original app
+running at the same time as separate processes, the copy on its own data folder (checked in the
+folder and, for Store apps, in the process's arguments). Recorded in
+`desktop/src/OpenParallel.Core/InstanceService.cs` (`Ledger`), so these exact versions show as
+**Tested** in the Windows app.
+
+| App | Exe | Version | Recipe | Installed from |
+| --- | --- | --- | --- | --- |
+| Firefox | `firefox.exe` | 142.0 | Firefox `-profile -no-remote` | already on the machine |
+| Cursor | `Cursor.exe` | 3.24.18 | VS Code (`--user-data-dir`, `--extensions-dir`, copy's updater off) | official ARM64 user setup |
+| Antigravity | `Antigravity.exe` | 2.23.1.0 | Electron `--user-data-dir` | official ARM64 installer |
+| Claude | `Claude.exe` | 2.42304.0 | Microsoft Store (MSIX) Electron, started through Windows' activation API | official ARM64 MSIX |
+| ChatGPT (Codex) | `ChatGPT.exe` | 155.0.8059.40 | Microsoft Store (MSIX) Electron, started through Windows' activation API | Microsoft Store |
+
+## Linux: first real-machine tests
+
+Ubuntu 24.04.3 LTS on ARM64 (kernel 6.8, GNOME on Wayland) in Parallels Desktop, 2026-10-15/16,
+with `desktop/scripts/linux_test.py` (53/53): each copy started from OpenParallel, recognised as
+running, writing its own profile, and quit. The Linux app has no tested-version record yet, so
+these still show as **Supported** or **Experimental** (Snaps) there.
+
+| App | Package | Version | Recipe |
+| --- | --- | --- | --- |
+| Firefox | Snap | 129.0.1-1 | Firefox `-profile -no-remote`, profile in `~/snap/firefox/common/OpenParallel/` |
+| Thunderbird | Snap | 115.12.2-1 | Firefox family, profile in `~/snap/thunderbird/common/OpenParallel/` |
+| Chromium | Snap | 155.0.8059.79 | Chromium `--user-data-dir`, profile in `~/snap/chromium/common/OpenParallel/` |
+| Visual Studio Code | Microsoft's ARM64 tarball | 1.142.0 | VS Code (`--user-data-dir`, `--extensions-dir`, copy's updater off) |
+| Website instance (example.com) | in the Chromium Snap | 155.0.8059.79 | `--app` with its own profile in the snap's folder |
+
 ## WebKit Test
 
 Two generated WebKit shortcuts loaded `https://example.com` concurrently with distinct persistent `WKWebsiteDataStore` UUIDs. This proves WebKit process/store separation. Web-mode account login still needs user acceptance testing.

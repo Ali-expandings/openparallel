@@ -121,7 +121,7 @@ OpenParallel inspects the app, recognises what it's built with, and uses the swi
 
 **Windows.** Copies are Start menu shortcuts (and, if you like, desktop shortcuts) with their own icon and taskbar identity. Squirrel-installed apps start through their `Update.exe`, so the copy always opens the newest version. Microsoft Store apps built on Electron start through Windows' own activation API with the copy's arguments *(experimental)*. Data lives in `%LOCALAPPDATA%\OpenParallel\Instances\<copy>\`.
 
-**Linux.** Copies are freedesktop desktop entries with their own window class, so they show up separately in the dock. Flatpak apps run with `flatpak run` and access to the copy's folder only; Snaps keep data in the snap's own folder; AppImages keep working when the file is replaced by a newer version. Data lives in `~/.local/share/OpenParallel/Instances/<copy>/`.
+**Linux.** Copies are freedesktop desktop entries with their own window class, so most show up separately in the dock (a Snap browser's copy shares the original's dock icon on Wayland). Flatpak apps run with `flatpak run` and access to the copy's folder only; Snaps keep data in the snap's own folder; AppImages keep working when the file is replaced by a newer version. Data lives in `~/.local/share/OpenParallel/Instances/<copy>/`.
 
 </details>
 
@@ -140,7 +140,7 @@ Statuses are the same words in the apps, on the [website](https://openparallel.p
 
 **Tested on macOS (26 apps, 36 exact versions):** Anki, Antigravity, Antigravity IDE, Audacity, Brave Browser, Claude, Codex, Cursor, DBeaver Community, Discord, Firefox, Gemini, Ghostty, iTerm2, Obsidian, OpenCode, Openscreen, Screen Studio, Signal, Spotify, Sublime Text, Telegram Desktop, Tor Browser, Visual Studio Code, Vivaldi and Zen. Every version, bundle ID and recipe is in [REAL_APP_TEST_MATRIX.md](REAL_APP_TEST_MATRIX.md). These are process-and-profile tests: two copies, two processes, two data folders. Account-level checks move an app to **Verified**.
 
-**Windows and Linux** run the same recipes; until real-machine tests report back, their apps count as **Supported**.
+**Windows and Linux** run the same recipes. First real-machine tests (October 2026): on Windows 11, Firefox, Cursor, Antigravity, and Claude and ChatGPT (Codex) from the Microsoft Store; on Ubuntu 24.04, the Firefox, Thunderbird and Chromium Snaps, Visual Studio Code and a website instance. Versions are in [REAL_APP_TEST_MATRIX.md](REAL_APP_TEST_MATRIX.md); other apps count as **Supported** until tested.
 
 **Not supported, and what to use instead:**
 
@@ -246,7 +246,8 @@ PRODUCT.md               what OpenParallel is, who it's for, and what it never c
 - [x] Website: [openparallel.pages.dev](https://openparallel.pages.dev)
 - [ ] First public release (v1.0) with downloads and checksums for every system
 - [ ] Signed and notarized macOS build; code-signed Windows build
-- [ ] Real-machine compatibility lists for Windows and Linux
+- [x] First real-machine tests on Windows 11 and Ubuntu 24.04
+- [ ] Longer real-machine compatibility lists for Windows and Linux
 - [ ] Account-level **Verified** tests for the most-used apps
 - [ ] Homebrew cask, winget and Flathub packages
 
