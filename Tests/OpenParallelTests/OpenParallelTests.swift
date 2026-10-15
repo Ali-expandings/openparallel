@@ -600,6 +600,7 @@ private func assertZshSyntax(_ wrapper: URL) throws {
     #expect(launcher.contains("antigravity-ide/user-data"))
     #expect(launcher.contains("--extensions-dir"))
     #expect(launcher.contains("--new-window"))
+    #expect(launcher.contains("$DATA_ROOT/antigravity-ide/user-data/User/settings.json"))
     try assertZshSyntax(wrapper)
     try? FileManager.default.removeItem(at: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/OpenParallel/Instances/\(displaySlug(instanceName))"))
 }
@@ -894,4 +895,19 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     #expect(report.isTrimmedForMail)
     #expect(try #require(report.mailURL(to: "a@b.c")).absoluteString.contains("Trimmed"))
     #expect(!ProblemReport().isComplete)
+}
+
+@Test func vsCodeFamilyCopiesLeaveUpdatesToTheOriginal() throws {
+    // Windows showed it first: a Cursor copy ran its own updater against the shared install.
+    let fixture = try makeFixtureApp(name: "Cursor", bundleID: "com.todesktop.230313mzl4w4u92", executableName: "Cursor")
+    defer { try? FileManager.default.removeItem(at: fixture.root) }
+    let instanceName = "OpenParallel Test Cursor \(UUID().uuidString)"
+    let wrapper = try ShortcutBuilder.create(spec: makeSpec(source: fixture.app, output: fixture.root.appendingPathComponent("Output"), name: instanceName))
+    let launcher = try launcherText(in: wrapper)
+
+    #expect(launcher.contains("--extensions-dir"))
+    #expect(launcher.contains("$DATA_ROOT/user-data/User/settings.json"))
+    #expect(launcher.contains("\\\"update.mode\\\": \\\"none\\\""))
+    try assertZshSyntax(wrapper)
+    try? FileManager.default.removeItem(at: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/OpenParallel/Instances/\(displaySlug(instanceName))"))
 }

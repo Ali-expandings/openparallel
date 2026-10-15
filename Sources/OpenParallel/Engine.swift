@@ -1376,6 +1376,29 @@ enum ShortcutBuilder {
         }
     }
 
+    /// Turns off a VS Code-family copy's own updater, as on Windows and Linux: the copy runs
+    /// the original's app bundle, and two updaters replacing one bundle get in each other's
+    /// way. The original's updates reach the copy anyway. An update mode the person already set
+    /// for this copy is kept. Checked at every start of copies made from this version on.
+    static func leaveUpdatesToTheOriginal(userData: String) -> String {
+        #"""
+          settings_file="\#(userData)/User/settings.json"
+          if [[ ! -f "$settings_file" ]]; then
+            mkdir -p "${settings_file:h}"
+            print -r -- $'{\n  "update.mode": "none"\n}' > "$settings_file"
+          elif ! /usr/bin/grep -q '"update.mode"' "$settings_file"; then
+            settings_text="$(<"$settings_file")"
+            if [[ "$settings_text" == *'{'* ]]; then
+              settings_rest="${settings_text#*\{}"
+              settings_trimmed="${settings_rest//[[:space:]]/}"
+              settings_comma=","
+              [[ "${settings_trimmed[1]}" == '}' ]] && settings_comma=""
+              print -r -- "${settings_text%%\{*}{"$'\n'"  \"update.mode\": \"none\"$settings_comma$settings_rest" > "$settings_file"
+            fi
+          fi
+        """#
+    }
+
     private static func profileBlock(targetPath: String, profile: CompatibilityProfile) -> String {
         switch profile.family {
         case .chromium:
@@ -1420,6 +1443,7 @@ enum ShortcutBuilder {
                 return """
                 if [[ -n "$DATA_ROOT" ]]; then
                   mkdir -p "$DATA_ROOT/antigravity-ide/user-data" "$DATA_ROOT/antigravity-ide/extensions"
+                \(leaveUpdatesToTheOriginal(userData: "$DATA_ROOT/antigravity-ide/user-data"))
                   args+=("--user-data-dir" "$DATA_ROOT/antigravity-ide/user-data")
                   args+=("--extensions-dir" "$DATA_ROOT/antigravity-ide/extensions")
                   args+=("--new-window")
@@ -1491,6 +1515,7 @@ enum ShortcutBuilder {
             return """
             if [[ -n "$DATA_ROOT" ]]; then
               mkdir -p "$DATA_ROOT/user-data" "$DATA_ROOT/extensions"
+            \(leaveUpdatesToTheOriginal(userData: "$DATA_ROOT/user-data"))
               args+=("--user-data-dir" "$DATA_ROOT/user-data")
               args+=("--extensions-dir" "$DATA_ROOT/extensions")
               args+=("--new-window")
