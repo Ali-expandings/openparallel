@@ -208,3 +208,9 @@ desktop entry and icon) and `uninstall.sh`. AppImage later (needs `appimagetool`
   self-raising; the dock icon does it). The notification-area icon is off by default.
 - Tests 77/77, Wine 39/39. Packages: `artifacts/OpenParallel-1.0.0-linux-arm64.tar.gz` (44 MB),
   `…-linux-x64.tar.gz` (46 MB).
+- Same night (Ali asleep, "do all needed"): installed the Chromium snap (155) in the VM. Real
+  Chromium copies work; a **website instance** in snap Chromium quit at once because its
+  profile was under ~/.local/share. Website profiles now go inside the browser snap's folder
+  too, and the `web` folder is made up front (all systems). The test now opens a real website
+  instance when a real Chromium is present: **48/48**. Wine 39/39.
+

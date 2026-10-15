@@ -137,7 +137,11 @@ public sealed class InstanceService(IPlatform platform)
             if (isWebsite)
             {
                 browser = knowledge.Inspect(request.AppPath!);
-                plan = knowledge.WebPlan(browser, request.WebUrl!, dataRoot, slug);
+                // A Snap browser can't write under hidden folders such as ~/.local/share: its
+                // profile goes inside the snap's own folder, as for app copies.
+                extraData = knowledge.ExtraDataPath(browser, slug);
+                plan = knowledge.WebPlan(browser, request.WebUrl!, extraData ?? dataRoot, slug);
+                foreach (var folder in RecipeBook.ProfileFolders(AppFamily.Website, extraData ?? dataRoot)) Directory.CreateDirectory(folder);
                 mode = "web-app";
                 family = AppFamily.Website.ToString();
                 processFolder = knowledge.ProcessFolder(browser);

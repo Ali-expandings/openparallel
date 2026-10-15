@@ -57,6 +57,7 @@ public static class RecipeBook
         AppFamily.VSCode => [VSCodeUserData(dataRoot), Path.Combine(dataRoot, "vscode", "extensions")],
         AppFamily.Firefox => [Path.Combine(dataRoot, "firefox")],
         AppFamily.Telegram => [Path.Combine(dataRoot, "telegram")],
+        AppFamily.Website => [Path.Combine(dataRoot, "web")],
         _ => [],
     };
 

@@ -291,6 +291,18 @@ def real_browsers():
         opctl("quit", m["instanceSlug"])
         gone = wait_for(lambda: not (opctl("running")[0] or {}).get(m["instanceSlug"]), 30)
         check(f"real {app['name']}: Quit closes it", gone)
+    # A website instance in a real Chromium (a Snap one can only write inside its own folder).
+    chromium = next((a for a in picks if a["family"] == "Chromium"), None)
+    if chromium:
+        w, _ = opctl("create", "--web", "https://example.com", "--name", "Real Web Test", "--browser", chromium["exePath"])
+        opctl("launch", w["instanceSlug"])
+        running = wait_for(lambda: (opctl("running")[0] or {}).get(w["instanceSlug"]), 40)
+        check(f"real website in {chromium['name']}: runs and is recognised", running, w["launchArguments"])
+        profile = next(a.split("=", 1)[1] for a in w["launchArguments"] if a.startswith("--user-data-dir="))
+        filled = wait_for(lambda: os.path.isdir(profile) and len(os.listdir(profile)) > 3, 40)
+        check(f"real website in {chromium['name']}: writes its own profile ({profile})", filled)
+        opctl("quit", w["instanceSlug"])
+        wait_for(lambda: not (opctl("running")[0] or {}).get(w["instanceSlug"]), 30)
 
 
 if __name__ == "__main__":
