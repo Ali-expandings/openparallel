@@ -150,6 +150,10 @@ public sealed record InstanceManifest
     public string? ExtraDataPath { get; init; }
     /// <summary>Websites: the browser it opens in, as the user knows it.</summary>
     public string? OpenedWith { get; init; }
+    /// <summary>What OpenParallel said about the app when the instance was made, so its page says
+    /// the same (a Snap, a Store app or an unknown Linux app is Experimental). Older instances have none.</summary>
+    public CompatibilityStatus? StatusAtCreation { get; init; }
+    public string? StatusNotes { get; init; }
 
     [JsonIgnore] public bool IsWebsite => Kind == "website";
 }

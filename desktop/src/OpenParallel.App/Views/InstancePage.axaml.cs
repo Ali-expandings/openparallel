@@ -54,8 +54,10 @@ public partial class InstancePage : UserControl
         OwnDataCard.Footer = App.Secondary(own ? "Yes" : $"No, shared with {m.SourceName}");
 
         FolderCard.IconSource = App.Symbol(FASymbol.Folder);
-        FolderCard.Description = Explorer.Friendly(DataRoot);
-        FolderButton.Click += (_, _) => Explorer.Show(DataRoot);
+        // Where the app's own data is: a Snap's copy keeps it inside the snap's folder.
+        var dataFolder = m.ExtraDataPath ?? DataRoot;
+        FolderCard.Description = Explorer.Friendly(dataFolder);
+        FolderButton.Click += (_, _) => Explorer.Show(dataFolder);
         SizeCard.IconSource = App.Symbol(FASymbol.Library);
 
         if (m.IsWebsite)

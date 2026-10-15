@@ -174,3 +174,37 @@ desktop entry and icon) and `uninstall.sh`. AppImage later (needs `appimagetool`
 - L5 (next): Ali's Parallels Ubuntu image (ARM64) from the external drive. `scripts/vm.sh info`,
   then `scripts/vm.sh root 'apt-get install -y xdotool'`, `scripts/vm.sh test`, then the UI pass
   with `vm.sh shot/key/type/click`. Parallels' service failed to start on 2026-10-14 (restart).
+
+### 2026-10-15: L5 on real Ubuntu 24.04 ARM (Parallels, Wayland)
+
+- VM "Ubuntu 24.04 ARM64 (1)" on Ali's drive "THE BOSS". No Mac shared folder, so
+  `scripts/vm.sh send` pipes the build into `~/op-test` through `prlctl exec` (stdin works) and
+  `scripts/vm.sh test-sent` runs the test. `prlctl exec` takes one shell string; `vm.sh` now
+  copies the session's DISPLAY, XAUTHORITY (XWayland's random file), WAYLAND_DISPLAY and D-Bus
+  address from a session process, without which no window opens. Keys go in with
+  `prlctl send-key-event` (xdotool can't reach Wayland windows).
+- End-to-end **46/46**, including the real Firefox and Thunderbird snaps writing their own
+  profiles in `~/snap/<name>/common/OpenParallel/<slug>`.
+- Found and fixed:
+  - `opctl launch` in a script or pipe never returned: the copy inherited opctl's output.
+    Apps now start through `/bin/sh -c 'exec "$0" "$@"'` with stdin/out/err on /dev/null
+    (same process id; `LinuxPlatform.DetachedArguments`).
+  - A Snap Firefox copy showed "Your Firefox profile cannot be loaded": a Snap Firefox refuses a
+    `-profile` folder that doesn't exist. Every recipe's folders are made before the first
+    start and again on open for older copies (`RecipeBook.ProfileFolders`).
+  - Thunderbird (and Betterbird) were "shares data": now Firefox family.
+  - The New instance list held 46 entries, settings panels, updaters, monitors and a KDE-only
+    System Monitor among them. Entries now follow `OnlyShowIn`/`NotShowIn` against
+    `XDG_CURRENT_DESKTOP` and leave out Settings, DesktopSettings, HardwareSettings,
+    PackageManager, Monitor and Documentation categories (`LinuxAppKnowledge.Listed`).
+  - Icons were blank for system apps: they come from the icon theme (Yaru → Humanity →
+    hicolor on Ubuntu) now, read from gsettings or GTK's settings file (`LinuxIcons`).
+  - A copy's page said Supported for Snaps and unknown apps, showed the empty instance folder as
+    its data and 1 KB as its size. The status and its note are saved with each new copy
+    (`StatusAtCreation`, `StatusNotes`; older copies fall back by launch mode); data folder and
+    size include the Snap's folder.
+- Known, not fixed: on Wayland a Snap Firefox copy shares the original's dock icon (neither
+  `--class` nor `--name` changes it); a second start can't raise an open window (GNOME blocks
+  self-raising; the dock icon does it). The notification-area icon is off by default.
+- Tests 77/77, Wine 39/39. Packages: `artifacts/OpenParallel-1.0.0-linux-arm64.tar.gz` (44 MB),
+  `…-linux-x64.tar.gz` (46 MB).

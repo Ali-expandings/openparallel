@@ -47,6 +47,19 @@ public static class RecipeBook
         _ => [],
     };
 
+    /// <summary>The folders <see cref="ProfileArguments"/> points the app at. They are made before the
+    /// first start: Firefox from a Snap refuses a <c>-profile</c> folder that doesn't exist yet
+    /// ("Your Firefox profile cannot be loaded").</summary>
+    public static IReadOnlyList<string> ProfileFolders(AppFamily family, string dataRoot) => family switch
+    {
+        AppFamily.Chromium => [Path.Combine(dataRoot, "chromium")],
+        AppFamily.Electron => [ElectronProfile(dataRoot)],
+        AppFamily.VSCode => [VSCodeUserData(dataRoot), Path.Combine(dataRoot, "vscode", "extensions")],
+        AppFamily.Firefox => [Path.Combine(dataRoot, "firefox")],
+        AppFamily.Telegram => [Path.Combine(dataRoot, "telegram")],
+        _ => [],
+    };
+
     /// <summary>Environment variables a recipe needs (empty for most).</summary>
     public static IReadOnlyDictionary<string, string> ProfileEnvironment(InspectedApp app, string dataRoot)
     {

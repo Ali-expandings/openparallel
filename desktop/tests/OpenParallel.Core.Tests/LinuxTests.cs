@@ -302,3 +302,106 @@ public class LinuxServiceTests
         Assert.False(File.Exists(manifest.ShortcutPath));
     }
 }
+
+/// <summary>Found on Ubuntu 24.04 (2026-10-15): a started copy kept opctl's output open, so
+/// <c>opctl launch</c> in a script never returned while the copy ran.</summary>
+public class DetachedStartTests
+{
+    private static System.Diagnostics.Process Start(string target, params string[] arguments)
+    {
+        var info = new System.Diagnostics.ProcessStartInfo("/bin/sh") { UseShellExecute = false, RedirectStandardOutput = true };
+        foreach (var argument in LinuxPlatform.DetachedArguments(target, arguments)) info.ArgumentList.Add(argument);
+        return System.Diagnostics.Process.Start(info)!;
+    }
+
+    [Fact]
+    public void TheCallersOutputClosesWhileTheAppKeepsRunning()
+    {
+        using var app = Start("/bin/sleep", "5");
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        app.StandardOutput.ReadToEnd();
+        Assert.True(watch.Elapsed < TimeSpan.FromSeconds(3), $"output stayed open {watch.Elapsed}");
+        Assert.False(app.HasExited);
+        app.Kill();
+    }
+
+    [Fact]
+    public void ArgumentsArriveAsWordsAndTheProcessIdIsTheAppsOwn()
+    {
+        var output = Path.Combine(Path.GetTempPath(), $"op-detached-{Guid.NewGuid():N}.txt");
+        try
+        {
+            using var app = Start("/bin/sh", "-c", "printf '%s|' \"$@\" > \"$0\"; printf '\\n%s\\n' $$ >> \"$0\"", output, "a b", "c\"d $HOME");
+            app.WaitForExit(5000);
+            var lines = File.ReadAllLines(output);
+            Assert.Equal("a b|c\"d $HOME|", lines[0]);
+            Assert.Equal(app.Id.ToString(), lines[1]);
+        }
+        finally
+        {
+            File.Delete(output);
+        }
+    }
+}
+
+/// <summary>Found on Ubuntu 24.04 (2026-10-15).</summary>
+public class UbuntuFindingsTests : IDisposable
+{
+    private readonly string root = Path.Combine(Path.GetTempPath(), $"op-ubuntu-{Guid.NewGuid():N}");
+
+    public UbuntuFindingsTests() => Directory.CreateDirectory(root);
+
+    public void Dispose() => Directory.Delete(root, recursive: true);
+
+    private static DesktopEntry Entry(string lines) => DesktopEntry.Parse("[Desktop Entry]\nType=Application\nName=X\nExec=/usr/bin/x\n" + lines);
+
+    [Fact]
+    public void TheListFollowsTheDesktopsRulesAndLeavesOutSystemTools()
+    {
+        string[] gnome = ["ubuntu", "GNOME"];
+        Assert.True(LinuxAppKnowledge.Listed(Entry("Categories=Office;Spreadsheet;"), gnome));
+        Assert.True(LinuxAppKnowledge.Listed(Entry("OnlyShowIn=GNOME;Unity;\nCategories=GNOME;GTK;Utility;"), gnome));
+        // gnome-system-monitor-kde.desktop, Additional Drivers (NotShowIn=KDE is fine here, Settings isn't).
+        Assert.False(LinuxAppKnowledge.Listed(Entry("OnlyShowIn=KDE;\nCategories=GNOME;GTK;System;"), gnome));
+        Assert.False(LinuxAppKnowledge.Listed(Entry("NotShowIn=ubuntu;"), gnome));
+        Assert.False(LinuxAppKnowledge.Listed(Entry("NotShowIn=KDE;\nCategories=X-XFCE;GTK;Settings;HardwareSettings"), gnome));
+        Assert.False(LinuxAppKnowledge.Listed(Entry("Categories=GNOME;GTK;System;PackageManager;"), gnome));
+        Assert.False(LinuxAppKnowledge.Listed(Entry("Categories=GNOME;GTK;System;Monitor;"), gnome));
+        Assert.False(LinuxAppKnowledge.Listed(Entry("Categories=GNOME;GTK;Core;Documentation;Utility;"), gnome));
+        Assert.False(LinuxAppKnowledge.Listed(Entry("NoDisplay=true"), gnome));
+        // With no desktop known, an entry for one desktop only is left out, as GLib does.
+        Assert.False(LinuxAppKnowledge.Listed(Entry("OnlyShowIn=GNOME;"), []));
+    }
+
+    [Fact]
+    public void ThunderbirdFromASnapIsAFirefoxFamilyApp()
+    {
+        var entry = Path.Combine(root, "thunderbird_thunderbird.desktop");
+        File.WriteAllText(entry, "[Desktop Entry]\nType=Application\nName=Thunderbird Mail\nExec=/snap/bin/thunderbird %u\nX-SnapInstanceName=thunderbird\n");
+        var app = new LinuxAppKnowledge().Inspect(entry);
+        Assert.Equal(AppFamily.Firefox, app.Family);
+        Assert.Equal(InstallKind.Snap, app.InstallKind);
+        Assert.True(app.SeparatesData);
+    }
+
+    [Fact]
+    public void IconsComeFromTheThemeAndWhatItInherits()
+    {
+        Directory.CreateDirectory(Path.Combine(root, "icons", "Yaru"));
+        File.WriteAllText(Path.Combine(root, "icons", "Yaru", "index.theme"), "[Icon Theme]\nName=Yaru\nInherits=Humanity,hicolor\n");
+        Directory.CreateDirectory(Path.Combine(root, "icons", "Humanity"));
+        File.WriteAllText(Path.Combine(root, "icons", "Humanity", "index.theme"), "[Icon Theme]\nInherits=Adwaita,hicolor\n");
+        Assert.Equal(["Yaru", "Humanity", "Adwaita", "hicolor"], LinuxIcons.ThemeChain("Yaru", [root]));
+        Assert.Equal(["hicolor"], LinuxIcons.ThemeChain(null, [root]));
+    }
+
+    [Fact]
+    public void AFirefoxCopysProfileFolderIsMadeBeforeItStarts()
+    {
+        var data = Path.Combine(root, "snap", "firefox", "common", "OpenParallel", "fox-parall");
+        var app = new InspectedApp { ExePath = "/x.desktop", Name = "Firefox", Family = AppFamily.Firefox, Status = CompatibilityStatus.Experimental, Notes = "" };
+        new LinuxAppKnowledge().Prepare(app, data, separateData: true);
+        Assert.True(Directory.Exists(Path.Combine(data, "firefox")));
+        Assert.Contains(Path.Combine(data, "firefox"), RecipeBook.ProfileArguments(AppFamily.Firefox, data));
+    }
+}

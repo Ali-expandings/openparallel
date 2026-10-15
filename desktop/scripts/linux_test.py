@@ -82,10 +82,12 @@ def launch_entry(path):
     """Starts a menu entry the way the desktop does (gtk-launch / gio), else runs its Exec."""
     desktop_id = os.path.basename(path)
     env = dict(os.environ, OP_FIXTURE_LOG=LOGS)
+    # The launched app inherits the launcher's output, so pipes would never close: no capture.
+    quiet = dict(stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, timeout=60)
     if shutil.which("gtk-launch") and path.startswith(APPS_DIR):
-        return run("gtk-launch", desktop_id, ok=False, env=env).returncode == 0
+        return subprocess.run(["gtk-launch", desktop_id], **quiet).returncode == 0
     if shutil.which("gio"):
-        return run("gio", "launch", path, ok=False, env=env).returncode == 0
+        return subprocess.run(["gio", "launch", path], **quiet).returncode == 0
     return False
 
 
@@ -280,6 +282,12 @@ def real_browsers():
         opctl("launch", m["instanceSlug"])
         running = wait_for(lambda: (opctl("running")[0] or {}).get(m["instanceSlug"]), 40)
         check(f"real {app['name']}: the instance runs and is recognised", running, m["launchArguments"])
+        # The app must really use its folder: a Snap Firefox once ran but showed "profile missing".
+        args = m["launchArguments"]
+        profile = (args[args.index("-profile") + 1] if "-profile" in args
+                   else next((a.split("=", 1)[1] for a in args if a.startswith("--user-data-dir=")), None))
+        filled = profile and wait_for(lambda: os.path.isdir(profile) and len(os.listdir(profile)) > 3, 40)
+        check(f"real {app['name']}: it writes its own profile ({profile})", filled, os.listdir(profile) if profile and os.path.isdir(profile) else "missing")
         opctl("quit", m["instanceSlug"])
         gone = wait_for(lambda: not (opctl("running")[0] or {}).get(m["instanceSlug"]), 30)
         check(f"real {app['name']}: Quit closes it", gone)

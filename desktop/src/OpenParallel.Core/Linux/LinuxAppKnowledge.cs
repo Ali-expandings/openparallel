@@ -22,6 +22,8 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
     [
         "firefox", "firefox-esr", "firefox-developer-edition", "librewolf", "waterfox", "zen", "zen-browser", "floorp",
         "org.mozilla.firefox", "io.gitlab.librewolf-community", "app.zen_browser.zen", "one.ablaze.floorp",
+        // Mozilla's mail apps take the same -profile and -no-remote.
+        "thunderbird", "betterbird", "org.mozilla.thunderbird", "eu.betterbird.betterbird",
     ];
     private static readonly string[] TelegramNames = ["telegram-desktop", "telegram", "org.telegram.desktop"];
     private static readonly string[] ElectronNames =
@@ -307,6 +309,7 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
     {
         if (!separateData) return;
         Directory.CreateDirectory(dataRoot);
+        foreach (var folder in RecipeBook.ProfileFolders(app.Family, dataRoot)) Directory.CreateDirectory(folder);
         if (app.Family == AppFamily.VSCode) RecipeBook.LeaveUpdatesToTheOriginal(dataRoot);
         if (app.Family == AppFamily.JetBrains)
         {
@@ -334,8 +337,27 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
         return roots.Select(r => System.IO.Path.Combine(r, "applications")).Distinct().ToList();
     }
 
+    /// <summary>Settings panels, package managers, system monitors and help: the desktop's own
+    /// tools, never something to sign in to twice (Windows leaves out Windows' own tools the same way).</summary>
+    private static readonly string[] SystemCategories = ["Settings", "DesktopSettings", "HardwareSettings", "PackageManager", "Monitor", "Documentation"];
+
+    /// <summary>Whether an entry belongs in the New instance list: an app the menu shows on this
+    /// desktop (<c>OnlyShowIn</c>/<c>NotShowIn</c> against <c>XDG_CURRENT_DESKTOP</c>, as the
+    /// desktop itself does), with a command, that isn't OpenParallel or a system tool.</summary>
+    internal static bool Listed(DesktopEntry entry, IReadOnlyCollection<string> currentDesktops)
+    {
+        if (entry["Type"] != "Application" || entry.Flag("NoDisplay") || entry.Flag("Hidden") || entry.Flag("Terminal")) return false;
+        if (entry["Exec"] is not { Length: > 0 } exec || exec.Contains("OpenParallel", StringComparison.Ordinal) || entry.Flag("X-OpenParallel")) return false;
+        static string[] List(string? value) => (value ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        bool Current(string desktop) => currentDesktops.Contains(desktop, StringComparer.OrdinalIgnoreCase);
+        if (entry["OnlyShowIn"] is { } only && !List(only).Any(Current)) return false;
+        if (List(entry["NotShowIn"]).Any(Current)) return false;
+        return !List(entry["Categories"]).Any(c => SystemCategories.Contains(c, StringComparer.OrdinalIgnoreCase));
+    }
+
     public IReadOnlyList<InstalledApp> InstalledApps(IPlatform platform)
     {
+        var desktops = (Environment.GetEnvironmentVariable("XDG_CURRENT_DESKTOP") ?? "").Split(':', StringSplitOptions.RemoveEmptyEntries);
         var seen = new HashSet<string>();
         var result = new List<InstalledApp>();
         foreach (var folder in ApplicationFolders().Where(Directory.Exists))
@@ -355,8 +377,7 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
                 var id = System.IO.Path.GetRelativePath(folder, file).Replace('/', '-');
                 if (!seen.Add(id) || id.StartsWith("openparallel", StringComparison.OrdinalIgnoreCase)) continue;
                 var entry = DesktopEntry.Load(file);
-                if (entry is null || entry["Type"] != "Application" || entry.Flag("NoDisplay") || entry.Flag("Hidden") || entry.Flag("Terminal")) continue;
-                if (entry["Exec"] is not { Length: > 0 } exec || exec.Contains("OpenParallel", StringComparison.Ordinal) || entry.Flag("X-OpenParallel")) continue;
+                if (entry is null || !Listed(entry, desktops)) continue;
                 if (entry["TryExec"] is { Length: > 0 } tryExec && Resolve(tryExec) is null) continue;
                 result.Add(new InstalledApp(entry.Name, file));
             }

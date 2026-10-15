@@ -157,11 +157,23 @@ public sealed record StatusText(string Title, FASymbol Symbol, string Detail)
         if (manifest.IsWebsite) return Website;
         if (!manifest.ProfileIsolation)
             return new("Shares data", FASymbol.Copy, $"This instance opens {manifest.SourceName} again with the same login and data as the original.");
+        if (manifest.StatusAtCreation is { } recorded and not CompatibilityStatus.NotSupported and not CompatibilityStatus.SharesData)
+            return recorded == CompatibilityStatus.Experimental
+                ? new("Experimental", FASymbol.Important, manifest.StatusNotes ?? "Test it before relying on it.")
+                : For(new InspectedApp { ExePath = manifest.SourcePath, Name = manifest.SourceName, Family = AppFamily.Generic, Status = recorded, Notes = manifest.StatusNotes ?? "" });
         if (Enum.TryParse<AppFamily>(manifest.Family, out var family) && family == AppFamily.JetBrains)
             return new("Experimental", FASymbol.Important, "Its settings, plugins and caches live in this instance's own folders. Test it before relying on it.");
-        if (manifest.LaunchMode == "packaged")
-            return new("Experimental", FASymbol.Important,
-                "A Microsoft Store app built on Electron. It starts through Windows with a data folder of its own. New on Windows: test before relying on it.");
+        // Instances made before the status was saved with them.
+        var experimental = manifest.LaunchMode switch
+        {
+            "packaged" => "A Microsoft Store app built on Electron. It starts through Windows with a data folder of its own. New on Windows: test before relying on it.",
+            "snap" => "A Snap: its data goes into the snap’s own folder. Test it before relying on it.",
+            "flatpak" => "A Flatpak: the sandbox is given just this instance’s folder. Test it before relying on it.",
+            _ when manifest.Family == nameof(AppFamily.Generic) && manifest.Platform == "linux" =>
+                "Gets its own settings and data folders (XDG). Most Linux apps keep their data there; some use the original’s anyway. Test before relying on it.",
+            _ => null,
+        };
+        if (experimental is not null) return new("Experimental", FASymbol.Important, experimental);
         return new("Supported", FASymbol.Checkmark,
             "OpenParallel knows how to give this kind of app its own data folder. This exact version has not been tested yet.");
     }

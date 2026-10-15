@@ -71,15 +71,23 @@ public sealed class LinuxPlatform : IPlatform
 
     // MARK: Processes
 
+    /// <summary>Starts the app detached from OpenParallel's own input and output. A copy that kept
+    /// them would hold opctl's output open for as long as it runs, so <c>opctl launch</c> in a
+    /// script or a pipe never finished. <c>exec</c> keeps the process id the app's own.</summary>
     public int Start(LaunchPlan plan)
     {
-        var info = new ProcessStartInfo(plan.Target) { UseShellExecute = false };
-        foreach (var argument in plan.Arguments) info.ArgumentList.Add(argument);
+        var info = new ProcessStartInfo("/bin/sh") { UseShellExecute = false };
+        foreach (var argument in DetachedArguments(plan.Target, plan.Arguments)) info.ArgumentList.Add(argument);
         foreach (var (key, value) in plan.Environment) info.Environment[key] = value;
         if (plan.WorkingDirectory is { } dir && Directory.Exists(dir)) info.WorkingDirectory = dir;
         using var process = Process.Start(info) ?? throw new InvalidOperationException($"Couldn't start {plan.Target}.");
         return process.Id;
     }
+
+    /// <summary><c>/bin/sh</c> arguments that run <paramref name="target"/> with stdin, stdout and
+    /// stderr on /dev/null; the target and its arguments are passed as words, never parsed.</summary>
+    public static IReadOnlyList<string> DetachedArguments(string target, IEnumerable<string> arguments) =>
+        ["-c", "exec \"$0\" \"$@\" </dev/null >/dev/null 2>&1", target, .. arguments];
 
     public IReadOnlyList<ProcessSnapshot> Processes()
     {

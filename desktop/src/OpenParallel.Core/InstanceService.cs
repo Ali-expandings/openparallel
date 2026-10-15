@@ -179,6 +179,8 @@ public sealed class InstanceService(IPlatform platform)
                 WindowClass = plan.WindowClass,
                 ExtraDataPath = extraData,
                 OpenedWith = isWebsite ? browser!.Name : null,
+                StatusAtCreation = isWebsite ? null : app!.Status,
+                StatusNotes = isWebsite ? null : app!.Notes,
             };
             foreach (var path in new[] { shortcutPath, desktopPath }.Where(p => p is not null)) WriteShortcut(manifest, path!);
             var json = JsonSerializer.Serialize(manifest, Json);
@@ -246,6 +248,9 @@ public sealed class InstanceService(IPlatform platform)
         // Copies made before the copy's updater was turned off get it turned off here.
         if (manifest.ProfileIsolation && manifest.Family == nameof(AppFamily.VSCode))
             RecipeBook.LeaveUpdatesToTheOriginal(manifest.ExtraDataPath ?? DataRootOf(manifest));
+        // And copies made before their profile folder was made up front get it now.
+        if (manifest.ProfileIsolation && Enum.TryParse<AppFamily>(manifest.Family, out var family))
+            foreach (var folder in RecipeBook.ProfileFolders(family, manifest.ExtraDataPath ?? DataRootOf(manifest))) Directory.CreateDirectory(folder);
         try
         {
             return platform.Start(new LaunchPlan
@@ -364,14 +369,17 @@ public sealed class InstanceService(IPlatform platform)
         platform.MoveToRecycleBin([path]);
     }
 
+    /// <summary>The instance folder plus data kept elsewhere (a Snap's copy keeps its profile
+    /// inside the snap's own folder).</summary>
     public long SizeOnDisk(InstanceManifest manifest)
     {
-        var root = DataRootOf(manifest);
-        if (!Directory.Exists(root)) return 0;
         long total = 0;
-        foreach (var file in Directory.EnumerateFiles(root, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true }))
+        foreach (var root in new[] { DataRootOf(manifest), manifest.ExtraDataPath }.OfType<string>().Where(Directory.Exists))
         {
-            try { total += new FileInfo(file).Length; } catch (IOException) { }
+            foreach (var file in Directory.EnumerateFiles(root, "*", new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true }))
+            {
+                try { total += new FileInfo(file).Length; } catch (IOException) { }
+            }
         }
         return total;
     }
