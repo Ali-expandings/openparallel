@@ -66,8 +66,17 @@ public static class AppInspector
             var package = Windows.PackagedApps.Find(exePath);
             if (package is not null && (File.Exists(Path.Combine(dir, "resources", "app.asar")) || File.Exists(Path.Combine(dir, "resources", "app", "package.json"))))
             {
+                // OpenAI's ChatGPT app runs Codex, which keeps its sign-in and sessions in
+                // %USERPROFILE%\.codex unless CODEX_HOME says otherwise, and Windows starts a Store
+                // app without passing environment variables: Codex stays shared.
+                var codex = package.Name.Equals("OpenAI.Codex", StringComparison.OrdinalIgnoreCase)
+                    || File.Exists(Path.Combine(dir, "resources", "codex.exe"));
                 return Make(AppFamily.Electron, CompatibilityStatus.Experimental,
-                    "A Microsoft Store app built on Electron. Its copy starts through Windows with a data folder of its own. New on Windows: test before relying on it.",
+                    "A Microsoft Store app built on Electron. Its copy starts through Windows with a data folder of its own. " +
+                    (codex
+                        ? "Codex inside it still uses your .codex folder, so Codex's sign-in and sessions are shared with the original. "
+                        : "") +
+                    "New on Windows: test before relying on it.",
                     InstallKind.Packaged) with { PackageId = package.AppUserModelId };
             }
             var web = package is null ? null : Windows.PackagedApps.WebAlternative(package.Name);

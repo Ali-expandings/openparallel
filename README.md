@@ -140,7 +140,7 @@ Statuses are the same words in the apps, on the [website](https://openparallel.p
 
 **Tested on macOS (26 apps, 36 exact versions):** Anki, Antigravity, Antigravity IDE, Audacity, Brave Browser, Claude, Codex, Cursor, DBeaver Community, Discord, Firefox, Gemini, Ghostty, iTerm2, Obsidian, OpenCode, Openscreen, Screen Studio, Signal, Spotify, Sublime Text, Telegram Desktop, Tor Browser, Visual Studio Code, Vivaldi and Zen. Every version, bundle ID and recipe is in [REAL_APP_TEST_MATRIX.md](REAL_APP_TEST_MATRIX.md). These are process-and-profile tests: two copies, two processes, two data folders. Account-level checks move an app to **Verified**.
 
-**Windows and Linux** run the same recipes. First real-machine tests (October 2026): on Windows 11, Firefox, Cursor, Antigravity, and Claude and ChatGPT (Codex) from the Microsoft Store; on Ubuntu 24.04, the Firefox, Thunderbird and Chromium Snaps, Visual Studio Code and a website instance. Versions are in [REAL_APP_TEST_MATRIX.md](REAL_APP_TEST_MATRIX.md); other apps count as **Supported** until tested.
+**Windows and Linux** run the same recipes. First real-machine tests (October 2026): on Windows 11, Firefox, Cursor, Antigravity and Claude from the Microsoft Store (a ChatGPT copy works too, but Codex inside it shares the original's sign-in there); on Ubuntu 24.04, Claude, ChatGPT with Codex, Antigravity, Cursor, Visual Studio Code, the Firefox, Thunderbird and Chromium Snaps and a website instance. Versions are in [REAL_APP_TEST_MATRIX.md](REAL_APP_TEST_MATRIX.md); other apps count as **Supported** until tested.
 
 **Not supported, and what to use instead:**
 

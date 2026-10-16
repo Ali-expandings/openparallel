@@ -25,7 +25,8 @@ public sealed class InstanceService(IPlatform platform)
             [("cursor.exe", "3.24.18")] = CompatibilityStatus.Tested,
             [("antigravity.exe", "2.23.1.0")] = CompatibilityStatus.Tested,
             [("claude.exe", "2.42304.0")] = CompatibilityStatus.Tested,
-            [("chatgpt.exe", "155.0.8059.40")] = CompatibilityStatus.Tested,
+            // Not ChatGPT 155.0.8059.40: its chat data is separate, but Codex inside it shares
+            // %USERPROFILE%\.codex with the original (found on Linux, 2026-10-16).
         };
 
     /// <summary>An icon OpenParallel saved for the instance (Store apps), used by its shortcuts.</summary>

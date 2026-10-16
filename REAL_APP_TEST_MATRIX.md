@@ -73,10 +73,15 @@ folder and, for Store apps, in the process's arguments). Recorded in
 | Claude | `Claude.exe` | 2.42304.0 | Microsoft Store (MSIX) Electron, started through Windows' activation API | official ARM64 MSIX |
 | ChatGPT (Codex) | `ChatGPT.exe` | 155.0.8059.40 | Microsoft Store (MSIX) Electron, started through Windows' activation API | Microsoft Store |
 
+ChatGPT 155.0.8059.40 is **not** counted as Tested: its chat data is separate, but Codex inside it
+keeps its sign-in and sessions in `%USERPROFILE%\.codex`, and Windows starts a Store app without
+the `CODEX_HOME` a copy would need. The Windows app says so on ChatGPT's status (found on Linux,
+2026-10-16, where the copy does get its own `CODEX_HOME`).
+
 ## Linux: first real-machine tests
 
 Ubuntu 24.04.3 LTS on ARM64 (kernel 6.8, GNOME on Wayland) in Parallels Desktop, 2026-10-15/16,
-with `desktop/scripts/linux_test.py` (53/53): each copy started from OpenParallel, recognised as
+with `desktop/scripts/linux_test.py` (56/56) and by hand beside the originals: each copy started from OpenParallel, recognised as
 running, writing its own profile, and quit. The Linux app has no tested-version record yet, so
 these still show as **Supported** or **Experimental** (Snaps) there.
 
@@ -87,6 +92,10 @@ these still show as **Supported** or **Experimental** (Snaps) there.
 | Chromium | Snap | 155.0.8059.79 | Chromium `--user-data-dir`, profile in `~/snap/chromium/common/OpenParallel/` |
 | Visual Studio Code | Microsoft's ARM64 tarball | 1.142.0 | VS Code (`--user-data-dir`, `--extensions-dir`, copy's updater off) |
 | Website instance (example.com) | in the Chromium Snap | 155.0.8059.79 | `--app` with its own profile in the snap's folder |
+| Claude | Anthropic's .deb (beta) | 2.42304.0 | Electron `--user-data-dir` (it rewrites its process title; recognised since 2026-10-16) |
+| ChatGPT (Codex) | OpenAI's .deb (preview) | 26.1013.31256 | Electron `--user-data-dir` plus its own `CODEX_HOME` |
+| Antigravity | Google's ARM64 tar.gz | 2.23.1 | Electron `--user-data-dir` |
+| Cursor | ARM64 AppImage | 3.24.18 | VS Code (`--user-data-dir`, `--extensions-dir`, copy's updater off) |
 
 ## WebKit Test
 

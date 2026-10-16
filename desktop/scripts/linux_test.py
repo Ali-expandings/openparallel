@@ -270,7 +270,7 @@ def real_browsers():
     """Chromium, Chrome or Firefox from the distribution, a Snap or a Flatpak, if present."""
     _, r = opctl("apps")
     apps = json.loads(r.stdout) if r.stdout.strip().startswith("[") else []
-    picks = [a for a in apps if a["family"] in ("Chromium", "Firefox", "VSCode") and not os.path.basename(a["exePath"]).startswith("op-fixture")
+    picks = [a for a in apps if a["family"] in ("Chromium", "Firefox", "VSCode", "Electron") and not os.path.basename(a["exePath"]).startswith("op-fixture")
              and FIXTURES not in a["exePath"]]
     # One of each family at most.
     picks = [a for i, a in enumerate(picks) if a["family"] not in [b["family"] for b in picks[:i]]]

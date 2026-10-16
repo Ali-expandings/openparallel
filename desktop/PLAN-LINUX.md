@@ -220,4 +220,18 @@ desktop entry and icon) and `uninstall.sh`. AppImage later (needs `appimagetool`
   updater. The file-based Chromium test now runs after the VS Code and Electron markers. Real VS
   Code copy: own profile, own extensions folder, updater off. The test covers one real app per
   family (Chromium, Firefox, VS Code) and a real website instance: **53/53**.
+- Ali: "did you try the apps I listed in Windows in Linux?" Installed the official ARM64 builds:
+  Claude 2.42304.0 (.deb; Anthropic's apt source failed to verify in the VM with "Unknown error
+  executing apt-key", the documented direct .deb worked and registers the source itself),
+  ChatGPT 26.1013.31256 (.deb, Codex inside), Antigravity 2.23.1 (tar.gz, sandbox helper set
+  root 4755) and Cursor 3.24.18 (AppImage, `--no-sandbox` in its menu entry). Each ran beside its
+  original with its own data. Found and fixed:
+  - Claude rewrites its process title, so `/proc/<pid>/cmdline` is one string: its copy was never
+    "running". Arguments are now also matched as whole words inside such a title
+    (`ProcessMatcher.HasArgument`).
+  - ChatGPT's Codex kept using `~/.codex` in the copy (sign-in, config, sessions shared). An
+    Electron app with `resources/codex` now gets `CODEX_HOME=<copy>/codex-home`, as on the Mac.
+    On Windows a Store app can't be given environment variables: ChatGPT's status there says
+    Codex stays shared, and it's no longer in the Tested list.
+  Test 56/56 (one real app per family, Electron included); unit 81/81; Wine 39/39.
 

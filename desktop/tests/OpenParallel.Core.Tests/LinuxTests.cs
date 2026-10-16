@@ -129,6 +129,22 @@ public class LinuxInspectorTests : IDisposable
     }
 
     [Fact]
+    public void ChatGptCopiesGetTheirOwnCodexHome()
+    {
+        // ChatGPT 26.1013 for Linux: /usr/bin/chatgpt runs a launcher beside the app and resources/codex.
+        var entry = Entry("ChatGPT", Program("usr/lib/chatgpt/codex-launcher", "ChatGPT", "resources/app.asar", "resources/codex") + " %U");
+        var app = apps.Inspect(entry);
+        Assert.Equal(AppFamily.Electron, app.Family);
+        Assert.Contains("CODEX_HOME", app.Notes);
+        var (plan, _) = apps.AppPlan(app, "/data/chatgpt-parall", true, [], new Dictionary<string, string>(), "chatgpt-parall", "/op");
+        Assert.Equal(Path.Combine("/data/chatgpt-parall", "codex-home"), plan.Environment["CODEX_HOME"]);
+        Assert.Contains("--user-data-dir=" + Path.Combine("/data/chatgpt-parall", "electron"), plan.Arguments);
+
+        var plain = apps.Inspect(Entry("Notes", Program("opt/notes/notes", "resources/app.asar")));
+        Assert.False(apps.AppPlan(plain, "/data/n", true, [], new Dictionary<string, string>(), "n", "/op").Plan.Environment.ContainsKey("CODEX_HOME"));
+    }
+
+    [Fact]
     public void AnyOtherAppGetsItsOwnXdgFolders()
     {
         var tool = apps.Inspect(Entry("Tool", "env GDK_BACKEND=x11 " + Program("bin/tool")));
@@ -230,6 +246,26 @@ public class LinuxMatcherTests
         var running = ProcessMatcher.MatchArguments([a, b], Root, processes, _ => null);
         Assert.Equal([10], running["work"]);
         Assert.Equal([13], running["work-2"]);
+    }
+
+    [Fact]
+    public void AppsThatRewriteTheirProcessTitleAreStillRecognised()
+    {
+        // Claude 2.42304 on Ubuntu 24.04: /proc/<pid>/cmdline is one string of the words joined by spaces.
+        var claude = Manifest("claude-parall", ["--user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall/electron", "--class=OpenParallel.claude-parall"]);
+        var other = Manifest("claude-parall-2", ["--user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall-2/electron"]);
+        var processes = new List<ProcessSnapshot>
+        {
+            new(30, "/usr/lib/claude-desktop/claude-desktop", "", ["/usr/lib/claude-desktop/claude-desktop"], 1),
+            new(31, "/usr/lib/claude-desktop/claude-desktop", "",
+                ["/usr/lib/claude-desktop/claude-desktop --user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall/electron --class=OpenParallel.claude-parall"], 1),
+            new(32, "/usr/lib/claude-desktop/claude-desktop", "",
+                ["/usr/lib/claude-desktop/claude-desktop --type=renderer --user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall/electron"], 31),
+        };
+        var running = ProcessMatcher.MatchArguments([claude, other], Root, processes, _ => null);
+        Assert.Equal([31], running["claude-parall"]);
+        // A word is matched whole: claude-parall's folder is not claude-parall-2's.
+        Assert.False(running.ContainsKey("claude-parall-2"));
     }
 
     [Fact]

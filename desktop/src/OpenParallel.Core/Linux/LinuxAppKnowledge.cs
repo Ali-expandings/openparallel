@@ -156,6 +156,11 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
                 ? "A Snap: its data goes into the snap’s own folder. Test it before relying on it."
                 : "A Flatpak: the sandbox is given just this instance’s folder. Test it before relying on it.";
         }
+        else if (family == AppFamily.Electron && BundlesCodex(folder))
+        {
+            status = CompatibilityStatus.Supported;
+            notes = "Gets its own data folder and its own Codex home (CODEX_HOME), where Codex keeps its sign-in and sessions.";
+        }
         else
         {
             status = CompatibilityStatus.Supported;
@@ -180,6 +185,12 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
             InstallRoot = folder,
         };
     }
+
+    /// <summary>OpenAI's ChatGPT app runs Codex from <c>resources/codex</c>, which keeps its sign-in,
+    /// config and sessions in <c>CODEX_HOME</c> (default <c>~/.codex</c>), outside the app's data
+    /// folder: a copy needs its own, as on the Mac.</summary>
+    internal static bool BundlesCodex(string? folder) =>
+        folder is not null && File.Exists(System.IO.Path.Combine(folder, "resources", "codex"));
 
     /// <summary>The app id in <c>flatpak run [options] &lt;id&gt; [args]</c>.</summary>
     internal static string? FlatpakId(IReadOnlyList<string> command)
@@ -241,6 +252,8 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
             {
                 foreach (var (key, folder) in XdgFolders) environment[key] = System.IO.Path.Combine(dataRoot, "xdg", folder);
             }
+            if (app.Family == AppFamily.Electron && BundlesCodex(app.InstallRoot))
+                environment["CODEX_HOME"] = System.IO.Path.Combine(dataRoot, "codex-home");
         }
         arguments.AddRange(extraArguments);
         foreach (var (key, value) in extraEnvironment) environment[key] = value;
@@ -312,6 +325,7 @@ public sealed class LinuxAppKnowledge : IAppKnowledge
         if (!separateData) return;
         Directory.CreateDirectory(dataRoot);
         foreach (var folder in RecipeBook.ProfileFolders(app.Family, dataRoot)) Directory.CreateDirectory(folder);
+        if (app.Family == AppFamily.Electron && BundlesCodex(app.InstallRoot)) Directory.CreateDirectory(System.IO.Path.Combine(dataRoot, "codex-home"));
         if (app.Family == AppFamily.VSCode) RecipeBook.LeaveUpdatesToTheOriginal(dataRoot);
         if (app.Family == AppFamily.JetBrains)
         {

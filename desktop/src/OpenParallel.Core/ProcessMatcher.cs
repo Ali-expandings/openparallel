@@ -71,7 +71,7 @@ public static class ProcessMatcher
         foreach (var process in processes)
         {
             if (process.Arguments is not { Count: > 0 } argv || IsHelperProcess(argv)) continue;
-            var hit = byArguments.FirstOrDefault(s => s.Arguments.All(argv.Contains));
+            var hit = byArguments.FirstOrDefault(s => s.Arguments.All(a => HasArgument(argv, a)));
             if (hit.Manifest is not null)
             {
                 matched[process.Pid] = hit.Manifest.InstanceSlug;
@@ -124,7 +124,17 @@ public static class ProcessMatcher
 
     /// <summary>Linux helpers: Chromium/Electron <c>--type=</c> children, Firefox content processes.</summary>
     public static bool IsHelperProcess(IReadOnlyList<string> argv) =>
-        argv.Any(a => a.StartsWith("--type=", StringComparison.Ordinal)) || argv.Contains("-contentproc");
+        argv.Any(a => a.StartsWith("--type=", StringComparison.Ordinal)) || argv.Contains("-contentproc")
+        || (Retitled(argv) && IsHelperProcess(" " + argv[0]));
+
+    /// <summary>Some Chromium-based apps (Claude) rewrite their process title, so the kernel's
+    /// argument list becomes one string of the words joined by spaces.</summary>
+    private static bool Retitled(IReadOnlyList<string> argv) => argv.Count == 1 && argv[0].Contains(' ');
+
+    /// <summary>Whether a process was given <paramref name="argument"/>: as one of its words, or as
+    /// a whole space-separated word inside a rewritten title.</summary>
+    public static bool HasArgument(IReadOnlyList<string> argv, string argument) =>
+        argv.Contains(argument) || (Retitled(argv) && $" {argv[0]} ".Contains($" {argument} ", StringComparison.Ordinal));
 
     /// <summary>Chromium and Electron start renderer, GPU and utility processes from the same
     /// exe with <c>--type=</c>; only the main process represents the instance.</summary>

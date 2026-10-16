@@ -58,6 +58,21 @@ public class PackagedTests
         Assert.Equal(family, PackagedApps.FamilyName(folder));
 
     [Fact]
+    public void TheChatGptStoreAppSaysCodexStaysShared()
+    {
+        // Windows can't hand a Store app CODEX_HOME, so Codex keeps using %USERPROFILE%\.codex.
+        using var fake = new FakePlatform();
+        const string folder = "OpenAI.Codex_26.1007.9446.0_arm64__2p2nqsd0c76g0";
+        var exe = fake.MakeApp($"WindowsApps/{folder}/app/ChatGPT.exe", "resources/app.asar");
+        File.WriteAllText(Path.Combine(PackagedApps.PackageRoot(exe)!, "AppxManifest.xml"),
+            ClaudeManifest.Replace("Name=\"Claude\"", "Name=\"OpenAI.Codex\"").Replace("app\\claude.exe", "app\\ChatGPT.exe"));
+        var app = AppInspector.Inspect(exe);
+        Assert.Equal(CompatibilityStatus.Experimental, app.Status);
+        Assert.Contains("Codex's sign-in and sessions are shared", app.Notes);
+        Assert.DoesNotContain("Codex", AppInspector.Inspect(MakeClaude(fake)).Notes);
+    }
+
+    [Fact]
     public void AnElectronStoreAppIsExperimentalAndStartsThroughWindows()
     {
         using var fake = new FakePlatform();
