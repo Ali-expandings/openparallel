@@ -457,7 +457,7 @@ html { scrollbar-color: var(--line-strong) transparent; }
 
 /* Private by design: plain statements, set like a colophon. */
 .promises { margin-top: var(--space-2xl); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: var(--space-xl) var(--space-2xl); }
-.promises div { display: grid; grid-template-columns: 22px 1fr; gap: var(--space-sm); }
+.promises > div { display: grid; grid-template-columns: 22px 1fr; gap: var(--space-sm); }
 .promises svg { width: 20px; height: 20px; margin-top: 3px; color: var(--accent-ink); }
 .promises b { display: block; font-weight: 600; }
 .promises p { color: var(--ink-2); }
