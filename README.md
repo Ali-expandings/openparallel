@@ -75,11 +75,11 @@ OpenParallel gives you **a second copy of the app**, called `Discord Parall` unl
 
 | System | Status | Get it | Requires |
 |---|---|---|---|
-| **macOS** | Stable (1.0) | Build from source today ([below](#macos)); the signed download arrives with the first release | macOS 14 Sonoma or later, Apple silicon or Intel |
-| **Windows** | Beta | [Test build (zip)](https://openparallel.pages.dev/download/OpenParallel-1.0.0-windows-x64.zip), or [build from source](#windows-and-linux) | Windows 10 or 11, 64-bit |
-| **Linux** | Beta | [Build from source](#windows-and-linux): x64 and arm64 tarballs with an installer script | 64-bit Linux desktop (X11 or Wayland) |
+| **macOS** | Stable (1.0) | [OpenParallel-1.0.0-mac.zip](https://github.com/Ali-expandings/openparallel/releases/latest/download/OpenParallel-1.0.0-mac.zip), or [build from source](#macos) | macOS 14 Sonoma or later, Apple silicon or Intel |
+| **Windows** | Beta | [OpenParallel-1.0.0-windows-x64.zip](https://github.com/Ali-expandings/openparallel/releases/latest/download/OpenParallel-1.0.0-windows-x64.zip), or [build from source](#windows-and-linux) | Windows 10 or 11, 64-bit |
+| **Linux** | Beta | [x64](https://github.com/Ali-expandings/openparallel/releases/latest/download/OpenParallel-1.0.0-linux-x64.tar.gz) or [arm64](https://github.com/Ali-expandings/openparallel/releases/latest/download/OpenParallel-1.0.0-linux-arm64.tar.gz) tarball with an installer script, or [build from source](#windows-and-linux) | 64-bit Linux desktop (X11 or Wayland) |
 
-The Windows build isn't code-signed yet: extract the zip first, then choose **More info → Run anyway** if SmartScreen asks. Releases with checksums will appear under [Releases](https://github.com/Ali-expandings/openparallel/releases) from v1.0.
+Every release lists SHA-256 checksums on the [Releases](https://github.com/Ali-expandings/openparallel/releases) page. The downloads aren't signed with a paid certificate yet: on macOS, if it's blocked, open System Settings → Privacy & Security and choose **Open Anyway**; on Windows, extract the zip first, then choose **More info → Run anyway** if SmartScreen asks.
 
 ## How it works
 
@@ -244,7 +244,7 @@ PRODUCT.md               what OpenParallel is, who it's for, and what it never c
 - [x] Linux app (desktop entries, Flatpak, Snap, AppImage)
 - [x] Report a problem in every app and on the website
 - [x] Website: [openparallel.pages.dev](https://openparallel.pages.dev)
-- [ ] First public release (v1.0) with downloads and checksums for every system
+- [x] First public release (v1.0) with downloads and checksums for every system
 - [ ] Signed and notarized macOS build; code-signed Windows build
 - [x] First real-machine tests on Windows 11 and Ubuntu 24.04
 - [ ] Longer real-machine compatibility lists for Windows and Linux

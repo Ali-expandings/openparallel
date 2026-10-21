@@ -36,10 +36,8 @@ jobs:
         run: bash web/build.sh && test -f web/dist/index.html && test -f web/dist/project.json
 
   macos:
-    # macOS runners cost 10× the minutes of Linux ones on private repositories, so this runs on
-    # demand for now. Move it to every push once the repository is public (free minutes).
     name: macOS app (Swift)
-    if: github.event_name == 'workflow_dispatch' && inputs.macos
+    if: github.event_name != 'workflow_dispatch' || inputs.macos
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
