@@ -35,12 +35,12 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
                 LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "development build")
                 if let signature = project.signature {
-                    // Not LabeledContent: it would give every link the signature as its name.
-                    HStack {
+                    // Not LabeledContent: it would give every link the signature as its name. The
+                    // links get their own line; beside the signature they broke mid-word.
+                    VStack(alignment: .leading, spacing: 6) {
                         Text(signature)
-                        Spacer()
-                        HStack(spacing: 12) {
-                            ForEach(project.authorLinks) { Link($0.label, destination: $0.url) }
+                        HStack(spacing: 16) {
+                            ForEach(project.authorLinks) { Link($0.label, destination: $0.url).fixedSize() }
                         }
                     }
                 }
