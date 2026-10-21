@@ -75,11 +75,42 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+/// The standard About window, with who made OpenParallel and their links under the version.
+@MainActor
+enum AboutPanel {
+    static func show() {
+        NSApp.orderFrontStandardAboutPanel(options: credits(ProjectInfo.current).map { [.credits: $0] } ?? [:])
+    }
+
+    static func credits(_ project: ProjectInfo) -> NSAttributedString? {
+        guard let signature = project.signature else { return nil }
+        let centered = NSMutableParagraphStyle()
+        centered.alignment = .center
+        let plain: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
+            .foregroundColor: NSColor.secondaryLabelColor,
+            .paragraphStyle: centered,
+        ]
+        let text = NSMutableAttributedString(string: signature, attributes: plain)
+        for (index, link) in project.authorLinks.enumerated() {
+            text.append(NSAttributedString(string: index == 0 ? "\n" : "  \u{00B7}  ", attributes: plain))
+            var linked = plain
+            linked[.link] = link.url
+            text.append(NSAttributedString(string: link.label, attributes: linked))
+        }
+        return text
+    }
+}
+
 struct OpenParallelCommands: Commands {
     @ObservedObject var state: AppState
     @Environment(\.openWindow) private var openWindow
 
     var body: some Commands {
+        CommandGroup(replacing: .appInfo) {
+            Button("About OpenParallel") { AboutPanel.show() }
+        }
+
         CommandGroup(replacing: .newItem) {
             Button("New Instance\u{2026}") { state.requestNewInstance() }
                 .keyboardShortcut("n")

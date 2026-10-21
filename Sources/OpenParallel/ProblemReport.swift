@@ -6,6 +6,24 @@ struct ProjectInfo: Decodable {
     var version: String?
     var reportEmail: String?
     var repositoryUrl: String?
+    var author: Author?
+
+    /// Who made OpenParallel, shown in About and Settings (and the website's footer).
+    struct Author: Decodable {
+        var signature: String?
+        var links: [AuthorLink]?
+    }
+
+    struct AuthorLink: Decodable {
+        var label: String?
+        var url: String?
+    }
+
+    struct Link: Hashable, Identifiable {
+        var label: String
+        var url: URL
+        var id: String { label }
+    }
 
     static let current: ProjectInfo = {
         guard let url = Bundle.main.url(forResource: "project", withExtension: "json"),
@@ -17,6 +35,18 @@ struct ProjectInfo: Decodable {
 
     var reportAddress: String? { reportEmail.flatMap { $0.trimmingCharacters(in: .whitespaces).isEmpty ? nil : $0 } }
     var repository: String? { repositoryUrl.flatMap { $0.trimmingCharacters(in: .whitespaces).isEmpty ? nil : $0 } }
+    var signature: String? { author?.signature.map { $0.trimmingCharacters(in: .whitespaces) }.flatMap { $0.isEmpty ? nil : $0 } }
+
+    /// The author's web links; anything without a label or an http(s) address is left out.
+    var authorLinks: [Link] {
+        (author?.links ?? []).compactMap { link in
+            guard let label = link.label?.trimmingCharacters(in: .whitespaces), !label.isEmpty,
+                  let text = link.url?.trimmingCharacters(in: .whitespaces), let url = URL(string: text),
+                  ["http", "https"].contains(url.scheme?.lowercased() ?? "")
+            else { return nil }
+            return Link(label: label, url: url)
+        }
+    }
 }
 
 /// One report, in the format every OpenParallel surface uses (Mac, Windows, Linux, website),

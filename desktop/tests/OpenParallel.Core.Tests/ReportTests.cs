@@ -48,4 +48,33 @@ public class ReportTests
         Assert.Null(ProjectInfo.Load(Path.Combine(dir, "missing")).Repository);
         Directory.Delete(dir, true);
     }
+
+    [Fact]
+    public void ReadsTheAuthorAndOnlyItsWebLinks()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "op-author-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        File.WriteAllText(Path.Combine(dir, "project.json"), """
+            { "author": { "signature": " Made by A ", "links": [
+              { "label": "Site", "url": "https://a.example" }, { "label": "Mail", "url": "mailto:a@b.c" }, { "label": "", "url": "https://b.example" } ] } }
+            """);
+        var info = ProjectInfo.Load(dir);
+        Assert.Equal("Made by A", info.Signature);
+        Assert.Equal([("Site", "https://a.example")], info.AuthorLinks);
+        Assert.Null(new ProjectInfo().Signature);
+        Assert.Empty(new ProjectInfo().AuthorLinks);
+        Directory.Delete(dir, true);
+    }
+
+    [Fact]
+    public void ShippedProjectFactsCarryTheSignature()
+    {
+        // project.json at the repository root is the file every app and the website read.
+        var info = ProjectInfo.Load(RepositoryRoot());
+        Assert.Equal("Made by Ali Assem, The Tech Butcher", info.Signature);
+        Assert.Equal(["GitHub", "LinkedIn", "Instagram", "Linktree"], info.AuthorLinks.Select(l => l.Label));
+    }
+
+    private static string RepositoryRoot([System.Runtime.CompilerServices.CallerFilePath] string here = "") =>
+        Path.GetFullPath(Path.Combine(Path.GetDirectoryName(here)!, "..", "..", ".."));
 }

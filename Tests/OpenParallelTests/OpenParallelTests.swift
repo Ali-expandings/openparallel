@@ -922,3 +922,18 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     #expect(WebRunner.safariApplicationName(safariInfoPlist: plist) == "Version/27.0 Safari/605.1.15")
     #expect(WebRunner.safariApplicationName(safariInfoPlist: folder.appendingPathComponent("missing.plist")) == "Version/18.0 Safari/605.1.15")
 }
+
+@MainActor @Test func aboutShowsTheSignatureAndOnlyWebLinks() throws {
+    let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+    let shipped = try JSONDecoder().decode(ProjectInfo.self, from: Data(contentsOf: root.appendingPathComponent("project.json")))
+    #expect(shipped.signature == "Made by Ali Assem, The Tech Butcher")
+    #expect(shipped.authorLinks.map(\.label) == ["GitHub", "LinkedIn", "Instagram", "Linktree"])
+
+    let json = #"{ "author": { "signature": " Made by A ", "links": [ { "label": "Site", "url": "https://a.example" }, { "label": "Mail", "url": "mailto:a@b.c" }, { "label": "", "url": "https://b.example" } ] } }"#
+    let project = try JSONDecoder().decode(ProjectInfo.self, from: Data(json.utf8))
+    #expect(project.authorLinks.map(\.label) == ["Site"])
+    let credits = try #require(AboutPanel.credits(project))
+    #expect(credits.string == "Made by A\nSite")
+    #expect(credits.attribute(.link, at: credits.length - 1, effectiveRange: nil) as? URL == URL(string: "https://a.example"))
+    #expect(AboutPanel.credits(ProjectInfo()) == nil)
+}

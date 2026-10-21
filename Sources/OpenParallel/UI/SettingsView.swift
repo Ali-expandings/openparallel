@@ -5,6 +5,7 @@ struct SettingsView: View {
     @EnvironmentObject private var state: AppState
     @AppStorage(SettingsKey.showMenuBarExtra) private var showMenuBarExtra = true
     @AppStorage(SettingsKey.openAfterCreating) private var openAfterCreating = true
+    private let project = ProjectInfo.current
 
     var body: some View {
         Form {
@@ -33,6 +34,13 @@ struct SettingsView: View {
                 Text("OpenParallel sends nothing anywhere, runs nothing in the background, and never changes the apps you copy.")
                     .foregroundStyle(.secondary)
                 LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "development build")
+                if let signature = project.signature {
+                    LabeledContent(signature) {
+                        HStack(spacing: 12) {
+                            ForEach(project.authorLinks) { Link($0.label, destination: $0.url) }
+                        }
+                    }
+                }
                 LabeledContent("Something wrong?") {
                     Button("Report a Problem\u{2026}") { openWindow(id: "report") }
                 }

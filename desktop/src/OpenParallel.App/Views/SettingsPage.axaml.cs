@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using FluentAvalonia.UI.Controls;
 using OpenParallel.App.Services;
+using OpenParallel.Core;
 
 namespace OpenParallel.App.Views;
 
@@ -98,7 +99,25 @@ public partial class SettingsPage : UserControl
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         VersionText.Text = version is null ? "Development build" : $"Version {version.Major}.{version.Minor}.{version.Build}";
+        ShowAuthor(ProjectInfo.Load(AppContext.BaseDirectory));
         loading = false;
+    }
+
+    /// <summary>Who made OpenParallel and their links, from project.json; hidden when it has none.</summary>
+    private void ShowAuthor(ProjectInfo project)
+    {
+        if (project.Signature is not { } signature) return;
+        AuthorCard.Header = signature;
+        AuthorCard.IconSource = App.Symbol(FASymbol.Contact);
+        foreach (var (label, url) in project.AuthorLinks)
+        {
+            var link = new HyperlinkButton { Content = label, Padding = new Thickness(8, 4) };
+            AutomationProperties.SetName(link, $"{label} (opens in your browser)");
+            ToolTip.SetTip(link, url);
+            link.Click += (_, _) => Explorer.OpenUrl(url);
+            AuthorLinks.Children.Add(link);
+        }
+        AuthorCard.IsVisible = true;
     }
 
     private void Save(Action change)

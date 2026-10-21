@@ -72,6 +72,11 @@
         <ui:FASettingsExpanderItem Content="Privacy"
                                    Description="OpenParallel sends nothing anywhere and never changes the apps you copy. It runs only while its window or its notification-area icon is open." />
       </ui:FASettingsExpander>
+      <ui:FASettingsExpander x:Name="AuthorCard" IsVisible="False">
+        <ui:FASettingsExpander.Footer>
+          <WrapPanel x:Name="AuthorLinks" VerticalAlignment="Center" />
+        </ui:FASettingsExpander.Footer>
+      </ui:FASettingsExpander>
     </StackPanel>
   </ScrollViewer>
 </UserControl>

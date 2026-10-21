@@ -4,6 +4,15 @@
   "version": "1.0.0",
   "reportEmail": "",
   "repositoryUrl": "",
+  "author": {
+    "signature": "Made by Ali Assem, The Tech Butcher",
+    "links": [
+      { "label": "GitHub", "url": "https://github.com/Ali-expandings" },
+      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/ali-assemm/" },
+      { "label": "Instagram", "url": "https://www.instagram.com/ali_the_tech_butcher/" },
+      { "label": "Linktree", "url": "https://linktr.ee/ali_tech_space" }
+    ]
+  },
   "downloads": {
     "mac": { "file": "OpenParallel-1.0.0-mac.zip", "requires": "macOS 14 Sonoma or later, Apple silicon or Intel" },
     "windows": { "file": "OpenParallel-1.0.0-windows-x64.zip", "requires": "Windows 10 or 11, 64-bit" },

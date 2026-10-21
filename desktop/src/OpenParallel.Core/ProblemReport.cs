@@ -5,7 +5,7 @@ namespace OpenParallel.Core;
 
 /// <summary>Public project facts from <c>project.json</c> (shipped beside the app, shared with the
 /// Mac app and the website). Empty values hide what needs them.</summary>
-public sealed record ProjectInfo(string? Version = null, string? ReportEmail = null, string? RepositoryUrl = null)
+public sealed record ProjectInfo(string? Version = null, string? ReportEmail = null, string? RepositoryUrl = null, ProjectAuthor? Author = null)
 {
     public static ProjectInfo Load(string folder)
     {
@@ -22,7 +22,22 @@ public sealed record ProjectInfo(string? Version = null, string? ReportEmail = n
 
     public string? ReportAddress => string.IsNullOrWhiteSpace(ReportEmail) ? null : ReportEmail.Trim();
     public string? Repository => string.IsNullOrWhiteSpace(RepositoryUrl) ? null : RepositoryUrl.Trim().TrimEnd('/');
+    public string? Signature => string.IsNullOrWhiteSpace(Author?.Signature) ? null : Author.Signature.Trim();
+
+    /// <summary>The author's web links; anything without a label or an http(s) address is left out.</summary>
+    public IReadOnlyList<(string Label, string Url)> AuthorLinks =>
+        (Author?.Links ?? [])
+            .Where(l => !string.IsNullOrWhiteSpace(l.Label)
+                        && Uri.TryCreate(l.Url?.Trim(), UriKind.Absolute, out var uri)
+                        && (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp))
+            .Select(l => (l.Label!.Trim(), l.Url!.Trim()))
+            .ToList();
 }
+
+/// <summary>Who made OpenParallel, shown in Settings' About section (and the website's footer).</summary>
+public sealed record ProjectAuthor(string? Signature = null, IReadOnlyList<ProjectLink>? Links = null);
+
+public sealed record ProjectLink(string? Label = null, string? Url = null);
 
 public enum ProblemKind
 {

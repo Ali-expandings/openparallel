@@ -480,6 +480,7 @@ html { scrollbar-color: var(--line-strong) transparent; }
 .colophon .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-xl); }
 .colophon .brand { color: var(--ink); }
 .colophon nav { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-lg); margin-left: auto; }
+.colophon .credit { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xl); padding-top: var(--space-md); border-top: 1px solid var(--line); }
 .colophon a { text-decoration: none; }
 .colophon a:hover { text-decoration: underline; }
 
