@@ -107,7 +107,8 @@ public partial class SettingsPage : UserControl
     private void ShowAuthor(ProjectInfo project)
     {
         if (project.Signature is not { } signature) return;
-        AuthorCard.Header = signature;
+        AuthorSignature.Text = signature;
+        AutomationProperties.SetName(AuthorCard, signature);
         AuthorCard.IconSource = App.Symbol(FASymbol.Contact);
         foreach (var (label, url) in project.AuthorLinks)
         {
