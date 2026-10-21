@@ -35,7 +35,10 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
                 LabeledContent("Version", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "development build")
                 if let signature = project.signature {
-                    LabeledContent(signature) {
+                    // Not LabeledContent: it would give every link the signature as its name.
+                    HStack {
+                        Text(signature)
+                        Spacer()
                         HStack(spacing: 12) {
                             ForEach(project.authorLinks) { Link($0.label, destination: $0.url) }
                         }
