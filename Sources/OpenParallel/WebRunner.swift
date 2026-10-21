@@ -41,6 +41,17 @@ enum WebRunner {
         exit(0)
     }
 
+    /// The end of the user agent: Safari's own "Version/x Safari/605.1.15". WebKit's default user
+    /// agent leaves it out, and some sites then refuse the page as an outdated Safari (WhatsApp
+    /// Web: "WhatsApp works with Safari 15+"). The web view is the WebKit the installed Safari
+    /// uses, so it says Safari's version.
+    static func safariApplicationName(safariInfoPlist: URL = URL(fileURLWithPath: "/Applications/Safari.app/Contents/Info.plist")) -> String {
+        let installed = (NSDictionary(contentsOf: safariInfoPlist)?["CFBundleShortVersionString"] as? String)?
+            .split(separator: ".").prefix(2).joined(separator: ".")
+        let version = installed.flatMap { Double($0) != nil ? $0 : nil } ?? "18.0"
+        return "Version/\(version) Safari/605.1.15"
+    }
+
     private static func parse(_ arguments: [String]) -> [String: String] {
         var result: [String: String] = [:]
         var index = 0
@@ -81,6 +92,7 @@ private final class WebRunnerDelegate: NSObject, NSApplicationDelegate, NSWindow
             // Unique shortcut bundle identifiers keep default stores separate on macOS 13.
             configuration.websiteDataStore = .default()
         }
+        configuration.applicationNameForUserAgent = WebRunner.safariApplicationName()
         configuration.defaultWebpagePreferences.allowsContentJavaScript = true
         configuration.allowsAirPlayForMediaPlayback = true
 

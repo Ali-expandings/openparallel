@@ -911,3 +911,14 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     try assertZshSyntax(wrapper)
     try? FileManager.default.removeItem(at: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/OpenParallel/Instances/\(displaySlug(instanceName))"))
 }
+
+@MainActor @Test func websiteCopiesIntroduceThemselvesAsTheInstalledSafari() throws {
+    // WhatsApp Web refused WebKit's default user agent ("WhatsApp works with Safari 15+").
+    let folder = FileManager.default.temporaryDirectory.appendingPathComponent("OpenParallel-Safari-\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: folder) }
+    let plist = folder.appendingPathComponent("Info.plist")
+    try (["CFBundleShortVersionString": "27.0.1"] as NSDictionary).write(to: plist)
+    #expect(WebRunner.safariApplicationName(safariInfoPlist: plist) == "Version/27.0 Safari/605.1.15")
+    #expect(WebRunner.safariApplicationName(safariInfoPlist: folder.appendingPathComponent("missing.plist")) == "Version/18.0 Safari/605.1.15")
+}
