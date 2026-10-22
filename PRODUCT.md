@@ -14,10 +14,10 @@ separate editor profiles. They are at a desk, mid-work, tired of signing out and
 
 ## What is uniquely true
 - A copy opens from the Dock, Start menu or applications menu like any app, under its own name
-  (default: "<App> Parall").
+  (default: "<App> 2", then "<App> 3"…).
 - Honest status per app, never rounded up: Tested (this exact version ran as two copies with
   separate data), Supported (a recipe exists for this kind of app), Experimental, Shares data,
-  Not supported. 27 apps / 37 versions tested on macOS as of 2026-10.
+  Not supported. 26 apps / 36 versions tested on macOS as of 2026-10.
 - Private by construction: no telemetry, no account, no background service, no network calls
   from OpenParallel itself. Removing a copy moves it to the Trash / Recycle Bin.
 - Works with websites too: any site as its own app window with its own cookies.

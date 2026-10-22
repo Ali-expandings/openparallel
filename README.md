@@ -42,7 +42,7 @@
 
 You have a work Discord and a personal one. A client's Claude and your own. Two Telegram numbers, two GitHub accounts in VS Code. Every switch means signing out, signing in, and losing your place.
 
-OpenParallel gives you **a second copy of the app**, called `Discord Parall` unless you rename it. It opens from the Dock, Start menu or app launcher like any other app, and it signs in to the other account and stays there. The copy runs the very app you installed, so it updates when the original does. What it gets is its own place for everything that makes an account yours.
+OpenParallel gives you **a second copy of the app**, called `Discord 2` unless you rename it. It opens from the Dock, Start menu or app launcher like any other app, and it signs in to the other account and stays there. The copy runs the very app you installed, so it updates when the original does. What it gets is its own place for everything that makes an account yours.
 
 ## Highlights
 
@@ -66,7 +66,7 @@ OpenParallel gives you **a second copy of the app**, called `Discord Parall` unl
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/media/macos-new-instance-dark.png">
-    <img src="docs/media/macos-new-instance-light.png" width="430" alt="The New Instance sheet for Claude: the installed version, its status, the name Claude Parall, and switches for separate login and data and for opening it after creating.">
+    <img src="docs/media/macos-new-instance-light.png" width="430" alt="The New Instance sheet for Claude: the installed version, its status, the name Claude 2, and switches for separate login and data and for opening it after creating.">
   </picture>
   <br><sub>The macOS app built from this repository, showing a sample library. Versions that haven't been tested yet say so.</sub>
 </p>
@@ -87,7 +87,7 @@ A copy is two small things: **a launcher** and **a data folder**. The launcher s
 
 ```mermaid
 flowchart LR
-    C["Discord Parall<br/>the copy's shortcut"] -->|"--user-data-dir=…/discord-parall"| A["Discord<br/>installed once, never modified"]
+    C["Discord 2<br/>the copy's shortcut"] -->|"--user-data-dir=…/discord-2"| A["Discord<br/>installed once, never modified"]
     O["Discord<br/>the original shortcut"] --> A
     A -->|"when opened as the copy"| D[("The copy's data<br/>its own sign-ins, cookies,<br/>settings and caches")]
     A -->|"when opened as itself"| P[("Discord's own data<br/>untouched")]
@@ -197,7 +197,7 @@ The app doubles as a command-line tool:
 ```sh
 OpenParallel inspect --src /Applications/Claude.app --json      # what a copy would get
 OpenParallel build --src /Applications/Claude.app               # make a copy
-OpenParallel web-build --url https://web.whatsapp.com --name "WhatsApp Web Parall"   # a website copy
+OpenParallel web-build --url https://web.whatsapp.com --name "WhatsApp Web"   # a website copy
 ./scripts/real-app-smoke-test.sh --app /Applications/Firefox.app --instances 2
 ```
 
@@ -292,7 +292,9 @@ OpenParallel keeps your work and personal lives apart; it doesn't get around any
 <details>
 <summary><b>How does it relate to Parall?</b></summary>
 
-OpenParallel is a free, open-source, clean-room take on Parall-style workflows, for macOS, Windows and Linux. It uses no Parall code, assets or implementation details; Parall's public compatibility list served as a benchmark.
+OpenParallel is an independent project, not affiliated with Parall. Parall is a paid Mac app that does a similar job; if you want a supported Mac app, it's worth a look. OpenParallel is free and open source, and also runs on Windows and Linux.
+
+Version 1.0.0 used Parall's public compatibility list as a fallback for Mac apps OpenParallel hadn't tested yet. From 1.0.1 on, every status and recipe comes from OpenParallel's own tests.
 </details>
 
 ## Contributing

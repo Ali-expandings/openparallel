@@ -29,7 +29,7 @@
         msgs: [["Customer", "Has order 2291 shipped yet?"], ["Kiln Ceramics", "It left today. Tracking link sent by email."]] },
     },
     vscode: {
-      name: "Visual Studio Code", dock: "VS Code", letter: "V", tile: "var(--tile-4)", layout: "editor", parallName: "Visual Studio Code Parall",
+      name: "Visual Studio Code", dock: "VS Code", letter: "V", tile: "var(--tile-4)", layout: "editor", parallName: "Visual Studio Code 2",
       a: { account: "Profile: Personal", side: "Explorer", items: ["garden-planner", "src", "planner.ts", "README.md"], on: 2, tint: "var(--st-supported)",
         code: [["const", " beds = loadBeds("], ["", "  '/plots/2026.json'"], ["", ");"], ["export", " function sow(bed) {"]] },
       b: { account: "Profile: Fernhill", side: "Explorer", items: ["client-portal", "app", "routes.ts", "package.json"], on: 2, tint: "var(--st-tested)",
@@ -75,7 +75,7 @@
     const bar = el("div", "titlebar");
     const lights = el("span", "lights");
     lights.append(el("i"), el("i"), el("i"));
-    const title = el("span", "title", which === "a" ? data.name : data.parallName || `${data.name} Parall`);
+    const title = el("span", "title", which === "a" ? data.name : data.parallName || `${data.name} 2`);
     const account = el("span", "account", side.account);
     const controls = el("span", "wincontrols");
     controls.append(svg("i-min", "0 0 10 10"), svg("i-max", "0 0 10 10"), svg("i-x", "0 0 10 10"));
@@ -123,7 +123,7 @@
       return t;
     }
     const isCopy = kind === "copy";
-    const label = isCopy ? data.parallName || `${data.name} Parall` : data.name;
+    const label = isCopy ? data.parallName || `${data.name} 2` : data.name;
     const t = el("button", `tile running ${isCopy ? "t-copy" : "t-original"}`);
     t.type = "button";
     t.setAttribute("aria-label", isCopy ? `Open ${label}, the copy` : `Bring ${label} forward`);
@@ -140,7 +140,7 @@
     desk.dataset.os = os;
     desk.dataset.front = "copy";
     const name = APPS[app].name;
-    desk.setAttribute("aria-label", `Illustration: ${name} and ${APPS[app].parallName || name + " Parall"} open side by side on ${window.OP ? window.OP.systems[os].name : os}, each signed in to a different account.`);
+    desk.setAttribute("aria-label", `Illustration: ${name} and ${APPS[app].parallName || name + " 2"} open side by side on ${window.OP ? window.OP.systems[os].name : os}, each signed in to a different account.`);
     stage.append(windowFor("a"), windowFor("b"));
     const dock = el("div", "dock");
     for (let i = 0; i < BLANKS; i++) dock.append(tile("blank"));

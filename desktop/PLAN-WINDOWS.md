@@ -321,7 +321,7 @@ auto-update; Linux build (possible later with the same Avalonia code).
 - Ali's VM "Windows 11 mie" (Windows 11 on ARM, the x64 build runs under emulation), driven by
   keyboard through `prlctl send-key-event` and read through screenshots.
 - Firefox: copy created, opened on a fresh profile, shown as Running, quit to Not running; the
-  original Firefox ran beside it on its own profile; the Start menu has "Firefox Parall".
+  original Firefox ran beside it on its own profile; the Start menu has the copy.
 - Installed for the test (official ARM64 installers, Ali's OK): Cursor 3.24.18 (user setup),
   Antigravity 2.23.1, Claude 2.42304 (MSIX; needs admin for its Cowork service, Ali approved it),
   ChatGPT 155.0.8059 from the Store (the Codex app now ships inside it; Ali approved its admin

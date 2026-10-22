@@ -870,212 +870,212 @@
     },
     {
       "app": "Alacritty",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Kitty",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "WezTerm",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Emacs",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Blender",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "FreeCAD",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "KiCad",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Arduino IDE",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "OBS Studio",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Inkscape",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "GIMP",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Krita",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Darktable",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "RawTherapee",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "MuseScore",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Ardour",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "LMMS",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Godot",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Tiled",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "OpenSCAD",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "QGIS",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Meld",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Zotero",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Calibre",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "HandBrake",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Kdenlive",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Shotcut",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Neovide",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Hyper",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
       "app": "Tabby",
-      "tier": "detected",
-      "family": "Isolated home",
-      "note": "The Isolated home recipe applies. Never launched on the test Mac, so nothing is proven.",
+      "tier": "wishlist",
+      "family": "None yet",
+      "note": "No recipe yet. Send a test record and it moves up.",
       "versions": 0
     },
     {
@@ -1395,12 +1395,12 @@
     }
   ],
   "counts": {
-    "tested": 27,
-    "detected": 127,
-    "wishlist": 30,
-    "limited": 15
+    "tested": 26,
+    "detected": 97,
+    "wishlist": 60,
+    "limited": 16
   },
   "total": 199,
-  "testedVersions": 37,
-  "testedApps": 27
+  "testedVersions": 36,
+  "testedApps": 26
 }
