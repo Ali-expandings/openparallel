@@ -1,6 +1,6 @@
 # Shared environment for building and running the Windows version on macOS.
 # Source it: . windows/scripts/env.sh
-export DOTNET_ROOT="$HOME/.dotnet"
+export DOTNET_ROOT="${DOTNET_ROOT:-$HOME/.dotnet}"
 export PATH="$DOTNET_ROOT:$PATH"
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_NOLOGO=1
