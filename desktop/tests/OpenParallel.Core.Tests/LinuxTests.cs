@@ -40,7 +40,7 @@ public class DesktopEntryTests
         var shortcut = new ShortcutDefinition
         {
             Path = "/home/a/.local/share/applications/openparallel-x.desktop",
-            Name = "Notes Parall",
+            Name = "Notes Copy",
             Target = "/opt/My App/app",
             ArgumentList = ["--user-data-dir=/home/a/b c/electron", "--x=$HOME", "100%", "back\\slash", "quote\"d"],
             Environment = new Dictionary<string, string> { ["XDG_CONFIG_HOME"] = "/home/a/b c/xdg/config" },
@@ -55,7 +55,7 @@ public class DesktopEntryTests
         Assert.Equal(shortcut.Target, back.Target);
         Assert.Equal(shortcut.ArgumentList, back.ArgumentList);
         Assert.Equal(shortcut.Environment, back.Environment);
-        Assert.Equal("Notes Parall", back.Name);
+        Assert.Equal("Notes Copy", back.Name);
         Assert.Equal("notes", back.IconPath);
     }
 
@@ -136,9 +136,9 @@ public class LinuxInspectorTests : IDisposable
         var app = apps.Inspect(entry);
         Assert.Equal(AppFamily.Electron, app.Family);
         Assert.Contains("CODEX_HOME", app.Notes);
-        var (plan, _) = apps.AppPlan(app, "/data/chatgpt-parall", true, [], new Dictionary<string, string>(), "chatgpt-parall", "/op");
-        Assert.Equal(Path.Combine("/data/chatgpt-parall", "codex-home"), plan.Environment["CODEX_HOME"]);
-        Assert.Contains("--user-data-dir=" + Path.Combine("/data/chatgpt-parall", "electron"), plan.Arguments);
+        var (plan, _) = apps.AppPlan(app, "/data/chatgpt-copy", true, [], new Dictionary<string, string>(), "chatgpt-copy", "/op");
+        Assert.Equal(Path.Combine("/data/chatgpt-copy", "codex-home"), plan.Environment["CODEX_HOME"]);
+        Assert.Contains("--user-data-dir=" + Path.Combine("/data/chatgpt-copy", "electron"), plan.Arguments);
 
         var plain = apps.Inspect(Entry("Notes", Program("opt/notes/notes", "resources/app.asar")));
         Assert.False(apps.AppPlan(plain, "/data/n", true, [], new Dictionary<string, string>(), "n", "/op").Plan.Environment.ContainsKey("CODEX_HOME"));
@@ -252,20 +252,20 @@ public class LinuxMatcherTests
     public void AppsThatRewriteTheirProcessTitleAreStillRecognised()
     {
         // Claude 2.42304 on Ubuntu 24.04: /proc/<pid>/cmdline is one string of the words joined by spaces.
-        var claude = Manifest("claude-parall", ["--user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall/electron", "--class=OpenParallel.claude-parall"]);
-        var other = Manifest("claude-parall-2", ["--user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall-2/electron"]);
+        var claude = Manifest("claude-copy", ["--user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-copy/electron", "--class=OpenParallel.claude-copy"]);
+        var other = Manifest("claude-copy-2", ["--user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-copy-2/electron"]);
         var processes = new List<ProcessSnapshot>
         {
             new(30, "/usr/lib/claude-desktop/claude-desktop", "", ["/usr/lib/claude-desktop/claude-desktop"], 1),
             new(31, "/usr/lib/claude-desktop/claude-desktop", "",
-                ["/usr/lib/claude-desktop/claude-desktop --user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall/electron --class=OpenParallel.claude-parall"], 1),
+                ["/usr/lib/claude-desktop/claude-desktop --user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-copy/electron --class=OpenParallel.claude-copy"], 1),
             new(32, "/usr/lib/claude-desktop/claude-desktop", "",
-                ["/usr/lib/claude-desktop/claude-desktop --type=renderer --user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-parall/electron"], 31),
+                ["/usr/lib/claude-desktop/claude-desktop --type=renderer --user-data-dir=/home/a/.local/share/OpenParallel/Instances/claude-copy/electron"], 31),
         };
         var running = ProcessMatcher.MatchArguments([claude, other], Root, processes, _ => null);
-        Assert.Equal([31], running["claude-parall"]);
-        // A word is matched whole: claude-parall's folder is not claude-parall-2's.
-        Assert.False(running.ContainsKey("claude-parall-2"));
+        Assert.Equal([31], running["claude-copy"]);
+        // A word is matched whole: claude-copy's folder is not claude-copy-2's.
+        Assert.False(running.ContainsKey("claude-copy-2"));
     }
 
     [Fact]
@@ -325,10 +325,10 @@ public class LinuxServiceTests
         var entry = Path.Combine(fake.Root, "tool.desktop");
         File.WriteAllText(entry, $"[Desktop Entry]\nType=Application\nName=Tool\nExec={program} %F\nIcon=tool\n");
 
-        var manifest = service.Create(new InstanceRequest { Name = "Tool Parall", AppPath = entry });
+        var manifest = service.Create(new InstanceRequest { Name = "Tool Copy", AppPath = entry });
 
         Assert.Equal("linux", manifest.Platform);
-        Assert.EndsWith("openparallel-tool-parall.desktop", manifest.ShortcutPath);
+        Assert.EndsWith("openparallel-tool-copy.desktop", manifest.ShortcutPath);
         Assert.Equal("tool", manifest.IconName);
         Assert.True(manifest.ProfileIsolation);
         var config = manifest.Environment["XDG_CONFIG_HOME"];
@@ -445,7 +445,7 @@ public class UbuntuFindingsTests : IDisposable
     [Fact]
     public void AFirefoxCopysProfileFolderIsMadeBeforeItStarts()
     {
-        var data = Path.Combine(root, "snap", "firefox", "common", "OpenParallel", "fox-parall");
+        var data = Path.Combine(root, "snap", "firefox", "common", "OpenParallel", "fox-copy");
         var app = new InspectedApp { ExePath = "/x.desktop", Name = "Firefox", Family = AppFamily.Firefox, Status = CompatibilityStatus.Experimental, Notes = "" };
         new LinuxAppKnowledge().Prepare(app, data, separateData: true);
         Assert.True(Directory.Exists(Path.Combine(data, "firefox")));

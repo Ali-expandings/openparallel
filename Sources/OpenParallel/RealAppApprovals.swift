@@ -17,7 +17,7 @@ struct RealAppApproval: Sendable {
 /// signed source. These are process/profile approvals, not account-login verification.
 enum RealAppApprovalLedger {
     #if OPENPARALLEL_PRIVATE
-    static let approvals: [RealAppApproval] = linkedSourceApprovals + NativeWhatsApp.approvals
+    static let approvals: [RealAppApproval] = linkedSourceApprovals + PrivateExtensions.approvals
     #else
     static let approvals: [RealAppApproval] = linkedSourceApprovals
     #endif
@@ -67,6 +67,16 @@ enum RealAppApprovalLedger {
         guard let bundleIdentifier, !bundleIdentifier.isEmpty, let version, !version.isEmpty else { return nil }
         return approvalsByKey["\(bundleIdentifier.lowercased())\u{0}\(version)"]
     }
+
+    /// Apps OpenParallel itself tested with a per-instance HOME (any version).
+    /// Only these get the HOME recipe; an app nobody here tested gets none.
+    static func isHomeProfileApp(_ bundleIdentifier: String) -> Bool {
+        homeProfileBundleIDs.contains(bundleIdentifier.lowercased())
+    }
+
+    private static let homeProfileBundleIDs = Set(
+        linkedSourceApprovals.filter { $0.family == .homeProfile }.map { $0.bundleIdentifier.lowercased() }
+    )
 
     static func approval(forAppAt path: String) -> RealAppApproval? {
         guard let bundle = Bundle(url: URL(fileURLWithPath: path)) else { return nil }

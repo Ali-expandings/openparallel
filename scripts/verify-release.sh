@@ -18,7 +18,7 @@ cd "$ROOT"
 /usr/bin/lipo "$APP/Contents/MacOS/OpenParallel" -verify_arch arm64 x86_64
 
 /usr/bin/plutil -lint "$APP/Contents/Info.plist" >/dev/null
-[[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist")" == "1.0.0" ]]
+[[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist")" == "$(/usr/bin/jq -r .version "$ROOT/project.json")" ]]
 [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/Info.plist")" == "dev.openparallel.app" ]]
 /usr/bin/codesign --verify --deep --strict "$APP"
 /usr/bin/unzip -tq "$ZIP" >/dev/null
@@ -40,24 +40,18 @@ for app in /Applications/Claude.app /Applications/ChatGPT.app /Applications/Anti
   rg -q '"normalHome" : true' <<< "$output"
 done
 
-catalog="$("$APP/Contents/MacOS/OpenParallel" catalog --json)"
-/usr/bin/jq -e '.summary.total == 119 and .summary.verified == 98 and .summary.partial == 15 and .summary.web == 5 and .summary.limited == 1' >/dev/null <<< "$catalog"
-
 for blocked_app in '/Applications/Telegram Lite.app'; do
   [[ -d "$blocked_app" ]] || continue
   blocked_output="$("$APP/Contents/MacOS/OpenParallel" inspect --src "$blocked_app" --json)"
   /usr/bin/jq -e '.multiInstance == false and .separateData == false' >/dev/null <<< "$blocked_output"
 done
 
-# Native WhatsApp: the public build refuses it and points at a Web shortcut; a
-# build with the private extension (Sources/OpenParallel/Private) handles it.
+# WhatsApp: the public build refuses it and points at a Web shortcut. A build
+# with private extensions runs their own checks instead.
 if [[ -d /Applications/WhatsApp.app ]]; then
   whatsapp_output="$("$APP/Contents/MacOS/OpenParallel" inspect --src /Applications/WhatsApp.app --json)"
-  if [[ -d "$ROOT/Sources/OpenParallel/Private" ]]; then
-    /usr/bin/jq -e '.family == "WhatsApp Native"' >/dev/null <<< "$whatsapp_output"
-    /usr/bin/jq -e '.launchMode == "native-identity-copy"' >/dev/null <<< "$whatsapp_output"
-    /usr/bin/jq -e '.multiInstance == true and .separateData == true' >/dev/null <<< "$whatsapp_output"
-    /usr/bin/jq -e '.supportsProfileIsolation == true and .normalHome == false' >/dev/null <<< "$whatsapp_output"
+  if [[ -x "$ROOT/scripts/private/verify-release.sh" && -d "$ROOT/Sources/OpenParallel/Private" ]]; then
+    "$ROOT/scripts/private/verify-release.sh" "$APP" "$whatsapp_output"
   else
     /usr/bin/jq -e '.multiInstance == false and .separateData == false' >/dev/null <<< "$whatsapp_output"
   fi

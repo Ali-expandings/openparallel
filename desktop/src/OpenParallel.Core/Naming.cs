@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace OpenParallel.Core;
@@ -24,8 +25,25 @@ public static class Naming
         return slug.Length == 0 ? "shortcut" : slug;
     }
 
-    /// <summary>The default name for a new instance of an app: <c>&lt;App&gt; Parall</c>.</summary>
-    public static string DefaultInstanceName(string appName) => $"{appName.Trim()} Parall";
+    /// <summary>The default name for a new instance of an app: <c>&lt;App&gt; 2</c>, the original
+    /// being number one. <see cref="InstanceService.SuggestName"/> picks the next free number.</summary>
+    public static string DefaultInstanceName(string appName) => $"{appName.Trim()} 2";
+
+    /// <summary>Names to try, in order: the name itself, then the next numbers. A name that
+    /// already ends in a small number counts on from it ("Discord 2" → "Discord 3"); any other
+    /// name gets " 2", " 3", … ("Office 365" → "Office 365 2"). Same rule as the Mac app.</summary>
+    public static IEnumerable<string> Candidates(string name)
+    {
+        var baseName = name;
+        var number = 1;
+        var space = name.LastIndexOf(' ');
+        if (space > 0 && int.TryParse(name[(space + 1)..], NumberStyles.None, CultureInfo.InvariantCulture, out var n) && n is >= 2 and <= 99)
+        {
+            baseName = name[..space];
+            number = n;
+        }
+        for (; ; number++) yield return number == 1 ? baseName : $"{baseName} {number}";
+    }
 
     /// <summary>A name that is safe as a Windows file name (for the <c>.lnk</c>).</summary>
     public static string SafeFileName(string value)

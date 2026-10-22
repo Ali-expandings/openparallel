@@ -10,13 +10,13 @@ public class ReportTests
         var report = new ProblemReport
         {
             Kind = ProblemKind.Separate, App = "Discord", AppVersion = "0.0.407", AppDetail = "Electron, Supported",
-            Details = "Both copies show my main account.", Steps = "1. Open Discord Parall",
+            Details = "Both copies show my main account.", Steps = "1. Open Discord Copy",
             System = "Windows 10.0.19045 (x64)", OpenParallelVersion = "1.0.0 (Windows)",
         };
         Assert.Equal("[OpenParallel] An app doesn’t keep its data separate: Discord", report.Subject);
         Assert.Equal("What happened: An app doesn’t keep its data separate\nApp: Discord 0.0.407 (Electron, Supported)\n" +
                      "OpenParallel: 1.0.0 (Windows)\nSystem: Windows 10.0.19045 (x64)\n---\nBoth copies show my main account.\n\n" +
-                     "How to see it again:\n1. Open Discord Parall", report.Body);
+                     "How to see it again:\n1. Open Discord Copy", report.Body);
         report.IncludeSystem = false;
         Assert.DoesNotContain("System:", report.Body);
     }

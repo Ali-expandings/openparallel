@@ -5,8 +5,7 @@ DerivedData/
 dist/
 .DS_Store
 
-# Private, never published: session transcripts, digests, and archived
-# experiments (the archive includes extracted proprietary Claude app code).
+# Private, never published: session transcripts, digests, and archived experiments.
 research/
 archive/
 

@@ -46,7 +46,7 @@ private func makeFixtureApp(
     return FixtureApp(root: root, app: app, plist: plist)
 }
 
-func makeSpec(source: URL, output: URL, name: String = "Fixture Parall") -> ShortcutSpec {
+func makeSpec(source: URL, output: URL, name: String = "Fixture Copy") -> ShortcutSpec {
     ShortcutSpec(
         name: name,
         kind: .app,
@@ -221,14 +221,11 @@ private func assertZshSyntax(_ wrapper: URL) throws {
     #expect(!profile.supportsProfileIsolation)
 }
 
-@Test func compatibilityCatalogMatchesPublishedMatrix() {
-    let counts = CompatibilityCatalog.counts()
-    #expect(CompatibilityCatalog.records.count == 119)
-    #expect(Set(CompatibilityCatalog.records.map(\.name)).count == 119)
-    #expect(counts[.verified] == 98)
-    #expect(counts[.partial] == 15)
-    #expect(counts[.web] == 5)
-    #expect(counts[.limited] == 1)
+@Test func onlyAppsOpenParallelTestedGetTheHomeRecipe() {
+    #expect(RealAppApprovalLedger.isHomeProfileApp("com.sublimetext.4"))
+    #expect(RealAppApprovalLedger.isHomeProfileApp("COM.MITCHELLH.GHOSTTY"))
+    #expect(!RealAppApprovalLedger.isHomeProfileApp("org.blenderfoundation.blender"))
+    #expect(!RealAppApprovalLedger.isHomeProfileApp("com.hnc.discord"))
 }
 
 @Test func realAppApprovalsRequireExactBundleAndVersion() {
@@ -321,19 +318,25 @@ private func assertZshSyntax(_ wrapper: URL) throws {
     let fixture = try makeFixtureApp(name: "ChatGPT Classic", bundleID: "com.openai.chat", electron: false)
     defer { try? FileManager.default.removeItem(at: fixture.root) }
 
-    let record = CompatibilityCatalog.record(matchingAppAt: fixture.app.path)
     let profile = CompatibilityProfile.analyze(kind: .app, targetPath: fixture.app.path)
-    #expect(record?.name == "ChatGPT Classic")
-    #expect(record?.referenceStatus == .web)
-    #expect(profile.status == .limited)
-    #expect(profile.dataMode == .webFrame)
+    #expect(profile.family != .codex)
+    #expect(profile.family == .generic)
     #expect(!profile.separateData)
 }
 
-@Test func verifiedNativeCatalogAppGetsExperimentalHomeProfile() throws {
+@Test func untestedNativeAppGetsNoDataClaim() throws {
     let fixture = try makeFixtureApp(name: "Blender", bundleID: "org.blenderfoundation.blender", electron: false)
     defer { try? FileManager.default.removeItem(at: fixture.root) }
-    let instanceName = "OpenParallel Test Blender \(UUID().uuidString)"
+    let profile = CompatibilityProfile.analyze(kind: .app, targetPath: fixture.app.path)
+    #expect(profile.family == .generic)
+    #expect(!profile.separateData)
+    #expect(!profile.usesHomeOverride)
+}
+
+@Test func nativeAppTestedWithHomeGetsExperimentalHomeProfile() throws {
+    let fixture = try makeFixtureApp(name: "Sublime Text", bundleID: "com.sublimetext.4", electron: false)
+    defer { try? FileManager.default.removeItem(at: fixture.root) }
+    let instanceName = "OpenParallel Test Sublime \(UUID().uuidString)"
     let instanceRoot = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent("Library/Application Support/OpenParallel/Instances/\(displaySlug(instanceName))", isDirectory: true)
     defer { try? FileManager.default.removeItem(at: instanceRoot) }
@@ -357,7 +360,20 @@ private func assertZshSyntax(_ wrapper: URL) throws {
     #expect(info?["OpenParallelNormalHome"] as? Bool == false)
 }
 
-@Test func partialCatalogAppDoesNotClaimSeparation() throws {
+@Test func copiesAreNumberedFromTwo() throws {
+    #expect(Array(ShortcutBuilder.candidateNames(for: "Discord 2").prefix(3)) == ["Discord 2", "Discord 3", "Discord 4"])
+    #expect(Array(ShortcutBuilder.candidateNames(for: "Work").prefix(3)) == ["Work", "Work 2", "Work 3"])
+    #expect(Array(ShortcutBuilder.candidateNames(for: "Office 365").prefix(2)) == ["Office 365", "Office 365 2"])
+
+    let fixture = try makeFixtureApp(name: "Numbered", bundleID: "dev.example.numbered")
+    defer { try? FileManager.default.removeItem(at: fixture.root) }
+    let output = fixture.root.appendingPathComponent("Output", isDirectory: true)
+    try FileManager.default.createDirectory(at: output.appendingPathComponent("Numbered 2.app"), withIntermediateDirectories: true)
+    #expect(ShortcutBuilder.defaultName(for: fixture.app, kind: .app) == "Numbered 2")
+    #expect(ShortcutBuilder.defaultName(for: fixture.app, kind: .app, in: output) == "Numbered 3")
+}
+
+@Test func unlistedAppDoesNotClaimSeparation() throws {
     let fixture = try makeFixtureApp(name: "Pages", bundleID: "dev.example.pages", electron: false)
     defer { try? FileManager.default.removeItem(at: fixture.root) }
 
@@ -699,18 +715,18 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
 @Test func libraryListsManifestsAlphabeticallyAndSkipsBrokenOnes() throws {
     let fixture = try makeLibraryFixture()
     defer { try? FileManager.default.removeItem(at: fixture.root) }
-    try writeManifest(["instanceName": "Older Parall", "instanceSlug": "older-parall", "createdAt": "2026-08-01T00:00:00Z"],
-                      slug: "older-parall", in: fixture)
-    try writeManifest(["instanceName": "Newer Parall", "instanceSlug": "newer-parall", "createdAt": "2026-08-19T00:00:00Z",
+    try writeManifest(["instanceName": "Older Copy", "instanceSlug": "older-copy", "createdAt": "2026-08-01T00:00:00Z"],
+                      slug: "older-copy", in: fixture)
+    try writeManifest(["instanceName": "Newer Copy", "instanceSlug": "newer-copy", "createdAt": "2026-08-19T00:00:00Z",
                        "family": "Chromium", "profileIsolation": true],
-                      slug: "newer-parall", in: fixture)
+                      slug: "newer-copy", in: fixture)
     let broken = fixture.dataRoot.appendingPathComponent("broken", isDirectory: true)
     try FileManager.default.createDirectory(at: broken, withIntermediateDirectories: true)
     try Data("not json".utf8).write(to: broken.appendingPathComponent("instance.json"))
 
     let library = makeLibrary(fixture)
 
-    #expect(library.instances.map(\.instanceName) == ["Newer Parall", "Older Parall"])
+    #expect(library.instances.map(\.instanceName) == ["Newer Copy", "Older Copy"])
     #expect(library.instances.first?.profileIsolation == true)
     #expect(library.instances.first?.family == "Chromium")
 }
@@ -720,44 +736,44 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     let fixture = try makeLibraryFixture()
     defer { try? FileManager.default.removeItem(at: fixture.root) }
     let elsewhere = fixture.root.appendingPathComponent("Elsewhere", isDirectory: true)
-    try FileManager.default.createDirectory(at: elsewhere.appendingPathComponent("Moved Parall.app"), withIntermediateDirectories: true)
-    try writeManifest(["instanceName": "Moved Parall", "instanceSlug": "moved-parall",
-                       "wrapperPath": elsewhere.appendingPathComponent("Moved Parall.app").path], slug: "moved-parall", in: fixture)
-    try writeManifest(["instanceName": "Renamed Parall", "instanceSlug": "renamed-parall"], slug: "renamed-parall", in: fixture)
-    try writeManifest(["instanceName": "Named Parall", "instanceSlug": "named-parall"], slug: "named-parall", in: fixture)
-    try writeManifest(["instanceName": "Missing Parall", "instanceSlug": "missing-parall"], slug: "missing-parall", in: fixture)
-    let renamed = try writeWrapper(named: "My Work Browser", in: fixture, info: ["OpenParallelInstanceSlug": "renamed-parall"])
-    let named = try writeWrapper(named: "Named Parall", in: fixture)
-    let older = try writeWrapper(named: "Claude Parall", in: fixture, info: ["CFBundleIdentifier": "dev.openparallel.clone.claude"])
+    try FileManager.default.createDirectory(at: elsewhere.appendingPathComponent("Moved Copy.app"), withIntermediateDirectories: true)
+    try writeManifest(["instanceName": "Moved Copy", "instanceSlug": "moved-copy",
+                       "wrapperPath": elsewhere.appendingPathComponent("Moved Copy.app").path], slug: "moved-copy", in: fixture)
+    try writeManifest(["instanceName": "Renamed Copy", "instanceSlug": "renamed-copy"], slug: "renamed-copy", in: fixture)
+    try writeManifest(["instanceName": "Named Copy", "instanceSlug": "named-copy"], slug: "named-copy", in: fixture)
+    try writeManifest(["instanceName": "Missing Copy", "instanceSlug": "missing-copy"], slug: "missing-copy", in: fixture)
+    let renamed = try writeWrapper(named: "My Work Browser", in: fixture, info: ["OpenParallelInstanceSlug": "renamed-copy"])
+    let named = try writeWrapper(named: "Named Copy", in: fixture)
+    let older = try writeWrapper(named: "Claude Copy", in: fixture, info: ["CFBundleIdentifier": "dev.openparallel.clone.claude"])
 
     let library = makeLibrary(fixture)
 
-    #expect(library.record(withSlug: "moved-parall")?.wrapperURL?.lastPathComponent == "Moved Parall.app")
-    #expect(library.record(withSlug: "renamed-parall")?.wrapperURL?.standardizedFileURL == renamed.standardizedFileURL)
-    #expect(library.record(withSlug: "named-parall")?.wrapperURL?.standardizedFileURL == named.standardizedFileURL)
-    #expect(library.record(withSlug: "missing-parall")?.wrapperURL == nil)
+    #expect(library.record(withSlug: "moved-copy")?.wrapperURL?.lastPathComponent == "Moved Copy.app")
+    #expect(library.record(withSlug: "renamed-copy")?.wrapperURL?.standardizedFileURL == renamed.standardizedFileURL)
+    #expect(library.record(withSlug: "named-copy")?.wrapperURL?.standardizedFileURL == named.standardizedFileURL)
+    #expect(library.record(withSlug: "missing-copy")?.wrapperURL == nil)
     #expect(library.legacyShortcuts.map(\.standardizedFileURL) == [older.standardizedFileURL])
 }
 
 @MainActor
-@Test func nativeCopyReportsDriftOnlyAfterTheSourceVersionChanges() throws {
+@Test func extensionCopyReportsDriftOnlyAfterTheSourceVersionChanges() throws {
     let fixture = try makeLibraryFixture()
     defer { try? FileManager.default.removeItem(at: fixture.root) }
     let source = try makeFixtureApp(name: "Copied App", bundleID: "com.example.copied", electron: false)
     defer { try? FileManager.default.removeItem(at: source.root) }
-    let base: [String: Any] = ["instanceName": "Copied App Parall", "instanceSlug": "copied-app-parall",
+    let base: [String: Any] = ["instanceName": "Copied App Copy", "instanceSlug": "copied-app-copy",
                                "sourcePath": source.app.path, "vendorBundleModified": true,
                                "updatePolicy": "rebuild-required"]
 
     var current = base
     current["sourceVersionAtCreation"] = "9.8.7"
-    try writeManifest(current, slug: "copied-app-parall", in: fixture)
+    try writeManifest(current, slug: "copied-app-copy", in: fixture)
     let library = makeLibrary(fixture)
     #expect(library.sourceDrifted(try #require(library.instances.first)) == false)
 
     var stale = base
     stale["sourceVersionAtCreation"] = "9.8.6"
-    try writeManifest(stale, slug: "copied-app-parall", in: fixture)
+    try writeManifest(stale, slug: "copied-app-copy", in: fixture)
     library.reload()
     #expect(library.sourceDrifted(try #require(library.instances.first)) == true)
 
@@ -765,7 +781,7 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     var wrapper = stale
     wrapper["vendorBundleModified"] = false
     wrapper.removeValue(forKey: "updatePolicy")
-    try writeManifest(wrapper, slug: "copied-app-parall", in: fixture)
+    try writeManifest(wrapper, slug: "copied-app-copy", in: fixture)
     library.reload()
     #expect(library.sourceDrifted(try #require(library.instances.first)) == false)
 }
@@ -779,30 +795,30 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     let ownGroup = fixture.groups.appendingPathComponent("group.net.whatsapp.ab12cd34.shared", isDirectory: true)
     let originalGroup = fixture.groups.appendingPathComponent("group.net.whatsapp.WhatsApp.shared", isDirectory: true)
     let outsideGroup = fixture.root.appendingPathComponent("Elsewhere/group.net.whatsapp.ab12cd34.private", isDirectory: true)
-    let neighbour = fixture.dataRoot.appendingPathComponent("other-parall", isDirectory: true)
+    let neighbour = fixture.dataRoot.appendingPathComponent("other-copy", isDirectory: true)
     let logs = fixture.library.appendingPathComponent("Logs/OpenParallel", isDirectory: true)
     for directory in [ownGroup, originalGroup, outsideGroup, neighbour, logs] {
         try fm.createDirectory(at: directory, withIntermediateDirectories: true)
     }
-    try Data("log".utf8).write(to: logs.appendingPathComponent("whatsapp-parall.log"))
-    try Data("log".utf8).write(to: logs.appendingPathComponent("other-parall.log"))
-    try writeManifest(["instanceName": "WhatsApp Parall", "instanceSlug": "whatsapp-parall",
+    try Data("log".utf8).write(to: logs.appendingPathComponent("whatsapp-copy.log"))
+    try Data("log".utf8).write(to: logs.appendingPathComponent("other-copy.log"))
+    try writeManifest(["instanceName": "WhatsApp Copy", "instanceSlug": "whatsapp-copy",
                        "vendorBundleModified": true,
                        "groupContainerPaths": [ownGroup.path, originalGroup.path, outsideGroup.path]],
-                      slug: "whatsapp-parall", in: fixture)
-    let wrapper = try writeWrapper(named: "WhatsApp Parall", in: fixture)
+                      slug: "whatsapp-copy", in: fixture)
+    let wrapper = try writeWrapper(named: "WhatsApp Copy", in: fixture)
 
     let library = makeLibrary(fixture)
     try library.delete(try #require(library.instances.first))
 
     #expect(!fm.fileExists(atPath: wrapper.path))
-    #expect(!fm.fileExists(atPath: fixture.dataRoot.appendingPathComponent("whatsapp-parall").path))
+    #expect(!fm.fileExists(atPath: fixture.dataRoot.appendingPathComponent("whatsapp-copy").path))
     #expect(!fm.fileExists(atPath: ownGroup.path))
-    #expect(!fm.fileExists(atPath: logs.appendingPathComponent("whatsapp-parall.log").path))
+    #expect(!fm.fileExists(atPath: logs.appendingPathComponent("whatsapp-copy.log").path))
     #expect(fm.fileExists(atPath: originalGroup.path))
     #expect(fm.fileExists(atPath: outsideGroup.path))
     #expect(fm.fileExists(atPath: neighbour.path))
-    #expect(fm.fileExists(atPath: logs.appendingPathComponent("other-parall.log").path))
+    #expect(fm.fileExists(atPath: logs.appendingPathComponent("other-copy.log").path))
     #expect(library.instances.isEmpty)
 }
 
@@ -833,13 +849,13 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     let base = "/Users/me/Library/Application Support/OpenParallel/Instances"
     let exe = "/Applications/Claude.app/Contents/MacOS/"
     let targets: [InstanceProcessMatcher.Target] = [
-        .init(slug: "claude-parall", executablePrefix: exe, marker: "\(base)/claude-parall/"),
-        .init(slug: "claude-parall-2", executablePrefix: exe, marker: "\(base)/claude-parall-2/"),
+        .init(slug: "claude-copy", executablePrefix: exe, marker: "\(base)/claude-copy/"),
+        .init(slug: "claude-copy-2", executablePrefix: exe, marker: "\(base)/claude-copy-2/"),
         .init(slug: "mail", executablePrefix: "/Shortcuts/Mail.app/Contents/MacOS/OpenParallelWebRunner", marker: "")
     ]
     let processes = InstanceProcessMatcher.parse(psOutput: """
-      101 /Applications/Claude.app/Contents/MacOS/Claude --user-data-dir=\(base)/claude-parall-2/electron-user-data
-      102 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper --user-data-dir=\(base)/claude-parall/electron-user-data
+      101 /Applications/Claude.app/Contents/MacOS/Claude --user-data-dir=\(base)/claude-copy-2/electron-user-data
+      102 /Applications/Claude.app/Contents/Frameworks/Claude Helper.app/Contents/MacOS/Claude Helper --user-data-dir=\(base)/claude-copy/electron-user-data
       103 /Applications/Claude.app/Contents/MacOS/Claude
       104 /Shortcuts/Mail.app/Contents/MacOS/OpenParallelWebRunner web-run --url https://mail.example.com
     """)
@@ -847,8 +863,8 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     let result = InstanceProcessMatcher.match(targets, in: processes)
 
     #expect(processes.map(\.pid) == [101, 102, 103, 104])
-    #expect(result.running["claude-parall-2"] == [101])
-    #expect(result.running["claude-parall"] == nil)
+    #expect(result.running["claude-copy-2"] == [101])
+    #expect(result.running["claude-copy"] == nil)
     #expect(result.running["mail"] == [104])
     // The original app (no data folder in its arguments) needs an environment check.
     #expect(result.needsEnvironment == [103])
@@ -863,7 +879,7 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
     report.appVersion = "0.0.407"
     report.appDetail = "Electron, Tested"
     report.details = "Both copies show my main account."
-    report.steps = "1. Open Discord Parall"
+    report.steps = "1. Open Discord Copy"
     report.system = "macOS 15.6 (Apple silicon)"
     report.openParallelVersion = "1.0.0 (macOS)"
     #expect(report.subject == "[OpenParallel] An app doesn\u{2019}t keep its data separate: Discord")
@@ -876,7 +892,7 @@ private func writeWrapper(named name: String, in fixture: LibraryFixture, info: 
         Both copies show my main account.
 
         How to see it again:
-        1. Open Discord Parall
+        1. Open Discord Copy
         """)
     report.includeSystem = false
     #expect(!report.body.contains("System:"))

@@ -6,8 +6,8 @@ namespace OpenParallel.Core.Tests;
 public class NamingTests
 {
     [Theory]
-    [InlineData("Claude Parall", "claude-parall")]
-    [InlineData("Claude Parall 2", "claude-parall-2")]
+    [InlineData("Claude Copy", "claude-copy")]
+    [InlineData("Claude Copy 2", "claude-copy-2")]
     [InlineData("  --Work__Profile--  ", "work-profile")]
     [InlineData("Ünïcode", "ufc-n-uef-code")]
     [InlineData("!!!", "shortcut")]
@@ -32,7 +32,7 @@ public class CommandLineTests
     [Fact]
     public void JoinAndSplitRoundTrip()
     {
-        string[] args = ["--user-data-dir=C:\\Users\\me\\AppData\\Local\\OpenParallel\\Instances\\claude-parall\\electron",
+        string[] args = ["--user-data-dir=C:\\Users\\me\\AppData\\Local\\OpenParallel\\Instances\\claude-copy\\electron",
             "", "two words", "trailing\\", "quote\"inside", "back\\\\slashes\\\"quote", "-profile", "C:\\a b\\c"];
         Assert.Equal(args, WindowsCommandLine.Split(WindowsCommandLine.Join(args)));
     }
@@ -118,7 +118,7 @@ public class RecipeTests
             InstallKind = InstallKind.Squirrel, UpdateExePath = "/u/AnthropicClaude/Update.exe",
             InstallRoot = "/u/AnthropicClaude", ExePath = "/u/AnthropicClaude/app-1.0.0/claude.exe",
         };
-        var (plan, mode) = RecipeBook.AppPlan(app, @"C:\data\claude-parall", true, [], new Dictionary<string, string>(), "claude-parall", "/op.exe");
+        var (plan, mode) = RecipeBook.AppPlan(app, @"C:\data\claude-copy", true, [], new Dictionary<string, string>(), "claude-copy", "/op.exe");
         Assert.Equal("squirrel", mode);
         Assert.EndsWith("Update.exe", plan.Target);
         Assert.Equal("--processStart", plan.Arguments[0]);
@@ -153,19 +153,19 @@ public class MatcherTests
         var base_ = @"C:\Users\me\AppData\Local\OpenParallel\Instances\";
         var targets = new[]
         {
-            new ProcessMatcher.Target("claude-parall", @"C:\Claude\", base_ + @"claude-parall\"),
-            new ProcessMatcher.Target("claude-parall-2", @"C:\Claude\", base_ + @"claude-parall-2\"),
+            new ProcessMatcher.Target("claude-copy", @"C:\Claude\", base_ + @"claude-copy\"),
+            new ProcessMatcher.Target("claude-copy-2", @"C:\Claude\", base_ + @"claude-copy-2\"),
         };
         var processes = new[]
         {
-            new ProcessSnapshot(1, @"C:\Claude\claude.exe", $"\"C:\\Claude\\claude.exe\" --user-data-dir={base_}claude-parall-2\\electron"),
-            new ProcessSnapshot(2, @"C:\Claude\claude.exe", $"\"C:\\Claude\\claude.exe\" --type=renderer --user-data-dir={base_}claude-parall\\electron"),
+            new ProcessSnapshot(1, @"C:\Claude\claude.exe", $"\"C:\\Claude\\claude.exe\" --user-data-dir={base_}claude-copy-2\\electron"),
+            new ProcessSnapshot(2, @"C:\Claude\claude.exe", $"\"C:\\Claude\\claude.exe\" --type=renderer --user-data-dir={base_}claude-copy\\electron"),
             new ProcessSnapshot(3, @"C:\Claude\claude.exe", "\"C:\\Claude\\claude.exe\""),
-            new ProcessSnapshot(4, @"C:\Other\other.exe", $"--user-data-dir={base_}claude-parall\\electron"),
+            new ProcessSnapshot(4, @"C:\Other\other.exe", $"--user-data-dir={base_}claude-copy\\electron"),
         };
         var (running, pending) = ProcessMatcher.Match(targets, processes);
-        Assert.Equal([1], running["claude-parall-2"]);
-        Assert.False(running.ContainsKey("claude-parall"));
+        Assert.Equal([1], running["claude-copy-2"]);
+        Assert.False(running.ContainsKey("claude-copy"));
         Assert.Equal([3], pending);
     }
 }
@@ -179,15 +179,15 @@ public class ServiceTests
         var service = new InstanceService(fake);
         var exe = fake.MakeApp(@"Notion/Notion.exe", "resources/app.asar");
 
-        var manifest = service.Create(new InstanceRequest { Name = "Notion Parall", AppPath = exe });
+        var manifest = service.Create(new InstanceRequest { Name = "Notion Copy", AppPath = exe });
 
-        Assert.Equal("notion-parall", manifest.InstanceSlug);
+        Assert.Equal("notion-copy", manifest.InstanceSlug);
         Assert.Equal("direct", manifest.LaunchMode);
         Assert.True(manifest.ProfileIsolation);
         var shortcut = fake.Shortcuts[manifest.ShortcutPath];
         Assert.Equal(exe, shortcut.Target);
         Assert.Contains("--user-data-dir=", shortcut.Arguments);
-        Assert.Equal("OpenParallel.notion-parall", shortcut.AppUserModelId);
+        Assert.Equal("OpenParallel.notion-copy", shortcut.AppUserModelId);
         Assert.Single(service.List());
         Assert.True(File.Exists(Path.Combine(service.DataRootOf(manifest), "instance.json")));
     }
@@ -198,7 +198,7 @@ public class ServiceTests
         using var fake = new FakePlatform();
         var service = new InstanceService(fake);
         var exe = fake.MakeApp(@"Notion/Notion.exe", "resources/app.asar");
-        var manifest = service.Create(new InstanceRequest { Name = "Notion Parall", AppPath = exe });
+        var manifest = service.Create(new InstanceRequest { Name = "Notion Copy", AppPath = exe });
         var original = fake.Shortcuts[manifest.ShortcutPath];
         File.Delete(manifest.ShortcutPath);
         fake.Shortcuts.Remove(manifest.ShortcutPath);
@@ -217,8 +217,8 @@ public class ServiceTests
         using var fake = new FakePlatform();
         var service = new InstanceService(fake);
         var exe = fake.MakeApp(@"Notion/Notion.exe", "resources/app.asar");
-        service.Create(new InstanceRequest { Name = "Notion Parall", AppPath = exe });
-        Assert.Equal("Notion Parall 2", service.ReserveName("Notion Parall"));
+        service.Create(new InstanceRequest { Name = "Notion Copy", AppPath = exe });
+        Assert.Equal("Notion Copy 2", service.ReserveName("Notion Copy"));
 
         // An empty skeleton is reused; a folder holding files is not.
         Directory.CreateDirectory(Path.Combine(service.InstancesRoot, "work", "cache"));
@@ -228,13 +228,29 @@ public class ServiceTests
     }
 
     [Fact]
+    public void CopiesAreNumberedFromTwo()
+    {
+        Assert.Equal(["Discord 2", "Discord 3", "Discord 4"], Naming.Candidates("Discord 2").Take(3));
+        Assert.Equal(["Work", "Work 2", "Work 3"], Naming.Candidates("Work").Take(3));
+        Assert.Equal(["Office 365", "Office 365 2"], Naming.Candidates("Office 365").Take(2));
+
+        using var fake = new FakePlatform();
+        var service = new InstanceService(fake);
+        var exe = fake.MakeApp(@"Notion/Notion.exe", "resources/app.asar");
+        Assert.Equal("Notion 2", service.SuggestName("Notion"));
+        service.Create(new InstanceRequest { Name = service.SuggestName("Notion"), AppPath = exe });
+        Assert.Equal("Notion 3", service.SuggestName("Notion"));
+        Assert.Equal("Notion 3", service.ReserveName("Notion 2"));
+    }
+
+    [Fact]
     public void AFailedCreateLeavesNothingBehind()
     {
         using var fake = new FakePlatform { FailShortcuts = true };
         var service = new InstanceService(fake);
         var exe = fake.MakeApp(@"Notion/Notion.exe", "resources/app.asar");
-        Assert.Throws<IOException>(() => service.Create(new InstanceRequest { Name = "Notion Parall", AppPath = exe }));
-        Assert.False(Directory.Exists(Path.Combine(service.InstancesRoot, "notion-parall")));
+        Assert.Throws<IOException>(() => service.Create(new InstanceRequest { Name = "Notion Copy", AppPath = exe }));
+        Assert.False(Directory.Exists(Path.Combine(service.InstancesRoot, "notion-copy")));
     }
 
     [Fact]
@@ -252,7 +268,7 @@ public class ServiceTests
         using var fake = new FakePlatform();
         var service = new InstanceService(fake);
         var exe = fake.MakeApp(@"Notion/Notion.exe", "resources/app.asar");
-        var manifest = service.Create(new InstanceRequest { Name = "Notion Parall", AppPath = exe });
+        var manifest = service.Create(new InstanceRequest { Name = "Notion Copy", AppPath = exe });
         var dataRoot = service.DataRootOf(manifest);
 
         fake.RunningProcesses.Add(new ProcessSnapshot(77, exe, $"\"{exe}\" --user-data-dir={Path.Combine(dataRoot, "electron")}"));
@@ -275,7 +291,7 @@ public class ServiceTests
         using var fake = new FakePlatform();
         var service = new InstanceService(fake);
         var exe = fake.MakeApp(@"PyCharm/bin/pycharm64.exe", "idea.properties");
-        var manifest = service.Create(new InstanceRequest { Name = "PyCharm Parall", AppPath = exe });
+        var manifest = service.Create(new InstanceRequest { Name = "PyCharm Copy", AppPath = exe });
         Assert.Equal("launcher", manifest.LaunchMode);
         Assert.Equal(fake.LauncherPath, fake.Shortcuts[manifest.ShortcutPath].Target);
 

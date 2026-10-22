@@ -31,7 +31,7 @@
       <TextBlock Classes="section" Text="What happened, and what you expected instead" />
       <TextBox x:Name="DetailsBox" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="110"
                AutomationProperties.Name="What happened, and what you expected instead"
-               PlaceholderText="I opened Discord Parall and it showed my main account instead of the second one." />
+               PlaceholderText="I opened Discord 2 and it showed my main account instead of the second one." />
       <TextBlock x:Name="DetailsError" IsVisible="False" Margin="2,6,0,0" Text="Say what happened, in a sentence or two." />
 
       <TextBlock Classes="section" Text="How to see it again (optional)" />

@@ -343,7 +343,7 @@ public partial class NewInstancePage : UserControl, IKeyAware
             AppOptions.IsVisible = true;
             if (!appNameEdited)
             {
-                suggestedAppName = Naming.DefaultInstanceName(choice.Name);
+                suggestedAppName = library.Service.SuggestName(choice.Name);
                 AppNameBox.Text = suggestedAppName;
             }
             SeparateToggle.IsChecked = app.SeparatesData;

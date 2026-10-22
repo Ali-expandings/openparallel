@@ -86,16 +86,18 @@ public sealed class InstanceService(IPlatform platform)
     /// reserved, so a new instance never adopts someone's leftover data; an empty one is reused.</summary>
     public string ReserveName(string requested)
     {
-        var baseName = requested.Trim();
-        if (baseName.Length == 0) throw new ArgumentException("Instance name required.");
-        for (var suffix = 1; ; suffix++)
-        {
-            var candidate = suffix == 1 ? baseName : $"{baseName} {suffix}";
-            var shortcut = Path.Combine(ShortcutsFolder, platform.ShortcutFileName(candidate, Naming.Slug(candidate)));
-            var data = Path.Combine(InstancesRoot, Naming.Slug(candidate));
-            if (!File.Exists(shortcut) && !HoldsFiles(data)) return candidate;
-        }
+        var name = requested.Trim();
+        if (name.Length == 0) throw new ArgumentException("Instance name required.");
+        return Naming.Candidates(name).First(IsFree);
     }
+
+    /// <summary>The name a new copy of <paramref name="appName"/> gets by default: "&lt;App&gt; 2",
+    /// or the next free number when copies already exist.</summary>
+    public string SuggestName(string appName) => Naming.Candidates(Naming.DefaultInstanceName(appName)).First(IsFree);
+
+    private bool IsFree(string candidate) =>
+        !File.Exists(Path.Combine(ShortcutsFolder, platform.ShortcutFileName(candidate, Naming.Slug(candidate))))
+        && !HoldsFiles(Path.Combine(InstancesRoot, Naming.Slug(candidate)));
 
     private static bool HoldsFiles(string folder) =>
         Directory.Exists(folder) && Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories).Any();

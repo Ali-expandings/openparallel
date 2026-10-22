@@ -71,12 +71,11 @@ public static class AppInspector
                 // app without passing environment variables: Codex stays shared.
                 var codex = package.Name.Equals("OpenAI.Codex", StringComparison.OrdinalIgnoreCase)
                     || File.Exists(Path.Combine(dir, "resources", "codex.exe"));
-                return Make(AppFamily.Electron, CompatibilityStatus.Experimental,
+                return Make(AppFamily.Electron, codex ? CompatibilityStatus.SharesData : CompatibilityStatus.Experimental,
                     "A Microsoft Store app built on Electron. Its copy starts through Windows with a data folder of its own. " +
                     (codex
-                        ? "Codex inside it still uses your .codex folder, so Codex's sign-in and sessions are shared with the original. "
-                        : "") +
-                    "New on Windows: test before relying on it.",
+                        ? "Codex inside it still uses your .codex folder, so Codex's sign-in and sessions are shared with the original."
+                        : "New on Windows: test before relying on it."),
                     InstallKind.Packaged) with { PackageId = package.AppUserModelId };
             }
             var web = package is null ? null : Windows.PackagedApps.WebAlternative(package.Name);

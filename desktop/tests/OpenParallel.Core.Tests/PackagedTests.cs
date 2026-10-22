@@ -67,7 +67,7 @@ public class PackagedTests
         File.WriteAllText(Path.Combine(PackagedApps.PackageRoot(exe)!, "AppxManifest.xml"),
             ClaudeManifest.Replace("Name=\"Claude\"", "Name=\"OpenAI.Codex\"").Replace("app\\claude.exe", "app\\ChatGPT.exe"));
         var app = AppInspector.Inspect(exe);
-        Assert.Equal(CompatibilityStatus.Experimental, app.Status);
+        Assert.Equal(CompatibilityStatus.SharesData, app.Status);
         Assert.Contains("Codex's sign-in and sessions are shared", app.Notes);
         Assert.DoesNotContain("Codex", AppInspector.Inspect(MakeClaude(fake)).Notes);
     }
@@ -84,10 +84,10 @@ public class PackagedTests
         Assert.Equal(CompatibilityStatus.Experimental, app.Status);
         Assert.Equal("Claude_pzs8sxrjxfjjc!Claude", app.PackageId);
 
-        var (plan, mode) = RecipeBook.AppPlan(app, "/data/claude-parall", true, [], new Dictionary<string, string>(), "claude-parall", "/op.exe");
+        var (plan, mode) = RecipeBook.AppPlan(app, "/data/claude-copy", true, [], new Dictionary<string, string>(), "claude-copy", "/op.exe");
         Assert.Equal("packaged", mode);
         Assert.Equal(@"shell:AppsFolder\Claude_pzs8sxrjxfjjc!Claude", plan.Target);
-        Assert.Equal(["--user-data-dir=" + Path.Combine("/data/claude-parall", "electron")], plan.Arguments);
+        Assert.Equal(["--user-data-dir=" + Path.Combine("/data/claude-copy", "electron")], plan.Arguments);
         // Updates move the app to a new package folder; recognition keys on WindowsApps itself.
         Assert.Equal(Path.Combine(fake.Root, "Apps", "WindowsApps"), RecipeBook.ProcessFolder(app));
     }
@@ -128,7 +128,7 @@ public class PackagedTests
     {
         using var fake = new FakePlatform();
         var service = new InstanceService(fake);
-        var manifest = service.Create(new InstanceRequest { Name = "Claude Parall", AppPath = MakeClaude(fake) });
+        var manifest = service.Create(new InstanceRequest { Name = "Claude Copy", AppPath = MakeClaude(fake) });
 
         Assert.Equal("packaged", manifest.LaunchMode);
         var dataRoot = service.DataRootOf(manifest);
@@ -136,7 +136,7 @@ public class PackagedTests
         Assert.True(Directory.Exists(profile), "the profile folder exists before the first start");
         var shortcut = fake.Shortcuts[manifest.ShortcutPath];
         Assert.Equal(fake.LauncherPath, shortcut.Target);
-        Assert.Equal(["--launch", "claude-parall"], shortcut.ArgumentList);
+        Assert.Equal(["--launch", "claude-copy"], shortcut.ArgumentList);
         Assert.Equal(Path.Combine(dataRoot, InstanceService.IconFileName), shortcut.IconPath);
 
         service.Launch(manifest);
@@ -163,7 +163,7 @@ public class UpdaterTests
         var service = new InstanceService(fake);
         var exe = fake.MakeApp("cursor/Cursor.exe", "resources/app/product.json");
 
-        var manifest = service.Create(new InstanceRequest { Name = "Cursor Parall", AppPath = exe });
+        var manifest = service.Create(new InstanceRequest { Name = "Cursor Copy", AppPath = exe });
 
         var text = File.ReadAllText(Settings(service.DataRootOf(manifest)));
         Assert.Contains("\"update.mode\": \"none\"", text);
@@ -176,7 +176,7 @@ public class UpdaterTests
     {
         using var fake = new FakePlatform();
         var service = new InstanceService(fake);
-        var manifest = service.Create(new InstanceRequest { Name = "Cursor Parall", AppPath = fake.MakeApp("cursor/Cursor.exe", "resources/app/product.json") });
+        var manifest = service.Create(new InstanceRequest { Name = "Cursor Copy", AppPath = fake.MakeApp("cursor/Cursor.exe", "resources/app/product.json") });
         var settings = Settings(service.DataRootOf(manifest));
         File.WriteAllText(settings, "{\n  \"editor.fontSize\": 15\n}\n");
 

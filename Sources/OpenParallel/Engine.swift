@@ -73,7 +73,7 @@ enum DataStorageMode: String {
     case webFrame = "Web Frame"
     /// A standalone copy that owns its own containers. Provided only by an
     /// optional private extension; the public build never selects it.
-    case identityCopy = "Identity Copy"
+    case extensionCopy = "Extension copy"
     case sandboxed = "Sandboxed"
     case unsupported = "Unsupported"
 }
@@ -92,7 +92,7 @@ enum AppFamily: String {
     case eclipse = "Eclipse"
     case vscode = "VS Code"
     case telegramDesktop = "Telegram Desktop"
-    case whatsAppNative = "WhatsApp Native"
+    case extensionCopy = "Extension copy"
     case homeProfile = "HOME Profile"
     case terminal = "Terminal"
     case apple = "Apple"
@@ -136,16 +136,19 @@ struct CompatibilityProfile {
 
     /// True when the generated instance runs with its own HOME instead of the
     /// user's.
-    var usesHomeOverride: Bool { family == .homeProfile || family == .whatsAppNative }
+    var usesHomeOverride: Bool { family == .homeProfile || family == .extensionCopy }
 
-    /// Isolation is not optional for a standalone copy: without it the copy
-    /// would be a slower duplicate of the original with no separate account.
-    var requiresProfileIsolation: Bool { family == .whatsAppNative }
+    /// Isolation is not optional for an extension copy: without it the copy
+    /// would open the original's account.
+    var requiresProfileIsolation: Bool { family == .extensionCopy }
 
     /// How the generated instance reaches the vendor app. Recorded in the
     /// instance Info.plist and manifest so tooling never has to guess.
     var launchMode: String {
-        family == .whatsAppNative ? "native-identity-copy" : "linked-signed-source"
+        #if OPENPARALLEL_PRIVATE
+        if family == .extensionCopy { return PrivateExtensions.launchMode }
+        #endif
+        return "linked-signed-source"
     }
 
     static let generic = CompatibilityProfile(
@@ -175,7 +178,10 @@ struct CompatibilityProfile {
         let lower = targetPath.lowercased()
         let bundle = Bundle(url: targetURL)
         let bundleID = (bundle?.bundleIdentifier ?? "").lowercased()
-        let catalogRecord = CompatibilityCatalog.record(matchingAppAt: targetPath)
+
+        #if OPENPARALLEL_PRIVATE
+        if let profile = PrivateExtensions.profile(forBundleID: bundleID) { return profile }
+        #endif
 
         if bundleID == "com.tdesktop.telegram" {
             return CompatibilityProfile(
@@ -206,9 +212,6 @@ struct CompatibilityProfile {
         // second process opens the same account. Checked ahead of the generic
         // sandbox rule below so the note can point at the Web alternative.
         if bundleID == "net.whatsapp.whatsapp" {
-            #if OPENPARALLEL_PRIVATE
-            return NativeWhatsApp.compatibilityProfile
-            #else
             return CompatibilityProfile(
                 family: .sandboxed,
                 status: .limited,
@@ -218,7 +221,6 @@ struct CompatibilityProfile {
                 menuBarNewWindow: false,
                 notes: "WhatsApp hardcodes one bundle identifier and App Group, so a second process opens the same account. Create a Web shortcut for https://web.whatsapp.com instead; each Web shortcut keeps its own login."
             )
-            #endif
         }
 
         if bundleID == "com.hnc.discord" {
@@ -402,7 +404,7 @@ struct CompatibilityProfile {
         }
 
         if ["iterm", "ghostty", "terminal"].contains(where: lower.contains) {
-            if catalogRecord?.referenceStatus == .verified {
+            if RealAppApprovalLedger.isHomeProfileApp(bundleID) {
                 return CompatibilityProfile(
                     family: .homeProfile,
                     status: .experimental,
@@ -410,7 +412,7 @@ struct CompatibilityProfile {
                     multiInstance: true,
                     separateData: true,
                     menuBarNewWindow: false,
-                    notes: "Recognized terminal compatibility target using experimental per-instance HOME. Shell starts in that profile; common personal folders remain linked to the real home.",
+                    notes: "Terminal tested by OpenParallel with a per-instance HOME. Shell starts in that profile; common personal folders remain linked to the real home.",
                     supportsProfileIsolation: true
                 )
             }
@@ -425,7 +427,7 @@ struct CompatibilityProfile {
             )
         }
 
-        if catalogRecord?.referenceStatus == .verified {
+        if RealAppApprovalLedger.isHomeProfileApp(bundleID) {
             return CompatibilityProfile(
                 family: .homeProfile,
                 status: .experimental,
@@ -433,44 +435,8 @@ struct CompatibilityProfile {
                 multiInstance: true,
                 separateData: true,
                 menuBarNewWindow: false,
-                notes: "Recognized compatibility target without a stronger app-specific flag. Uses a per-instance HOME as an experimental fallback; common personal folders remain linked to the real home. Test account separation and app features before relying on it.",
+                notes: "Tested by OpenParallel with a per-instance HOME; common personal folders remain linked to the real home. Test account separation and app features before relying on it.",
                 supportsProfileIsolation: true
-            )
-        }
-
-        if catalogRecord?.referenceStatus == .partial {
-            return CompatibilityProfile(
-                family: .generic,
-                status: .partial,
-                dataMode: .default,
-                multiInstance: true,
-                separateData: false,
-                menuBarNewWindow: false,
-                notes: "Cataloged partial target. OpenParallel can request another process but has no safe separate-data recipe."
-            )
-        }
-
-        if catalogRecord?.referenceStatus == .web {
-            return CompatibilityProfile(
-                family: .generic,
-                status: .limited,
-                dataMode: .webFrame,
-                multiInstance: false,
-                separateData: false,
-                menuBarNewWindow: false,
-                notes: "Cataloged web-app target. Use OpenParallel Web mode rather than cloning its native app."
-            )
-        }
-
-        if catalogRecord?.referenceStatus == .limited {
-            return CompatibilityProfile(
-                family: .generic,
-                status: .limited,
-                dataMode: .unsupported,
-                multiInstance: false,
-                separateData: false,
-                menuBarNewWindow: false,
-                notes: "iOS/iPadOS app mode is limited by macOS and cannot provide separate data or a dedicated native instance."
             )
         }
 
@@ -640,11 +606,15 @@ extension CompatibilityProfile {
 }
 
 extension ShortcutBuilder {
-    /// Default instance name for a source: `<App> Parall` for apps, the page
-    /// title-ish host name for websites.
-    static func defaultName(for url: URL, kind: ShortcutKind) -> String {
+    /// Default instance name for a source: `<App> 2` for apps (the original is
+    /// number one; the next free number when copies exist in `outputDirectory`),
+    /// the page title-ish host name for websites.
+    static func defaultName(for url: URL, kind: ShortcutKind, in outputDirectory: URL? = nil) -> String {
         let baseName = preferredAppName(at: url) ?? url.deletingPathExtension().lastPathComponent
-        return kind == .app ? "\(baseName) Parall" : baseName
+        guard kind == .app else { return baseName }
+        let first = "\(baseName) 2"
+        guard let outputDirectory else { return first }
+        return candidateNames(for: first).first { isFree($0, in: outputDirectory, reservesInstanceData: true) } ?? first
     }
 }
 
@@ -680,8 +650,6 @@ enum InspectCLI {
             "launchMode": profile.launchMode,
             "normalHome": !profile.usesHomeOverride,
             "dataMode": profile.dataMode.rawValue,
-            "referenceApp": CompatibilityCatalog.record(matchingAppAt: path)?.name ?? "",
-            "referenceStatus": CompatibilityCatalog.record(matchingAppAt: path)?.referenceStatus.rawValue ?? "Unlisted",
             "processProfileApproval": approval == nil ? "none" : "exact-version",
             "approvalTestedAt": approval?.testedAt ?? "",
             "approvalInstances": approval?.instances ?? 0,
@@ -701,52 +669,6 @@ enum InspectCLI {
             print("normalHome=\(!profile.usesHomeOverride)")
             print("dataMode=\(profile.dataMode.rawValue)")
             print("notes=\(profile.notes)")
-        }
-        exit(0)
-    }
-}
-
-enum CompatibilityCatalogCLI {
-    static func run(arguments: [String]) {
-        let counts = CompatibilityCatalog.counts()
-        let summary: [String: Any] = [
-            "updated": CompatibilityCatalog.updated,
-            "source": CompatibilityCatalog.sourceURL,
-            "total": CompatibilityCatalog.records.count,
-            "verified": counts[.verified, default: 0],
-            "partial": counts[.partial, default: 0],
-            "web": counts[.web, default: 0],
-            "limited": counts[.limited, default: 0]
-        ]
-
-        if arguments.contains("--json") {
-            let records: [[String: String]] = CompatibilityCatalog.records.map {
-                [
-                    "name": $0.name,
-                    "referenceStatus": $0.referenceStatus.rawValue,
-                    "openParallelPlan": $0.openParallelMode.rawValue
-                ]
-            }
-            let output: [String: Any] = ["summary": summary, "records": records]
-            guard
-                let data = try? JSONSerialization.data(withJSONObject: output, options: [.prettyPrinted, .sortedKeys]),
-                let text = String(data: data, encoding: .utf8)
-            else {
-                FileHandle.standardError.write(Data("CATALOG FAILED: could not encode JSON\n".utf8))
-                exit(1)
-            }
-            print(text)
-        } else {
-            print("OpenParallel compatibility reference")
-            print("updated=\(CompatibilityCatalog.updated)")
-            print("total=\(CompatibilityCatalog.records.count)")
-            print("verified=\(counts[.verified, default: 0])")
-            print("partial=\(counts[.partial, default: 0])")
-            print("web=\(counts[.web, default: 0])")
-            print("limited=\(counts[.limited, default: 0])")
-            for record in CompatibilityCatalog.records {
-                print("\(record.name)\t\(record.referenceStatus.rawValue)\t\(record.openParallelMode.rawValue)")
-            }
         }
         exit(0)
     }
@@ -781,7 +703,8 @@ enum BuildCLI {
         }
         let sourceURL = URL(fileURLWithPath: src)
         let sourceName = preferredAppName(at: sourceURL) ?? sourceURL.deletingPathExtension().lastPathComponent
-        let name = opts["name"] ?? "\(sourceName) Parall"
+        let outDirectory = opts["out"].map { URL(fileURLWithPath: $0, isDirectory: true) }
+        let name = opts["name"] ?? ShortcutBuilder.defaultName(for: sourceURL, kind: .app, in: outDirectory)
         let outDir = opts["out"].map { URL(fileURLWithPath: $0, isDirectory: true) }
             ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications/OpenParallel Shortcuts", isDirectory: true)
 
@@ -835,7 +758,7 @@ enum WebBuildCLI {
         let output = options["out"].map { URL(fileURLWithPath: $0, isDirectory: true) }
             ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications/OpenParallel Shortcuts", isDirectory: true)
         let spec = ShortcutSpec(
-            name: options["name"] ?? "\(host) Parall",
+            name: options["name"] ?? host,
             kind: .web,
             targetPath: url,
             arguments: "",
@@ -900,10 +823,9 @@ enum ShortcutBuilder {
         }
         let profile = CompatibilityProfile.analyze(kind: resolvedSpec.kind, targetPath: resolvedSpec.targetPath)
         #if OPENPARALLEL_PRIVATE
-        if resolvedSpec.kind == .app, profile.family == .whatsAppNative {
-            // Standalone copies are complete apps rather than launcher
-            // wrappers, so they skip the icon/Info.plist/launcher pipeline.
-            let nativeCopy = try NativeWhatsApp.build(
+        if resolvedSpec.kind == .app, profile.family == .extensionCopy {
+            // An extension builds its own copy and skips the launcher pipeline.
+            let nativeCopy = try PrivateExtensions.build(
                 sourceApp: URL(fileURLWithPath: resolvedSpec.targetPath),
                 outputApp: appURL,
                 instanceRoot: instanceRoot,
@@ -997,22 +919,35 @@ enum ShortcutBuilder {
         named name: String,
         reservesInstanceData: Bool
     ) throws -> URL {
-        let baseName = sanitizedFileName(name)
-        var candidate = outputDirectory.appendingPathComponent("\(baseName).app", isDirectory: true)
-        var suffix = 2
-        while true {
-            if !FileManager.default.fileExists(atPath: candidate.path)
-                && !(reservesInstanceData && instanceDataExists(for: candidate.deletingPathExtension().lastPathComponent)) {
-                do {
-                    try FileManager.default.createDirectory(at: candidate, withIntermediateDirectories: false)
-                    return candidate
-                } catch CocoaError.fileWriteFileExists {
-                    // Another builder won the same name between check and reservation.
-                }
+        for candidateName in candidateNames(for: sanitizedFileName(name)) {
+            guard isFree(candidateName, in: outputDirectory, reservesInstanceData: reservesInstanceData) else { continue }
+            let candidate = outputDirectory.appendingPathComponent("\(candidateName).app", isDirectory: true)
+            do {
+                try FileManager.default.createDirectory(at: candidate, withIntermediateDirectories: false)
+                return candidate
+            } catch CocoaError.fileWriteFileExists {
+                // Another builder won the same name between check and reservation.
             }
-            candidate = outputDirectory.appendingPathComponent("\(baseName) \(suffix).app", isDirectory: true)
-            suffix += 1
         }
+        preconditionFailure("candidateNames is endless")
+    }
+
+    /// Names to try, in order: the name itself, then the next numbers. A name
+    /// that already ends in a small number counts on from it ("Discord 2" →
+    /// "Discord 3"); any other name gets " 2", " 3", … ("Office 365" → "Office 365 2").
+    static func candidateNames(for name: String) -> some Sequence<String> {
+        var base = name
+        var number = 1
+        if let space = name.lastIndex(of: " "), let n = Int(name[name.index(after: space)...]), (2...99).contains(n) {
+            base = String(name[..<space])
+            number = n
+        }
+        return sequence(first: number) { $0 + 1 }.lazy.map { $0 == 1 ? base : "\(base) \($0)" }
+    }
+
+    private static func isFree(_ name: String, in outputDirectory: URL, reservesInstanceData: Bool) -> Bool {
+        !FileManager.default.fileExists(atPath: outputDirectory.appendingPathComponent("\(name).app").path)
+            && !(reservesInstanceData && instanceDataExists(for: name))
     }
 
     /// A folder blocks a name only when it holds data: an orphaned profile
@@ -1548,9 +1483,8 @@ enum ShortcutBuilder {
             fi
             """
 
-        // Native WhatsApp copies never reach this launcher: they are generated as
-        // complete apps with an isolated HOME baked into LSEnvironment.
-        case .generic, .terminal, .apple, .sandboxed, .whatsAppNative:
+        // Extension copies are built by their extension and never reach this launcher.
+        case .generic, .terminal, .apple, .sandboxed, .extensionCopy:
             return ""
         }
     }

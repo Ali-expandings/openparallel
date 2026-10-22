@@ -32,7 +32,7 @@ struct NewInstanceSheet: View {
         _source = State(initialValue: app)
         _choosingApp = State(initialValue: app == nil)
         _webAddress = State(initialValue: request.webAddress ?? "")
-        let initialName = request.name ?? app.map { ShortcutBuilder.defaultName(for: $0.url, kind: .app) } ?? ""
+        let initialName = request.name ?? app.map { ShortcutBuilder.defaultName(for: $0.url, kind: .app, in: AppState.shared.shortcutsDirectory) } ?? ""
         _name = State(initialValue: initialName)
         _nameEdited = State(initialValue: request.name != nil)
         _separateData = State(initialValue: app.map { $0.profile.supportsProfileIsolation || $0.profile.requiresProfileIsolation } ?? true)
@@ -70,7 +70,7 @@ struct NewInstanceSheet: View {
         .background { keyboardShortcuts }
         .onChange(of: kind) { _, _ in
             errorText = nil
-            if !nameEdited { name = kind == .web ? suggestedWebName : source.map { ShortcutBuilder.defaultName(for: $0.url, kind: .app) } ?? "" }
+            if !nameEdited { name = kind == .web ? suggestedWebName : source.map { ShortcutBuilder.defaultName(for: $0.url, kind: .app, in: state.shortcutsDirectory) } ?? "" }
         }
         .onChange(of: webAddress) { _, _ in
             if kind == .web, !nameEdited { name = suggestedWebName }
@@ -123,7 +123,7 @@ struct NewInstanceSheet: View {
     private var primaryTitle: String {
         if kind == .app && (choosingApp || source == nil) { return "Continue" }
         #if OPENPARALLEL_PRIVATE
-        if kind == .app, source?.profile.family == .whatsAppNative { return "Create Native Copy" }
+        if kind == .app, source?.profile.family == .extensionCopy { return PrivateExtensions.createButtonTitle }
         #endif
         return "Create"
     }
@@ -155,7 +155,7 @@ struct NewInstanceSheet: View {
 
     private func continueWithApp() {
         guard let source else { return }
-        if !nameEdited { name = ShortcutBuilder.defaultName(for: source.url, kind: .app) }
+        if !nameEdited { name = ShortcutBuilder.defaultName(for: source.url, kind: .app, in: state.shortcutsDirectory) }
         separateData = source.profile.supportsProfileIsolation || source.profile.requiresProfileIsolation
         choosingApp = false
     }
@@ -277,7 +277,7 @@ struct NewInstanceSheet: View {
 
     private func isolationText(_ app: InstalledApp, status: StatusPresentation) -> String {
         #if OPENPARALLEL_PRIVATE
-        if app.profile.family == .whatsAppNative { return NativeWhatsApp.isolationDescription }
+        if app.profile.family == .extensionCopy { return PrivateExtensions.isolationDescription }
         #endif
         return status.detail
     }

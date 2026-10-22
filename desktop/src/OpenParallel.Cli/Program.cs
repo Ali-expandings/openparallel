@@ -97,7 +97,7 @@ internal static class Program
             var inspected = service.Inspect(app);
             manifest = service.Create(new InstanceRequest
             {
-                Name = Option(args, "--name") ?? Naming.DefaultInstanceName(inspected.Name),
+                Name = Option(args, "--name") ?? service.SuggestName(inspected.Name),
                 AppPath = app,
                 SeparateData = !args.Contains("--shared"),
                 ExtraArguments = Options(args, "--arg").ToList(),

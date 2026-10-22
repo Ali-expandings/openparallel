@@ -111,9 +111,9 @@ find_profile_pid() {
   local instance_exe="$2"
   local candidate_pid command_line extended_command
 
-  # A native identity copy runs its own executable inside the generated bundle,
+  # An extension copy runs its own executable inside the generated bundle,
   # so the executable path alone already identifies the instance.
-  if [[ "$LAUNCH_MODE" == "native-identity-copy" ]]; then
+  if [[ "$LAUNCH_MODE" != "linked-signed-source" && "$LAUNCH_MODE" != "web-frame" ]]; then
     while read -r candidate_pid command_line; do
       if [[ "$command_line" == "$instance_exe"* ]]; then
         printf '%s\n' "$candidate_pid"

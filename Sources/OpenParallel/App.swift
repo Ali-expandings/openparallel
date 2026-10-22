@@ -11,8 +11,6 @@ struct OpenParallelMain {
             BuildCLI.run(arguments: Array(CommandLine.arguments.dropFirst(2)))
         case "inspect":
             InspectCLI.run(arguments: Array(CommandLine.arguments.dropFirst(2)))
-        case "catalog":
-            CompatibilityCatalogCLI.run(arguments: Array(CommandLine.arguments.dropFirst(2)))
         case "web-build":
             WebBuildCLI.run(arguments: Array(CommandLine.arguments.dropFirst(2)))
         case "web-run":
